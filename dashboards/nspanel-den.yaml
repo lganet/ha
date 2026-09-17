@@ -1,0 +1,139 @@
+title: Den Panel
+views:
+  - title: Den
+    path: den
+    icon: mdi:sofa
+    type: sections
+    max_columns: 1
+    badges:
+      - type: entity
+        entity: sensor.air_purifier_air_quality
+        name: Air Quality
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.air_purifier_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Den Controls
+            heading_style: title
+            icon: mdi:tune
+            badges:
+              - type: button
+                icon: mdi:lightbulb-off
+                color: red
+                tap_action:
+                  action: perform-action
+                  perform_action: light.turn_off
+                  target:
+                    area_id: den
+              - type: button
+                icon: mdi:lightbulb-on
+                color: amber
+                tap_action:
+                  action: perform-action
+                  perform_action: light.turn_on
+                  target:
+                    area_id: den
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: button
+                name: All Lights On
+                icon: mdi:lightbulb-group
+                tap_action:
+                  action: perform-action
+                  perform_action: light.turn_on
+                  target:
+                    area_id: den
+              - type: button
+                name: All Lights Off
+                icon: mdi:lightbulb-group-off
+                tap_action:
+                  action: perform-action
+                  perform_action: light.turn_off
+                  target:
+                    area_id: den
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Lights
+            heading_style: title
+            icon: mdi:lightbulb-multiple
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: light.h60b0
+                name: Ceiling Light
+                icon: mdi:ceiling-light
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.h6061
+                name: Wall Lights
+                icon: mdi:wall-sconce-flat
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.h6076
+                name: Floor Light
+                icon: mdi:floor-lamp
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.smart_fan
+                name: Fan Light
+                icon: mdi:fan-chevron-up
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.smart_fan_night_light
+                name: Night Light
+                icon: mdi:weather-night
+                tap_action:
+                  action: toggle
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Fan & Air
+            heading_style: title
+            icon: mdi:fan
+          - type: tile
+            entity: fan.smart_fan
+            name: Smart Fan
+            icon: mdi:fan
+            features:
+              - type: fan-speed
+              - type: fan-direction
+              - type: fan-preset-modes
+            tap_action:
+              action: more-info
+          - type: tile
+            entity: fan.air_purifier
+            name: Air Purifier
+            icon: mdi:air-purifier
+            features:
+              - type: fan-preset-modes
+                style: dropdown
+            tap_action:
+              action: more-info
