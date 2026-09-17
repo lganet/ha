@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 - 2026-09-16
+
+### Changed
+- Converted All Lights On and All Lights Off controls to `custom:button-card` with an icon-overlapping circular notification badge displaying active and inactive counts matching user reference design.
+- Installed `button-card` via HACS and registered the dashboard module resource.
+- Added implementation plan `doc/2026-09-16-button-card-badges.md`.
+
 ## 0.2.0 - 2026-09-16
 
 ### Added

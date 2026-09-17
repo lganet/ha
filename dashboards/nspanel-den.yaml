@@ -25,49 +25,92 @@ views:
             heading: Den Controls
             heading_style: title
             icon: mdi:tune
-            badges:
-              - type: entity
-                entity: sensor.den_lights_on
-                color: amber
-                show_state: true
-                tap_action:
-                  action: perform-action
-                  perform_action: light.turn_on
-                  target:
-                    area_id: den
-              - type: entity
-                entity: sensor.den_lights_off
-                color: red
-                show_state: true
-                tap_action:
-                  action: perform-action
-                  perform_action: light.turn_off
-                  target:
-                    area_id: den
           - type: grid
             columns: 2
             square: false
             cards:
-              - type: button
-                entity: sensor.den_lights_on
+              - type: custom:button-card
                 name: All Lights On
                 icon: mdi:lightbulb-group
-                show_state: true
                 tap_action:
-                  action: perform-action
-                  perform_action: light.turn_on
+                  action: call-service
+                  service: light.turn_on
                   target:
                     area_id: den
-              - type: button
-                entity: sensor.den_lights_off
+                styles:
+                  card:
+                    - height: 100px
+                    - padding: 12px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                  icon:
+                    - width: 40px
+                    - height: 40px
+                    - color: '#FBC02D'
+                  name:
+                    - font-size: 14px
+                    - font-weight: 500
+                    - margin-top: 8px
+                  custom_fields:
+                    notification:
+                      - background-color: '#4CAF50'
+                      - border-radius: 50%
+                      - position: absolute
+                      - left: calc(50% + 4px)
+                      - top: 12px
+                      - height: 24px
+                      - width: 24px
+                      - font-size: 13px
+                      - font-weight: bold
+                      - color: '#FFFFFF'
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - box-shadow: 0 2px 4px rgba(0,0,0,0.3)
+                custom_fields:
+                  notification: >
+                    [[[ return states['sensor.den_lights_on'] ?
+                    states['sensor.den_lights_on'].state : '0'; ]]]
+              - type: custom:button-card
                 name: All Lights Off
                 icon: mdi:lightbulb-group-off
-                show_state: true
                 tap_action:
-                  action: perform-action
-                  perform_action: light.turn_off
+                  action: call-service
+                  service: light.turn_off
                   target:
                     area_id: den
+                styles:
+                  card:
+                    - height: 100px
+                    - padding: 12px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                  icon:
+                    - width: 40px
+                    - height: 40px
+                    - color: var(--secondary-text-color, #9E9E9E)
+                  name:
+                    - font-size: 14px
+                    - font-weight: 500
+                    - margin-top: 8px
+                  custom_fields:
+                    notification:
+                      - background-color: '#546E7A'
+                      - border-radius: 50%
+                      - position: absolute
+                      - left: calc(50% + 4px)
+                      - top: 12px
+                      - height: 24px
+                      - width: 24px
+                      - font-size: 13px
+                      - font-weight: bold
+                      - color: '#FFFFFF'
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - box-shadow: 0 2px 4px rgba(0,0,0,0.3)
+                custom_fields:
+                  notification: >
+                    [[[ return states['sensor.den_lights_off'] ?
+                    states['sensor.den_lights_off'].state : '0'; ]]]
 
       - type: grid
         cards:
