@@ -26,20 +26,22 @@ views:
             heading_style: title
             icon: mdi:tune
             badges:
-              - type: button
-                icon: mdi:lightbulb-off
-                color: red
-                tap_action:
-                  action: perform-action
-                  perform_action: light.turn_off
-                  target:
-                    area_id: den
-              - type: button
-                icon: mdi:lightbulb-on
+              - type: entity
+                entity: sensor.den_lights_on
                 color: amber
+                show_state: true
                 tap_action:
                   action: perform-action
                   perform_action: light.turn_on
+                  target:
+                    area_id: den
+              - type: entity
+                entity: sensor.den_lights_off
+                color: red
+                show_state: true
+                tap_action:
+                  action: perform-action
+                  perform_action: light.turn_off
                   target:
                     area_id: den
           - type: grid
@@ -47,16 +49,20 @@ views:
             square: false
             cards:
               - type: button
+                entity: sensor.den_lights_on
                 name: All Lights On
                 icon: mdi:lightbulb-group
+                show_state: true
                 tap_action:
                   action: perform-action
                   perform_action: light.turn_on
                   target:
                     area_id: den
               - type: button
+                entity: sensor.den_lights_off
                 name: All Lights Off
                 icon: mdi:lightbulb-group-off
+                show_state: true
                 tap_action:
                   action: perform-action
                   perform_action: light.turn_off
