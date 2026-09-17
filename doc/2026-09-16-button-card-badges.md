@@ -28,4 +28,4 @@ Native Home Assistant `button` cards only support plain state text beneath the l
 ## Verification
 - Verify `dashboards/nspanel-den.yaml` YAML syntax.
 - Verify live dashboard updates successfully in Home Assistant via MCP.
-- Verify responsive layout preserves NSPanel 120 Pro (480x480) touch targets.
+- Verify responsive layout preserves NSPanel 120 Pro (750x1334 portrait) touch targets.

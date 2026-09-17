@@ -2,7 +2,7 @@
 
 **Date**: 2026-09-16  
 **Status**: Approved  
-**Target Hardware**: Sonoff NSPanel 120 Pro (480x480 square touch display)  
+**Target Hardware**: Sonoff NSPanel 120 Pro (4.7-inch 750x1334 portrait touch display)  
 **Location**: Den room
 
 ---
@@ -20,7 +20,7 @@ Create a dedicated, touch-optimized Home Assistant dashboard designed specifical
 - **Approved Decision**: Target `fan.smart_fan` directly in the dashboard cards so fan motor controls (speed slider, direction, preset modes) are pre-configured and ready immediately when mapped. Also include `fan.air_purifier` for room air circulation controls.
 
 ### Form Factor Optimization
-- **Screen Size**: 480x480 square touch screen.
+- **Screen Size**: 4.7-inch 750x1334 portrait touch screen (3:4 / 9:16 aspect ratio).
 - **Layout Architecture**: Modern Home Assistant `sections` view constrained to `max_columns: 1`.
 - **Touch Targets**: 2-column card grids with large touch targets, direct brightness sliders, and single-tap `more-info` dialogs for deep RGB color and temperature picking.
 
