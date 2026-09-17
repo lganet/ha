@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2 - 2026-09-17
+
+### Added
+- Applied `ios-dark-mode` theme to the Den NSPanel dashboard (`nspanel-den/den`) to ensure a native dark appearance on the Sonoff NSPanel 120 Pro.
+- Installed `iOS Dark Mode Theme` via HACS and registered theme reloads.
+- Added implementation plan `doc/2026-09-17-dark-theme.md`.
+
 ## 0.2.1 - 2026-09-16
 
 ### Changed

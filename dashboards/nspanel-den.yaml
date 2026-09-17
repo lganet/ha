@@ -5,6 +5,7 @@ views:
     icon: mdi:sofa
     type: sections
     max_columns: 1
+    theme: ios-dark-mode
     badges:
       - type: entity
         entity: sensor.air_purifier_air_quality
