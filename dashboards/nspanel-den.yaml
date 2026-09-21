@@ -32,7 +32,7 @@ views:
         show_state: true
         show_icon: true
       - type: entity
-        entity: sensor.air_purifier_pm2_5_2
+        entity: sensor.den_pm2_5_level
         name: PM2.5
         show_name: true
         show_state: true

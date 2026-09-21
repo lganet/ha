@@ -21,6 +21,8 @@ This plan addresses key improvements requested for the Den NSPanel Dashboard:
    - Refactor "All Lights On" to turn on room lights and Fan Light (with cool white memory) while keeping Night Light off.
 4. **Preserve External Govee App Settings**:
    - Ensure that whenever lighting attributes (custom colors, dynamic effects, or dimming levels) are altered via the official Govee app, turning lights off and back on via the NSPanel dashboard respects and restores those exact latest settings without overwriting them.
+5. **Human-Readable PM2.5 Air Quality Level**:
+   - Convert raw numeric PM2.5 measurements from the Air Purifier (`sensor.air_purifier_pm2_5_2`, e.g. "9 μg/m³") into human-readable air quality categories (`sensor.den_pm2_5_level`) similar to `sensor.den_light_level`, showing intuitive labels ("Clean", "Fair", "Elevated", "Poor", "Severe") directly on the dashboard badge.
 
 ---
 
@@ -71,6 +73,7 @@ To provide full independent dimmer and color temperature controls for both modes
 - Both Fan Light and Night Light have full brightness and color temperature controls (`features: light-brightness, light-color-temp`).
 - Fan Backlight and Fan Scene combined seamlessly into a single vertical stack card (`custom:stack-in-card`).
 - Fan & Air section streamlined for fan speed, fan direction, and air purifier modes.
+- Top badges updated: replaced raw PM2.5 sensor (`sensor.air_purifier_pm2_5_2`) with human-readable helper (`sensor.den_pm2_5_level`).
 
 ---
 
@@ -82,3 +85,4 @@ To provide full independent dimmer and color temperature controls for both modes
 - [x] **Night Light State Restoration**: Switching back to Night Light restores the exact saved warm dimmer (e.g. 30%, 3000K).
 - [x] **All Lights Off**: Shuts down all 5 lights in the Den; both Fan Light and Night Light tiles reflect OFF.
 - [x] **All Lights On**: Restores all Govee lights in their previous app state and restores Fan Light in cool white.
+- [x] **PM2.5 Human-Readable Level**: Helper `sensor.den_pm2_5_level` created, assigned to Den area with `mdi:molecule` icon, and verified displaying `Clean` based on current PM2.5 readings (<= 12 μg/m³). Dashboard badge successfully updated and verified in Home Assistant.

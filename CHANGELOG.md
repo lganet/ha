@@ -7,6 +7,7 @@
 - Created state tracking helpers (`input_number.den_fan_light_last_brightness`, `input_number.den_fan_light_last_color_temp`, `input_number.den_night_light_last_brightness`, `input_number.den_night_light_last_color_temp`, and `input_boolean.den_night_light_active`) to preserve user lighting preferences.
 - Created `automation.den_fan_light_state_tracker` to record active light color temperature and dimmer levels.
 - Created `script.den_all_lights_on` to turn on room lights and Fan Light (cool profile) while keeping Night Light off and preserving external Govee app settings.
+- Created template sensor helper `sensor.den_pm2_5_level` translating raw PM2.5 values into human-readable air quality categories (Clean, Fair, Elevated, Poor, Severe).
 - Added implementation plan `doc/2026-09-21-den-panel-improvements.md`.
 - Added Lighting & State Preservation Principles to `AGENTS.md`.
 
@@ -16,6 +17,7 @@
 - Installed `stack-in-card` via HACS to unite Fan Backlight (`light.smart_fan_backlight`) and Fan Scene (`select.smart_fan_scene`) into a single seamless card without inner gaps or dividing borders.
 - Streamlined Fan & Air section strictly for climate/circulation controls (`fan.smart_fan` and `fan.air_purifier_2`).
 - Updated "All Lights On" master button to invoke `script.den_all_lights_on`.
+- Updated Den dashboard badge from raw PM2.5 numeric sensor to human-readable `sensor.den_pm2_5_level`.
 
 ## 0.2.4 - 2026-09-21
 
