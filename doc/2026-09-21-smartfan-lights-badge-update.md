@@ -49,11 +49,23 @@ Under the **Fan & Air** section:
 
 ---
 
-## 3. Deployment & Verification
+## 3. Illuminance Readability Tuning (`sensor.den_light_level`)
+
+Tuned the semantic categories for the home office work environment to differentiate screen work vs. reading/task work and add soft ambient levels:
+- `< 10 lx`: **Dark** (night / off-hours)
+- `10 – 50 lx`: **Poor Light** (too dim, causes eye strain)
+- `50 – 150 lx`: **Soft Light** (relaxing / evening TV ambiance)
+- `150 – 350 lx`: **Screen Work** (comfortable for monitor/laptop use)
+- `350 – 1000 lx`: **Ideal for Work** (recommended task lighting for focused work and reading)
+- `> 1000 lx`: **Daylight** (natural window illumination)
+
+---
+
+## 4. Deployment & Verification
 
 1. Update live template helpers in Home Assistant via MCP `ha_config_set_helper`.
 2. Update repository file `dashboards/nspanel-den.yaml`.
 3. Deploy updated dashboard to live Home Assistant via MCP `ha_config_set_dashboard`.
 4. Validate rendering and sensor states.
-5. Update `VERSION` (bump to `0.2.4`) and `CHANGELOG.md`.
+5. Update `VERSION` (`0.2.4`) and `CHANGELOG.md`.
 6. Commit and push to PR #2.
