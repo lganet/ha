@@ -165,6 +165,23 @@ views:
                   - type: light-brightness
                 tap_action:
                   action: more-info
+              - type: tile
+                entity: light.smart_fan_backlight
+                name: Fan Backlight
+                icon: mdi:palette-outline
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.smart_fan_3
+                name: Fan Light
+                icon: mdi:ceiling-fan-light
+                features:
+                  - type: light-brightness
+                  - type: light-color-temp
+                tap_action:
+                  action: more-info
 
       - type: grid
         cards:

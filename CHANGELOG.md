@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.4 - 2026-09-21
+
+### Added
+- Added Smart Fan Light (`light.smart_fan_3`) with brightness dimmer and color temperature control to the Lights section of Den dashboard.
+- Added Smart Fan Backlight (`light.smart_fan_backlight`) with brightness dimmer and RGB color picker to the Lights section of Den dashboard.
+- Added implementation plan `doc/2026-09-21-smartfan-lights-badge-update.md`.
+
+### Changed
+- Updated `sensor.den_lights_on` and `sensor.den_lights_off` template sensors to treat all Smart Fan lights (main light, backlight, and nightlight) as a single composite light in the total light count.
+
 ## 0.2.3 - 2026-09-21
 
 ### Added
