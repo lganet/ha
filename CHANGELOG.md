@@ -8,6 +8,7 @@
 - Created `automation.den_fan_light_state_tracker` to record active light color temperature and dimmer levels.
 - Created `script.den_all_lights_on` to turn on room lights and Fan Light (cool profile) while keeping Night Light off and preserving external Govee app settings.
 - Added implementation plan `doc/2026-09-21-den-panel-improvements.md`.
+- Added Lighting & State Preservation Principles to `AGENTS.md`.
 
 ### Changed
 - Moved Night Light (`light.den_night_light`) to the Lights section of Den dashboard with full brightness and color temperature slider controls.
