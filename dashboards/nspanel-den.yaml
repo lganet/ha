@@ -178,7 +178,8 @@ views:
                 icon: mdi:weather-night
                 tap_action:
                   action: toggle
-              - type: vertical-stack
+              - type: custom:stack-in-card
+                mode: vertical
                 cards:
                   - type: tile
                     entity: light.smart_fan_backlight

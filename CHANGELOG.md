@@ -11,7 +11,7 @@
 
 ### Changed
 - Moved Night Light (`light.smart_fan_nightlight`) to the Lights section of Den dashboard.
-- Combined Fan Backlight (`light.smart_fan_backlight`) and Fan Scene (`select.smart_fan_scene`) into a cohesive vertical-stack card in the Lights grid.
+- Installed `stack-in-card` via HACS to unite Fan Backlight (`light.smart_fan_backlight`) and Fan Scene (`select.smart_fan_scene`) into a single seamless card without inner gaps or dividing borders.
 - Streamlined Fan & Air section strictly for climate/circulation controls (`fan.smart_fan` and `fan.air_purifier_2`).
 - Updated "All Lights On" master button to invoke `script.den_all_lights_on`.
 
