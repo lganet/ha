@@ -9,7 +9,8 @@
 - Created `script.den_all_lights_on` to turn on room lights and Fan Light (cool profile) while keeping Night Light off and preserving external Govee app settings.
 - Created template sensor helper `sensor.den_pm2_5_level` translating raw PM2.5 values into human-readable air quality categories (Clean, Fair, Elevated, Poor, Severe).
 - Added implementation plan `doc/2026-09-21-den-panel-improvements.md`.
-- Added Lighting & State Preservation Principles to `AGENTS.md`.
+- Added Lighting & State Preservation Principles and Configuration Tracking & Directory Organization rules to `AGENTS.md`.
+- Added version-controlled YAML definitions organized into dedicated domain folders (`automations/`, `scripts/`, `templates/`, `helpers/`).
 
 ### Changed
 - Moved Night Light (`light.den_night_light`) to the Lights section of Den dashboard with full brightness and color temperature slider controls.

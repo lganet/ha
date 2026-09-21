@@ -74,6 +74,23 @@ When both the Git repository and Home Assistant contain relevant information:
 
 Do not assume that the repository and running Home Assistant are synchronized.
 
+## Configuration Tracking & Directory Organization
+
+Always keep track of all Home Assistant resources that are built, modified, or touched in version-controlled YAML files within this Git repository. This enables full Git history, diff reviews, and the ability to easily undo, rollback, or revert any configuration decisions.
+
+Organize all tracked configurations into dedicated domain folders:
+
+- `dashboards/`: Lovelace dashboard configurations (e.g., `dashboards/nspanel-den.yaml`).
+- `automations/`: Automation configurations (e.g., `automations/<name>.yaml`).
+- `scripts/`: Script definitions (e.g., `scripts/<name>.yaml`).
+- `templates/`: Template sensors, template binary sensors, and template lights (e.g., `templates/<name>.yaml`).
+- `helpers/`: Helper definitions (`input_boolean`, `input_number`, `input_select`, etc.).
+
+Whenever creating, modifying, or refactoring an automation, script, helper, template entity, or dashboard:
+1. Maintain its corresponding YAML configuration file in the appropriate domain folder in this repository.
+2. Commit the changes to the feature branch alongside documentation and changelog updates.
+3. Treat Git as the single source of truth for version-controlled configuration and rollbacks.
+
 ## Lighting & State Preservation Principles
 
 When working with lighting entities, automations, scripts, or dashboard controls:

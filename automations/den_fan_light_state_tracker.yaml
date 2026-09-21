@@ -1,0 +1,55 @@
+id: "1790016568798"
+alias: Den Fan Light State Tracker
+description: Tracks Fan Light brightness/color temp when in normal mode, and Night Light brightness/color temp when in night mode.
+triggers:
+  - entity_id: light.smart_fan_3
+    trigger: state
+conditions:
+  - condition: state
+    entity_id: light.smart_fan_3
+    state: "on"
+actions:
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: input_boolean.den_night_light_active
+            state: "on"
+        sequence:
+          - action: input_number.set_value
+            data:
+              value: "{{ (state_attr('light.smart_fan_3', 'brightness') | float(25) / 2.55) | round(0) }}"
+            target:
+              entity_id: input_number.den_night_light_last_brightness
+          - if:
+              - condition: numeric_state
+                entity_id: light.smart_fan_3
+                attribute: color_temp_kelvin
+                above: 0
+            then:
+              - action: input_number.set_value
+                data:
+                  value: "{{ state_attr('light.smart_fan_3', 'color_temp_kelvin') | int(3000) }}"
+                target:
+                  entity_id: input_number.den_night_light_last_color_temp
+      - conditions:
+          - condition: state
+            entity_id: input_boolean.den_night_light_active
+            state: "off"
+        sequence:
+          - action: input_number.set_value
+            data:
+              value: "{{ (state_attr('light.smart_fan_3', 'brightness') | float(196) / 2.55) | round(0) }}"
+            target:
+              entity_id: input_number.den_fan_light_last_brightness
+          - if:
+              - condition: numeric_state
+                entity_id: light.smart_fan_3
+                attribute: color_temp_kelvin
+                above: 0
+            then:
+              - action: input_number.set_value
+                data:
+                  value: "{{ state_attr('light.smart_fan_3', 'color_temp_kelvin') | int(6000) }}"
+                target:
+                  entity_id: input_number.den_fan_light_last_color_temp
+mode: single

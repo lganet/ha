@@ -1,0 +1,39 @@
+input_boolean:
+  den_night_light_active:
+    name: Den Night Light Active
+    icon: mdi:weather-night
+
+input_number:
+  den_fan_light_last_brightness:
+    name: Den Fan Light Last Brightness
+    min: 1
+    max: 100
+    step: 1
+    mode: slider
+    icon: mdi:brightness-6
+
+  den_fan_light_last_color_temp:
+    name: Den Fan Light Last Color Temp
+    min: 3000
+    max: 6500
+    step: 1
+    unit_of_measurement: "K"
+    mode: slider
+    icon: mdi:thermometer
+
+  den_night_light_last_brightness:
+    name: Den Night Light Last Brightness
+    min: 1
+    max: 100
+    step: 1
+    mode: slider
+    icon: mdi:brightness-4
+
+  den_night_light_last_color_temp:
+    name: Den Night Light Last Color Temp
+    min: 3000
+    max: 6500
+    step: 1
+    unit_of_measurement: "K"
+    mode: slider
+    icon: mdi:thermometer
