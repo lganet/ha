@@ -8,13 +8,31 @@ views:
     theme: ios-dark-mode
     badges:
       - type: entity
-        entity: sensor.air_purifier_air_quality
-        name: Air Quality
+        entity: sensor.fp300_den_temperature
+        name: Temp
         show_name: true
         show_state: true
         show_icon: true
       - type: entity
-        entity: sensor.air_purifier_pm2_5
+        entity: sensor.fp300_den_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.air_purifier_air_quality_2
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.air_purifier_pm2_5_2
         name: PM2.5
         show_name: true
         show_state: true
@@ -147,20 +165,6 @@ views:
                   - type: light-brightness
                 tap_action:
                   action: more-info
-              - type: tile
-                entity: light.smart_fan
-                name: Fan Light
-                icon: mdi:fan-chevron-up
-                features:
-                  - type: light-brightness
-                tap_action:
-                  action: more-info
-              - type: tile
-                entity: light.smart_fan_night_light
-                name: Night Light
-                icon: mdi:weather-night
-                tap_action:
-                  action: toggle
 
       - type: grid
         cards:
@@ -168,22 +172,39 @@ views:
             heading: Fan & Air
             heading_style: title
             icon: mdi:fan
-          - type: tile
-            entity: fan.smart_fan
-            name: Smart Fan
-            icon: mdi:fan
-            features:
-              - type: fan-speed
-              - type: fan-direction
-              - type: fan-preset-modes
-            tap_action:
-              action: more-info
-          - type: tile
-            entity: fan.air_purifier
-            name: Air Purifier
-            icon: mdi:air-purifier
-            features:
-              - type: fan-preset-modes
-                style: dropdown
-            tap_action:
-              action: more-info
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: fan.smart_fan
+                name: Smart Fan
+                icon: mdi:fan
+                features:
+                  - type: fan-speed
+                  - type: fan-direction
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: fan.air_purifier_2
+                name: Air Purifier
+                icon: mdi:air-purifier
+                features:
+                  - type: fan-preset-modes
+                    style: dropdown
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.smart_fan_nightlight
+                name: Night Light
+                icon: mdi:weather-night
+                tap_action:
+                  action: toggle
+              - type: tile
+                entity: select.smart_fan_scene
+                name: Fan Scene
+                icon: mdi:palette
+                features:
+                  - type: select-options
+                tap_action:
+                  action: more-info

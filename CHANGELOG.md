@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.3 - 2026-09-21
+
+### Added
+- Added AQARA FP300 environmental indicators (Temperature, Humidity, and Light Level) to Den dashboard top badges.
+- Created template helper `sensor.den_light_level` providing human-readable illuminance conditions ("Dark", "Poor Light", "Good Light", "Bright", "Daylight") based on raw lux.
+- Added dedicated Fan Nightlight button (`light.smart_fan_nightlight`) and Fan Scene selector (`select.smart_fan_scene`).
+- Added implementation plan `doc/2026-09-21-localtuya-fp300-update.md`.
+
+### Changed
+- Migrated broken entities to LocalTuya (`fan.air_purifier_2`, `sensor.air_purifier_air_quality_2`, `sensor.air_purifier_pm2_5_2`, `fan.smart_fan`).
+- Removed redundant fan light tiles from room lighting grid to streamline layout for the 3 primary room lights.
+
 ## 0.2.2 - 2026-09-17
 
 ### Added
