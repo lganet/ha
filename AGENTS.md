@@ -79,14 +79,26 @@ For non-trivial changes:
 
 1. Inspect the current implementation.
 2. Explain the intended approach briefly.
-3. Identify which files/resources will be modified.
-4. Make the changes.
-5. Validate them.
-6. Review the Git diff.
-7. Update `CHANGELOG.md`.
-8. Prepare the branch for a pull request.
+3. Formulate an implementation plan.
+4. Save the generated plan in the `doc/` folder with a concise name including the date (e.g., `doc/YYYY-MM-DD-<topic>.md`).
+5. Identify which files/resources will be modified.
+6. Make the changes.
+7. Validate them.
+8. Review the Git diff.
+9. Update `CHANGELOG.md`.
+10. Prepare the branch for a pull request.
 
 Avoid asking for approval for every small implementation detail. Ask for clarification when requirements are ambiguous or when a change could have significant unintended effects.
+
+### Implementation Plans (`doc/`)
+
+Whenever an implementation plan is created or updated for a task:
+
+- Save the plan in the repository's `doc/` folder.
+- Choose a concise, descriptive filename that clearly identifies the plan's purpose.
+- Prefix the filename with the date in `YYYY-MM-DD` format (e.g., `doc/YYYY-MM-DD-<topic>.md`).
+- Commit the plan in the feature branch alongside the implementation.
+
 
 ## CHANGELOG.md
 

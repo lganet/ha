@@ -1,0 +1,227 @@
+title: Den Panel
+views:
+  - title: Den
+    path: den
+    icon: mdi:sofa
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.fp300_den_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.fp300_den_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.air_purifier_air_quality_2
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.air_purifier_pm2_5_2
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Den Controls
+            heading_style: title
+            icon: mdi:tune
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:button-card
+                name: All Lights On
+                icon: mdi:lightbulb-group
+                tap_action:
+                  action: call-service
+                  service: light.turn_on
+                  target:
+                    area_id: den
+                styles:
+                  card:
+                    - height: 100px
+                    - padding: 12px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                  icon:
+                    - width: 40px
+                    - height: 40px
+                    - color: '#FBC02D'
+                  name:
+                    - font-size: 14px
+                    - font-weight: 500
+                    - margin-top: 8px
+                  custom_fields:
+                    notification:
+                      - background-color: '#4CAF50'
+                      - border-radius: 50%
+                      - position: absolute
+                      - left: calc(50% + 4px)
+                      - top: 12px
+                      - height: 24px
+                      - width: 24px
+                      - font-size: 13px
+                      - font-weight: bold
+                      - color: '#FFFFFF'
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - box-shadow: 0 2px 4px rgba(0,0,0,0.3)
+                custom_fields:
+                  notification: >
+                    [[[ return states['sensor.den_lights_on'] ?
+                    states['sensor.den_lights_on'].state : '0'; ]]]
+              - type: custom:button-card
+                name: All Lights Off
+                icon: mdi:lightbulb-group-off
+                tap_action:
+                  action: call-service
+                  service: light.turn_off
+                  target:
+                    area_id: den
+                styles:
+                  card:
+                    - height: 100px
+                    - padding: 12px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                  icon:
+                    - width: 40px
+                    - height: 40px
+                    - color: var(--secondary-text-color, #9E9E9E)
+                  name:
+                    - font-size: 14px
+                    - font-weight: 500
+                    - margin-top: 8px
+                  custom_fields:
+                    notification:
+                      - background-color: '#546E7A'
+                      - border-radius: 50%
+                      - position: absolute
+                      - left: calc(50% + 4px)
+                      - top: 12px
+                      - height: 24px
+                      - width: 24px
+                      - font-size: 13px
+                      - font-weight: bold
+                      - color: '#FFFFFF'
+                      - display: flex
+                      - align-items: center
+                      - justify-content: center
+                      - box-shadow: 0 2px 4px rgba(0,0,0,0.3)
+                custom_fields:
+                  notification: >
+                    [[[ return states['sensor.den_lights_off'] ?
+                    states['sensor.den_lights_off'].state : '0'; ]]]
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Lights
+            heading_style: title
+            icon: mdi:lightbulb-multiple
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: light.h60b0
+                name: Ceiling Light
+                icon: mdi:ceiling-light
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.h6061
+                name: Wall Lights
+                icon: mdi:wall-sconce-flat
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.h6076
+                name: Floor Light
+                icon: mdi:floor-lamp
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.smart_fan_backlight
+                name: Fan Backlight
+                icon: mdi:palette-outline
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.smart_fan_3
+                name: Fan Light
+                icon: mdi:ceiling-fan-light
+                features:
+                  - type: light-brightness
+                  - type: light-color-temp
+                tap_action:
+                  action: more-info
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Fan & Air
+            heading_style: title
+            icon: mdi:fan
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: fan.smart_fan
+                name: Smart Fan
+                icon: mdi:fan
+                features:
+                  - type: fan-speed
+                  - type: fan-direction
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: fan.air_purifier_2
+                name: Air Purifier
+                icon: mdi:air-purifier
+                features:
+                  - type: fan-preset-modes
+                    style: dropdown
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.smart_fan_nightlight
+                name: Night Light
+                icon: mdi:weather-night
+                tap_action:
+                  action: toggle
+              - type: tile
+                entity: select.smart_fan_scene
+                name: Fan Scene
+                icon: mdi:palette
+                features:
+                  - type: select-options
+                tap_action:
+                  action: more-info
