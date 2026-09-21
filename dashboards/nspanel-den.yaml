@@ -164,7 +164,7 @@ views:
                 tap_action:
                   action: more-info
               - type: tile
-                entity: light.smart_fan_3
+                entity: light.den_fan_light
                 name: Fan Light
                 icon: mdi:ceiling-fan-light
                 features:
@@ -173,11 +173,14 @@ views:
                 tap_action:
                   action: more-info
               - type: tile
-                entity: light.smart_fan_nightlight
+                entity: light.den_night_light
                 name: Night Light
                 icon: mdi:weather-night
+                features:
+                  - type: light-brightness
+                  - type: light-color-temp
                 tap_action:
-                  action: toggle
+                  action: more-info
               - type: custom:stack-in-card
                 mode: vertical
                 cards:

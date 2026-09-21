@@ -3,14 +3,15 @@
 ## 0.3.0 - 2026-09-21
 
 ### Added
-- Created state tracking helpers (`input_number.den_fan_light_last_brightness`, `input_number.den_fan_light_last_color_temp`, and `input_number.den_night_light_last_brightness`) to preserve user lighting preferences.
-- Created `automation.den_fan_light_state_tracker` to continuously record active fan light color temperature and dimmer levels.
-- Created `automation.den_fan_light_mode_controller` to enforce mutual exclusivity between Fan Light and Night Light while automatically restoring remembered cool/warm color and dimming profiles.
+- Created Template Lights `light.den_fan_light` and `light.den_night_light` providing full, independent brightness and color temperature controls for both task lighting (cool white) and ambient night lighting (warm white).
+- Created state tracking helpers (`input_number.den_fan_light_last_brightness`, `input_number.den_fan_light_last_color_temp`, `input_number.den_night_light_last_brightness`, `input_number.den_night_light_last_color_temp`, and `input_boolean.den_night_light_active`) to preserve user lighting preferences.
+- Created `automation.den_fan_light_state_tracker` to record active light color temperature and dimmer levels.
 - Created `script.den_all_lights_on` to turn on room lights and Fan Light (cool profile) while keeping Night Light off and preserving external Govee app settings.
 - Added implementation plan `doc/2026-09-21-den-panel-improvements.md`.
 
 ### Changed
-- Moved Night Light (`light.smart_fan_nightlight`) to the Lights section of Den dashboard.
+- Moved Night Light (`light.den_night_light`) to the Lights section of Den dashboard with full brightness and color temperature slider controls.
+- Updated Fan Light card on Den dashboard to use `light.den_fan_light`.
 - Installed `stack-in-card` via HACS to unite Fan Backlight (`light.smart_fan_backlight`) and Fan Scene (`select.smart_fan_scene`) into a single seamless card without inner gaps or dividing borders.
 - Streamlined Fan & Air section strictly for climate/circulation controls (`fan.smart_fan` and `fan.air_purifier_2`).
 - Updated "All Lights On" master button to invoke `script.den_all_lights_on`.
