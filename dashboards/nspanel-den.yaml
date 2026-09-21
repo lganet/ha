@@ -53,9 +53,7 @@ views:
                 icon: mdi:lightbulb-group
                 tap_action:
                   action: call-service
-                  service: light.turn_on
-                  target:
-                    area_id: den
+                  service: script.den_all_lights_on
                 styles:
                   card:
                     - height: 100px
@@ -166,14 +164,6 @@ views:
                 tap_action:
                   action: more-info
               - type: tile
-                entity: light.smart_fan_backlight
-                name: Fan Backlight
-                icon: mdi:palette-outline
-                features:
-                  - type: light-brightness
-                tap_action:
-                  action: more-info
-              - type: tile
                 entity: light.smart_fan_3
                 name: Fan Light
                 icon: mdi:ceiling-fan-light
@@ -182,6 +172,30 @@ views:
                   - type: light-color-temp
                 tap_action:
                   action: more-info
+              - type: tile
+                entity: light.smart_fan_nightlight
+                name: Night Light
+                icon: mdi:weather-night
+                tap_action:
+                  action: toggle
+              - type: vertical-stack
+                cards:
+                  - type: tile
+                    entity: light.smart_fan_backlight
+                    name: Fan Backlight
+                    icon: mdi:palette-outline
+                    features:
+                      - type: light-brightness
+                    tap_action:
+                      action: more-info
+                  - type: tile
+                    entity: select.smart_fan_scene
+                    name: Fan Scene
+                    icon: mdi:palette
+                    features:
+                      - type: select-options
+                    tap_action:
+                      action: more-info
 
       - type: grid
         cards:
@@ -209,19 +223,5 @@ views:
                 features:
                   - type: fan-preset-modes
                     style: dropdown
-                tap_action:
-                  action: more-info
-              - type: tile
-                entity: light.smart_fan_nightlight
-                name: Night Light
-                icon: mdi:weather-night
-                tap_action:
-                  action: toggle
-              - type: tile
-                entity: select.smart_fan_scene
-                name: Fan Scene
-                icon: mdi:palette
-                features:
-                  - type: select-options
                 tap_action:
                   action: more-info
