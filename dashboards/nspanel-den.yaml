@@ -32,7 +32,7 @@ views:
         show_state: true
         show_icon: true
       - type: entity
-        entity: sensor.air_purifier_pm2_5_2
+        entity: sensor.den_pm2_5_level
         name: PM2.5
         show_name: true
         show_state: true
@@ -53,9 +53,7 @@ views:
                 icon: mdi:lightbulb-group
                 tap_action:
                   action: call-service
-                  service: light.turn_on
-                  target:
-                    area_id: den
+                  service: script.den_all_lights_on
                 styles:
                   card:
                     - height: 100px
@@ -166,15 +164,7 @@ views:
                 tap_action:
                   action: more-info
               - type: tile
-                entity: light.smart_fan_backlight
-                name: Fan Backlight
-                icon: mdi:palette-outline
-                features:
-                  - type: light-brightness
-                tap_action:
-                  action: more-info
-              - type: tile
-                entity: light.smart_fan_3
+                entity: light.den_fan_light
                 name: Fan Light
                 icon: mdi:ceiling-fan-light
                 features:
@@ -182,6 +172,34 @@ views:
                   - type: light-color-temp
                 tap_action:
                   action: more-info
+              - type: tile
+                entity: light.den_night_light
+                name: Night Light
+                icon: mdi:weather-night
+                features:
+                  - type: light-brightness
+                  - type: light-color-temp
+                tap_action:
+                  action: more-info
+              - type: custom:stack-in-card
+                mode: vertical
+                cards:
+                  - type: tile
+                    entity: light.smart_fan_backlight
+                    name: Fan Backlight
+                    icon: mdi:palette-outline
+                    features:
+                      - type: light-brightness
+                    tap_action:
+                      action: more-info
+                  - type: tile
+                    entity: select.smart_fan_scene
+                    name: Fan Scene
+                    icon: mdi:palette
+                    features:
+                      - type: select-options
+                    tap_action:
+                      action: more-info
 
       - type: grid
         cards:
@@ -209,19 +227,5 @@ views:
                 features:
                   - type: fan-preset-modes
                     style: dropdown
-                tap_action:
-                  action: more-info
-              - type: tile
-                entity: light.smart_fan_nightlight
-                name: Night Light
-                icon: mdi:weather-night
-                tap_action:
-                  action: toggle
-              - type: tile
-                entity: select.smart_fan_scene
-                name: Fan Scene
-                icon: mdi:palette
-                features:
-                  - type: select-options
                 tap_action:
                   action: more-info

@@ -11,6 +11,7 @@ This repository contains my Home Assistant configuration and is managed using Gi
 - Before making a change, inspect the existing configuration and understand how it currently works.
 - Never guess entity IDs, device IDs, area names, automation IDs, dashboard structure, or existing behavior when the information can be obtained through Home Assistant MCP.
 - Use the official Home Assistant MCP server for Home Assistant operations whenever possible.
+- Respect and preserve light states (brightness, color temperature, dynamic effects). Avoid hardcoding overrides in lighting controls unless explicitly requested, and account for state memory in implementation plans.
 
 ## Git Workflow
 
@@ -73,13 +74,42 @@ When both the Git repository and Home Assistant contain relevant information:
 
 Do not assume that the repository and running Home Assistant are synchronized.
 
+## Configuration Tracking & Directory Organization
+
+Always keep track of all Home Assistant resources that are built, modified, or touched in version-controlled YAML files within this Git repository. This enables full Git history, diff reviews, and the ability to easily undo, rollback, or revert any configuration decisions.
+
+Organize all tracked configurations into dedicated domain folders:
+
+- `dashboards/`: Lovelace dashboard configurations (e.g., `dashboards/nspanel-den.yaml`).
+- `automations/`: Automation configurations (e.g., `automations/<name>.yaml`).
+- `scripts/`: Script definitions (e.g., `scripts/<name>.yaml`).
+- `templates/`: Template sensors, template binary sensors, and template lights (e.g., `templates/<name>.yaml`).
+- `helpers/`: Helper definitions (`input_boolean`, `input_number`, `input_select`, etc.).
+
+Whenever creating, modifying, or refactoring an automation, script, helper, template entity, or dashboard:
+1. Maintain its corresponding YAML configuration file in the appropriate domain folder in this repository.
+2. Commit the changes to the feature branch alongside documentation and changelog updates.
+3. Treat Git as the single source of truth for version-controlled configuration and rollbacks.
+
+## Lighting & State Preservation Principles
+
+When working with lighting entities, automations, scripts, or dashboard controls:
+
+- **Preserve User Preferences**: Do not reset lights to arbitrary hardcoded brightness or color temperatures when turning them on, unless a specific default is explicitly requested.
+- **External Integration State**: For lights controlled by external ecosystems or companion apps (e.g., Govee, Hue, Tuya), prefer issuing bare `light.turn_on` calls without overriding brightness, color, or effect parameters so the device can restore its last active state, DIY scene, or app-configured mode.
+- **Multi-Mode Fixtures**: When a physical device serves multiple lighting roles (e.g., a ceiling fan with normal task lighting and a night light mode):
+  - Do not create conflicting automations that cut master fixture power or cause race conditions.
+  - Implement independent state tracking (helpers or template lights) so each mode retains its own brightness and color temperature settings.
+  - Ensure switching between modes transitions smoothly without cutting fixture power.
+- **Plan Consultation**: When proposing new lighting automations, room toggle scripts, or dashboard lighting controls, explicitly address state preservation in the implementation plan (e.g., whether the user wants last-state memory, distinct profiles, or fixed defaults). If the requirement is not specified, include a question or recommendation in the plan.
+
 ## Change Planning
 
 For non-trivial changes:
 
 1. Inspect the current implementation.
 2. Explain the intended approach briefly.
-3. Formulate an implementation plan.
+3. Formulate an implementation plan. For lighting tasks, specify how state memory (brightness, color temperature, effects) will be handled or ask if separate mode profiles are desired.
 4. Save the generated plan in the `doc/` folder with a concise name including the date (e.g., `doc/YYYY-MM-DD-<topic>.md`).
 5. Identify which files/resources will be modified.
 6. Make the changes.

@@ -1,0 +1,17 @@
+alias: Den All Lights On
+description: Turn on all room lights in the Den, restoring cool fan light settings and keeping night light off.
+icon: mdi:lightbulb-group
+mode: single
+sequence:
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.den_night_light_active
+  - action: light.turn_on
+    target:
+      entity_id:
+        - light.h60b0
+        - light.h6061
+        - light.h6076
+  - action: light.turn_on
+    target:
+      entity_id: light.den_fan_light

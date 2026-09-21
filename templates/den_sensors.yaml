@@ -1,0 +1,42 @@
+- sensor:
+    - name: Den PM2.5 Level
+      unique_id: den_pm2_5_level
+      icon: mdi:molecule
+      state: >-
+        {% set pm = states('sensor.air_purifier_pm2_5_2') | float(-1) %}
+        {% if pm < 0 %}Unknown
+        {% elif pm <= 12 %}Clean
+        {% elif pm <= 35 %}Fair
+        {% elif pm <= 55 %}Elevated
+        {% elif pm <= 150 %}Poor
+        {% else %}Severe{% endif %}
+
+    - name: Den Light Level
+      unique_id: den_light_level
+      icon: mdi:brightness-6
+      state: >-
+        {% set lx = states('sensor.fp300_den_illuminance') | float(0) %}
+        {% if lx < 10 %}Dark
+        {% elif lx < 50 %}Poor Light
+        {% elif lx < 150 %}Soft Light
+        {% elif lx < 350 %}Screen Work
+        {% elif lx < 1000 %}Ideal for Work
+        {% else %}Daylight{% endif %}
+
+    - name: Den Lights On
+      unique_id: den_lights_on
+      unit_of_measurement: "on"
+      state: >-
+        {% set fan_lights = ['light.smart_fan_3', 'light.smart_fan_backlight', 'light.smart_fan_nightlight'] %}
+        {% set room_lights_on = expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | rejectattr('entity_id', 'in', fan_lights) | selectattr('state', 'eq', 'on') | list | count %}
+        {% set fan_on = 1 if is_state('light.smart_fan_3', 'on') or is_state('light.smart_fan_backlight', 'on') or is_state('light.smart_fan_nightlight', 'on') else 0 %}
+        {{ room_lights_on + fan_on }}
+
+    - name: Den Lights Off
+      unique_id: den_lights_off
+      unit_of_measurement: "off"
+      state: >-
+        {% set fan_lights = ['light.smart_fan_3', 'light.smart_fan_backlight', 'light.smart_fan_nightlight'] %}
+        {% set room_lights_off = expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | rejectattr('entity_id', 'in', fan_lights) | selectattr('state', 'eq', 'off') | list | count %}
+        {% set fan_off = 1 if is_state('light.smart_fan_3', 'off') and is_state('light.smart_fan_backlight', 'off') and is_state('light.smart_fan_nightlight', 'off') else 0 %}
+        {{ room_lights_off + fan_off }}
