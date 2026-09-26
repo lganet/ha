@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0 - 2026-09-26
+
+### Added
+- Created `script.den_all_lights_off` to dynamically snapshot the exact state of all active Den lights and sub-lights (`scene.create`) before turning them off.
+- Added Den Floor Lamp stacked card (`custom:stack-in-card`) to Den dashboard, grouping the primary dimmer (`light.den_floor_lamp`) with direct controls for sub-lights (`light.den_floor_lamp_side_light`, `light.den_floor_lamp_bottom_light`, `light.den_floor_lamp_ripple_light`, and `switch.den_floor_lamp_dreamview`).
+- Added implementation plan `doc/2026-09-26-govee-cloud-den-lights.md`.
+
+### Changed
+- Migrated Den dashboard Govee lights from legacy local integration to HACS Govee Cloud integration (`light.den_floor_lamp`, `light.floor_lamp`, `light.office_leds`), resolving "Entity not found" tiles.
+- Updated `sensor.den_lights_on` and `sensor.den_lights_off` template helpers to group multi-segment Govee lights and sub-lights into their 4 physical fixtures (Den Floor Lamp, Floor Lamp, Office LEDs, Fan composite), fixing the 35-light count badge explosion.
+- Updated "All Lights Off" master button to invoke `script.den_all_lights_off`.
+- Updated `script.den_all_lights_on` to restore previous lighting configuration from `scene.den_lights_snapshot` with fallback to primary fixtures.
+
 ## 0.3.0 - 2026-09-21
 
 ### Added

@@ -92,9 +92,7 @@ views:
                 icon: mdi:lightbulb-group-off
                 tap_action:
                   action: call-service
-                  service: light.turn_off
-                  target:
-                    area_id: den
+                  service: script.den_all_lights_off
                 styles:
                   card:
                     - height: 100px
@@ -139,25 +137,56 @@ views:
             columns: 2
             square: false
             cards:
+              - type: custom:stack-in-card
+                mode: vertical
+                cards:
+                  - type: tile
+                    entity: light.den_floor_lamp
+                    name: Den Floor Lamp
+                    icon: mdi:floor-lamp-torchiere
+                    features:
+                      - type: light-brightness
+                    tap_action:
+                      action: more-info
+                  - type: grid
+                    columns: 2
+                    square: false
+                    cards:
+                      - type: tile
+                        entity: light.den_floor_lamp_side_light
+                        name: Side Light
+                        icon: mdi:wall-sconce-flat
+                        tap_action:
+                          action: more-info
+                      - type: tile
+                        entity: light.den_floor_lamp_bottom_light
+                        name: Bottom Light
+                        icon: mdi:lamp
+                        tap_action:
+                          action: more-info
+                      - type: tile
+                        entity: light.den_floor_lamp_ripple_light
+                        name: Ripple Light
+                        icon: mdi:waves
+                        tap_action:
+                          action: more-info
+                      - type: tile
+                        entity: switch.den_floor_lamp_dreamview
+                        name: DreamView
+                        icon: mdi:movie-filter
+                        tap_action:
+                          action: more-info
               - type: tile
-                entity: light.h60b0
-                name: Ceiling Light
-                icon: mdi:ceiling-light
+                entity: light.office_leds
+                name: Office LEDs
+                icon: mdi:led-strip-variant
                 features:
                   - type: light-brightness
                 tap_action:
                   action: more-info
               - type: tile
-                entity: light.h6061
-                name: Wall Lights
-                icon: mdi:wall-sconce-flat
-                features:
-                  - type: light-brightness
-                tap_action:
-                  action: more-info
-              - type: tile
-                entity: light.h6076
-                name: Floor Light
+                entity: light.floor_lamp
+                name: Floor Lamp
                 icon: mdi:floor-lamp
                 features:
                   - type: light-brightness

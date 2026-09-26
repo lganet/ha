@@ -27,16 +27,34 @@
       unique_id: den_lights_on
       unit_of_measurement: "on"
       state: >-
-        {% set fan_lights = ['light.smart_fan_3', 'light.smart_fan_backlight', 'light.smart_fan_nightlight'] %}
-        {% set room_lights_on = expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | rejectattr('entity_id', 'in', fan_lights) | selectattr('state', 'eq', 'on') | list | count %}
+        {% set dfl_entities = ['light.den_floor_lamp', 'light.den_floor_lamp_bottom_light', 'light.den_floor_lamp_side_light', 'light.den_floor_lamp_ripple_light'] %}
+        {% set dfl_device = device_entities(device_id('light.den_floor_lamp')) if device_id('light.den_floor_lamp') else [] %}
+        {% set dfl_on = 1 if (expand(dfl_entities + dfl_device) | selectattr('domain', 'eq', 'light') | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set fl_entities = ['light.floor_lamp'] %}
+        {% set fl_device = device_entities(device_id('light.floor_lamp')) if device_id('light.floor_lamp') else [] %}
+        {% set fl_on = 1 if (expand(fl_entities + fl_device) | selectattr('domain', 'eq', 'light') | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set ol_entities = ['light.office_leds'] %}
+        {% set ol_device = device_entities(device_id('light.office_leds')) if device_id('light.office_leds') else [] %}
+        {% set ol_on = 1 if (expand(ol_entities + ol_device) | selectattr('domain', 'eq', 'light') | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
         {% set fan_on = 1 if is_state('light.smart_fan_3', 'on') or is_state('light.smart_fan_backlight', 'on') or is_state('light.smart_fan_nightlight', 'on') else 0 %}
-        {{ room_lights_on + fan_on }}
+        {{ dfl_on + fl_on + ol_on + fan_on }}
 
     - name: Den Lights Off
       unique_id: den_lights_off
       unit_of_measurement: "off"
       state: >-
-        {% set fan_lights = ['light.smart_fan_3', 'light.smart_fan_backlight', 'light.smart_fan_nightlight'] %}
-        {% set room_lights_off = expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | rejectattr('entity_id', 'in', fan_lights) | selectattr('state', 'eq', 'off') | list | count %}
-        {% set fan_off = 1 if is_state('light.smart_fan_3', 'off') and is_state('light.smart_fan_backlight', 'off') and is_state('light.smart_fan_nightlight', 'off') else 0 %}
-        {{ room_lights_off + fan_off }}
+        {% set dfl_entities = ['light.den_floor_lamp', 'light.den_floor_lamp_bottom_light', 'light.den_floor_lamp_side_light', 'light.den_floor_lamp_ripple_light'] %}
+        {% set dfl_device = device_entities(device_id('light.den_floor_lamp')) if device_id('light.den_floor_lamp') else [] %}
+        {% set dfl_on = 1 if (expand(dfl_entities + dfl_device) | selectattr('domain', 'eq', 'light') | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set fl_entities = ['light.floor_lamp'] %}
+        {% set fl_device = device_entities(device_id('light.floor_lamp')) if device_id('light.floor_lamp') else [] %}
+        {% set fl_on = 1 if (expand(fl_entities + fl_device) | selectattr('domain', 'eq', 'light') | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set ol_entities = ['light.office_leds'] %}
+        {% set ol_device = device_entities(device_id('light.office_leds')) if device_id('light.office_leds') else [] %}
+        {% set ol_on = 1 if (expand(ol_entities + ol_device) | selectattr('domain', 'eq', 'light') | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set fan_on = 1 if is_state('light.smart_fan_3', 'on') or is_state('light.smart_fan_backlight', 'on') or is_state('light.smart_fan_nightlight', 'on') else 0 %}
+        {% set dfl_off = 1 if dfl_on == 0 else 0 %}
+        {% set fl_off = 1 if fl_on == 0 else 0 %}
+        {% set ol_off = 1 if ol_on == 0 else 0 %}
+        {% set fan_off = 1 if fan_on == 0 else 0 %}
+        {{ dfl_off + fl_off + ol_off + fan_off }}

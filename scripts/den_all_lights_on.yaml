@@ -1,17 +1,24 @@
 alias: Den All Lights On
-description: Turn on all room lights in the Den, restoring cool fan light settings and keeping night light off.
+description: Restore previous Den lighting state from snapshot or fallback to primary fixtures.
 icon: mdi:lightbulb-group
 mode: single
 sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_night_light_active
-  - action: light.turn_on
-    target:
-      entity_id:
-        - light.h60b0
-        - light.h6061
-        - light.h6076
-  - action: light.turn_on
-    target:
-      entity_id: light.den_fan_light
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ states.scene.den_lights_snapshot is defined }}"
+        sequence:
+          - action: scene.turn_on
+            target:
+              entity_id: scene.den_lights_snapshot
+    default:
+      - action: light.turn_on
+        target:
+          entity_id:
+            - light.den_floor_lamp
+            - light.office_leds
+            - light.floor_lamp
+            - light.den_fan_light
