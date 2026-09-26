@@ -4,7 +4,7 @@
 
 ### Added
 - Created `script.den_all_lights_off` to dynamically snapshot the exact state of all active Den lights and sub-lights (`scene.create`) before turning them off.
-- Added Den Floor Lamp stacked card (`custom:stack-in-card`) to Den dashboard, grouping the primary dimmer (`light.den_floor_lamp`) with direct controls for sub-lights (`light.den_floor_lamp_side_light`, `light.den_floor_lamp_bottom_light`, `light.den_floor_lamp_ripple_light`, and `switch.den_floor_lamp_dreamview`).
+- Added Den Floor Lamp stacked card (`custom:stack-in-card`) to Den dashboard, grouping the primary dimmer (`light.den_floor_lamp`) with direct controls for sub-lights (`switch.den_floor_lamp_side_light`, `switch.den_floor_lamp_bottom_light`, `switch.den_floor_lamp_ripple_light`, and `switch.den_floor_lamp_dreamview`).
 - Added implementation plan `doc/2026-09-26-govee-cloud-den-lights.md`.
 
 ### Changed
