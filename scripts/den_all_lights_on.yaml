@@ -9,7 +9,7 @@ sequence:
   - choose:
       - conditions:
           - condition: template
-            value_template: "{{ states.scene.den_lights_snapshot is defined }}"
+            value_template: "{{ states.scene.den_lights_snapshot is not none }}"
         sequence:
           - action: scene.turn_on
             target:

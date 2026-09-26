@@ -153,19 +153,19 @@ views:
                     square: false
                     cards:
                       - type: tile
-                        entity: light.den_floor_lamp_side_light
+                        entity: switch.den_floor_lamp_side_light
                         name: Side Light
                         icon: mdi:wall-sconce-flat
                         tap_action:
                           action: more-info
                       - type: tile
-                        entity: light.den_floor_lamp_bottom_light
+                        entity: switch.den_floor_lamp_bottom_light
                         name: Bottom Light
                         icon: mdi:lamp
                         tap_action:
                           action: more-info
                       - type: tile
-                        entity: light.den_floor_lamp_ripple_light
+                        entity: switch.den_floor_lamp_ripple_light
                         name: Ripple Light
                         icon: mdi:waves
                         tap_action:

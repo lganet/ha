@@ -4,24 +4,25 @@ icon: mdi:lightbulb-group-off
 mode: single
 sequence:
   - if:
-      - condition: template
-        value_template: "{{ states('sensor.den_lights_on') | int(0) > 0 }}"
+      - condition: numeric_state
+        entity_id: sensor.den_lights_on
+        above: 0
     then:
       - action: scene.create
         data:
           scene_id: den_lights_snapshot
           snapshot_entities: >-
-            {{ expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | map(attribute='entity_id') | list + (['switch.den_floor_lamp_dreamview'] if states('switch.den_floor_lamp_dreamview') not in ['unknown', 'unavailable'] else []) }}
+            {{ expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | map(attribute='entity_id') | list + ['switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_ripple_light', 'switch.den_floor_lamp_dreamview'] }}
   - action: light.turn_off
     target:
       area_id: den
-  - if:
-      - condition: template
-        value_template: "{{ is_state('switch.den_floor_lamp_dreamview', 'on') }}"
-    then:
-      - action: switch.turn_off
-        target:
-          entity_id: switch.den_floor_lamp_dreamview
+  - action: switch.turn_off
+    target:
+      entity_id:
+        - switch.den_floor_lamp_bottom_light
+        - switch.den_floor_lamp_side_light
+        - switch.den_floor_lamp_ripple_light
+        - switch.den_floor_lamp_dreamview
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_night_light_active
