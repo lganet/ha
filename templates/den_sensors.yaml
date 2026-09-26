@@ -27,7 +27,7 @@
       unique_id: den_lights_on
       unit_of_measurement: "on"
       state: >-
-        {% set dfl_entities = ['light.den_floor_lamp', 'switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_ripple_light'] %}
+        {% set dfl_entities = ['switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_ripple_light', 'switch.den_floor_lamp_dreamview'] %}
         {% set dfl_on = 1 if (expand(dfl_entities) | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
         {% set fl_on = 1 if is_state('light.floor_lamp', 'on') else 0 %}
         {% set ol_on = 1 if is_state('light.office_leds', 'on') else 0 %}
@@ -38,7 +38,7 @@
       unique_id: den_lights_off
       unit_of_measurement: "off"
       state: >-
-        {% set dfl_entities = ['light.den_floor_lamp', 'switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_ripple_light'] %}
+        {% set dfl_entities = ['switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_ripple_light', 'switch.den_floor_lamp_dreamview'] %}
         {% set dfl_on = 1 if (expand(dfl_entities) | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
         {% set fl_on = 1 if is_state('light.floor_lamp', 'on') else 0 %}
         {% set ol_on = 1 if is_state('light.office_leds', 'on') else 0 %}

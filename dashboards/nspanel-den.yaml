@@ -140,14 +140,10 @@ views:
               - type: custom:stack-in-card
                 mode: vertical
                 cards:
-                  - type: tile
-                    entity: light.den_floor_lamp
-                    name: Den Floor Lamp
+                  - type: heading
+                    heading: Den Floor Lamp
+                    heading_style: subtitle
                     icon: mdi:floor-lamp-torchiere
-                    features:
-                      - type: light-brightness
-                    tap_action:
-                      action: more-info
                   - type: grid
                     columns: 2
                     square: false

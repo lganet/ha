@@ -11,11 +11,22 @@ sequence:
       - action: scene.create
         data:
           scene_id: den_lights_snapshot
-          snapshot_entities: >-
-            {{ expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | map(attribute='entity_id') | list + ['switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_ripple_light', 'switch.den_floor_lamp_dreamview'] }}
+          snapshot_entities:
+            - switch.den_floor_lamp_side_light
+            - switch.den_floor_lamp_bottom_light
+            - switch.den_floor_lamp_ripple_light
+            - switch.den_floor_lamp_dreamview
+            - light.floor_lamp
+            - light.office_leds
+            - light.smart_fan_3
+            - light.smart_fan_backlight
   - action: light.turn_off
     target:
-      area_id: den
+      entity_id:
+        - light.floor_lamp
+        - light.office_leds
+        - light.smart_fan_3
+        - light.smart_fan_backlight
   - action: switch.turn_off
     target:
       entity_id:

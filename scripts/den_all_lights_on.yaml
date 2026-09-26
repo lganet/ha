@@ -18,7 +18,9 @@ sequence:
       - action: light.turn_on
         target:
           entity_id:
-            - light.den_floor_lamp
-            - light.office_leds
             - light.floor_lamp
+            - light.office_leds
             - light.den_fan_light
+      - action: switch.turn_on
+        target:
+          entity_id: switch.den_floor_lamp_side_light
