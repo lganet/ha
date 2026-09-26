@@ -78,9 +78,9 @@ The Den lighting is grouped into **4 logical fixtures**:
 2. **Den Floor Lamp Stacked Card (`custom:stack-in-card`)**:
    - Primary Tile for `light.den_floor_lamp` with brightness slider and `more-info` tap action.
    - Sub-grid with direct controls for:
-     - Side Light (`light.den_floor_lamp_side_light`)
-     - Bottom Light (`light.den_floor_lamp_bottom_light`)
-     - Ripple Light (`light.den_floor_lamp_ripple_light`)
+     - Side Light (`switch.den_floor_lamp_side_light`)
+     - Bottom Light (`switch.den_floor_lamp_bottom_light`)
+     - Ripple Light (`switch.den_floor_lamp_ripple_light`)
      - DreamView (`switch.den_floor_lamp_dreamview`)
 3. **Primary Room Lights**:
    - `light.floor_lamp` (Floor Lamp) with brightness slider.
