@@ -7,6 +7,11 @@ input_boolean:
     name: Den Lights Snapshot Active
     icon: mdi:camera
 
+input_text:
+  den_lights_last_state:
+    name: Den Lights Last State
+    max: 255
+
 input_number:
   den_fan_light_last_brightness:
     name: Den Fan Light Last Brightness

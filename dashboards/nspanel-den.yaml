@@ -156,13 +156,13 @@ views:
                     cards:
                       - type: tile
                         entity: switch.den_floor_lamp_bottom_light
-                        name: Bottom Light
+                        name: Base
                         icon: mdi:lamp
                         tap_action:
                           action: more-info
                       - type: tile
                         entity: switch.den_floor_lamp_ripple_light
-                        name: Ripple Light
+                        name: Ripple
                         icon: mdi:waves
                         tap_action:
                           action: more-info
