@@ -4,18 +4,21 @@
 
 ### Added
 - Created `script.den_all_lights_off` to dynamically snapshot the exact state of all active Den lights and sub-lights (`scene.create`) before turning them off.
-- Added Den Floor Lamp card (`custom:stack-in-card`) to Den dashboard with direct controls for sub-lights (`switch.den_floor_lamp_side_light`, `switch.den_floor_lamp_bottom_light`, `switch.den_floor_lamp_ripple_light`, and `switch.den_floor_lamp_dreamview`).
-- Added implementation plan `doc/2026-09-26-govee-cloud-den-lights.md`.
+- Created helper `input_boolean.den_lights_snapshot_active` to track whether an active lighting snapshot exists and guard against overwriting snapshots when lights are already off.
+- Added Den Floor Lamp card (`custom:stack-in-card`) to Den dashboard with direct controls for sub-lights (`switch.den_floor_lamp_side_light` full width, `switch.den_floor_lamp_bottom_light`, and `switch.den_floor_lamp_ripple_light` in a 2-column grid).
+- Added implementation plan `doc/2026-09-26-govee-cloud-den-lights.md` and proposal `doc/2026-09-28-label-strategy-proposal.md`.
 
 ### Changed
 - Migrated Den dashboard Govee lights from legacy local integration to HACS Govee Cloud integration (`light.floor_lamp`, `light.office_leds`), resolving "Entity not found" tiles.
 - Updated `sensor.den_lights_on` and `sensor.den_lights_off` template helpers to group multi-segment Govee lights and sub-lights into their 4 physical fixtures (Den Floor Lamp, Floor Lamp, Office LEDs, Fan composite), fixing the 35-light count badge explosion.
-- Updated "All Lights Off" master button to invoke `script.den_all_lights_off`.
-- Updated `script.den_all_lights_on` to restore previous lighting configuration from `scene.den_lights_snapshot` with fallback to primary fixtures.
+- Updated "All Lights Off" master button to invoke `script.den_all_lights_off` with snapshot guard (`above: 0`) and `mode: single`.
+- Updated `script.den_all_lights_on` to restore previous lighting configuration from `scene.den_lights_snapshot` with HA reboot fallback to default fixtures.
+- Removed unused and unresponsive `switch.den_floor_lamp_dreamview` from dashboard, scripts, and template counters, eliminating redundant Govee cloud API calls.
 
 ### Fixed
 - Fixed Den Floor Lamp on-off-on glitch during "All Lights Off" by targeting specific fixture lights and switches instead of broadcasting area-wide `light.turn_off`, preventing Govee Cloud API command flooding across multi-segment entities.
 - Removed status-only `light.den_floor_lamp` tile to avoid conflicting commands, controlling the lamp exclusively through its physical sub-light switches.
+- Fixed snapshot overwrite issue where pressing "All Lights Off" while dark would save an empty room state, preventing "All Lights On" from doing nothing.
 
 ## 0.3.0 - 2026-09-21
 

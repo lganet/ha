@@ -3,6 +3,10 @@ input_boolean:
     name: Den Night Light Active
     icon: mdi:weather-night
 
+  den_lights_snapshot_active:
+    name: Den Lights Snapshot Active
+    icon: mdi:camera
+
 input_number:
   den_fan_light_last_brightness:
     name: Den Fan Light Last Brightness
