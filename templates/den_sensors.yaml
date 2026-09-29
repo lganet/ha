@@ -27,20 +27,17 @@
       unique_id: den_lights_on
       unit_of_measurement: "on"
       state: >-
-        {% set dfl_entities = ['switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_ripple_light'] %}
-        {% set dfl_on = 1 if (expand(dfl_entities) | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
-        {% set fl_on = 1 if is_state('light.floor_lamp', 'on') else 0 %}
-        {% set ol_on = 1 if is_state('light.office_leds', 'on') else 0 %}
-        {% set fan_on = 1 if is_state('light.smart_fan_3', 'on') or is_state('light.smart_fan_backlight', 'on') or is_state('light.smart_fan_nightlight', 'on') else 0 %}
-        {{ dfl_on + fl_on + ol_on + fan_on }}
+        {% set den_lights = label_entities('den_controlled_lights') %}
+        {% set dfl_on = 1 if (den_lights | select('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set other_on = den_lights | reject('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
+        {{ dfl_on + other_on }}
 
     - name: Den Lights Off
       unique_id: den_lights_off
       unit_of_measurement: "off"
       state: >-
-        {% set dfl_entities = ['switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_ripple_light'] %}
-        {% set dfl_on = 1 if (expand(dfl_entities) | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
-        {% set fl_on = 1 if is_state('light.floor_lamp', 'on') else 0 %}
-        {% set ol_on = 1 if is_state('light.office_leds', 'on') else 0 %}
-        {% set fan_on = 1 if is_state('light.smart_fan_3', 'on') or is_state('light.smart_fan_backlight', 'on') or is_state('light.smart_fan_nightlight', 'on') else 0 %}
-        {{ 4 - (dfl_on + fl_on + ol_on + fan_on) }}
+        {% set den_lights = label_entities('den_controlled_lights') %}
+        {% set dfl_on = 1 if (den_lights | select('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set other_on = den_lights | reject('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
+        {% set total_fixtures = (1 if (den_lights | select('match', 'switch.den_floor_lamp_') | list | count > 0) else 0) + (den_lights | reject('match', 'switch.den_floor_lamp_') | list | count) %}
+        {{ total_fixtures - (dfl_on + other_on) }}

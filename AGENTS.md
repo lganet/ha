@@ -103,6 +103,15 @@ When working with lighting entities, automations, scripts, or dashboard controls
   - Ensure switching between modes transitions smoothly without cutting fixture power.
 - **Plan Consultation**: When proposing new lighting automations, room toggle scripts, or dashboard lighting controls, explicitly address state preservation in the implementation plan (e.g., whether the user wants last-state memory, distinct profiles, or fixed defaults). If the requirement is not specified, include a question or recommendation in the plan.
 
+## Label Principles & Best Practices
+
+Home Assistant Labels (HA 2024.4+) provide a flexible tagging mechanism for entity categorization, target selection in automations and scripts, and governance across integrations.
+
+- **Prefer Label Targeting Over Broad Area Broadcasts**: Never use broad `area_id` broadcasts when turning devices on/off or snapshotting if the area contains multi-entity or cloud-dependent devices (like Govee segments). Use functional labels (e.g., `target: { label_id: <label_id> }`) instead to target only intended fixtures and avoid cloud API throttling or device glitching.
+- **Avoid Rigid Entity Arrays in Code**: Use `label_entities('<label_id>')` in template sensors and scripts instead of hardcoded entity lists. This allows newly added fixtures to automatically inherit room automations and state badges simply by assigning them the appropriate label in Home Assistant.
+- **Inspect Before Creating**: Check existing labels using `ha_config_get_label` before creating new ones to prevent duplicate tags or fragmented naming conventions.
+- **Repository Provenance Mandate**: Every helper, automation, script, or template entity managed in this repository must be tagged with the `git_managed` label in Home Assistant. This provides clear provenance indicating that configuration is version-controlled and should be modified via Git rather than ad-hoc UI changes.
+
 ## Change Planning
 
 For non-trivial changes:
