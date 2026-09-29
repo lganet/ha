@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0 - 2026-09-28
+
+### Added
+- Implemented Home Assistant Label Architecture (Step 2 of roadmap) creating core labels `git_managed` (`mdi:git`, cyan) for repository provenance governance and `den_controlled_lights` (`mdi:lightbulb-group`, amber) for functional lighting grouping.
+- Tagged 17 version-controlled helpers, scripts, automations, and template entities in Home Assistant with `git_managed` to clearly delineate repository-managed resources from ad-hoc UI creations.
+- Tagged 6 active physical fixtures in the Den (`light.floor_lamp`, `light.office_leds`, `light.den_fan_light`, `switch.den_floor_lamp_side_light`, `switch.den_floor_lamp_bottom_light`, `switch.den_floor_lamp_ripple_light`) with `den_controlled_lights`.
+- Added **Label Principles & Best Practices** section to `AGENTS.md` governing label targeting over broad area broadcasts, dynamic entity resolution via `label_entities()`, inspection prior to label creation, and mandatory `git_managed` tagging.
+- Added implementation plan `doc/2026-09-28-labels-and-governance.md` and updated proposal `doc/2026-09-28-label-strategy-proposal.md`.
+
+### Changed
+- Refactored `sensor.den_lights_on` and `sensor.den_lights_off` template sensors and live helpers to dynamically resolve fixture states using `label_entities('den_controlled_lights')`, eliminating brittle hardcoded entity lists.
+- Refactored `script.den_all_lights_off` to target `label_id: den_controlled_lights` via `homeassistant.turn_off`, cleanly turning off all room fixtures across light and switch domains without area broadcast flooding.
+
 ## 0.4.0 - 2026-09-26
 
 ### Added

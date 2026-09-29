@@ -25,19 +25,13 @@ sequence:
       - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.den_lights_snapshot_active
+  - action: homeassistant.turn_off
+    target:
+      label_id: den_controlled_lights
   - action: light.turn_off
     target:
       entity_id:
-        - light.floor_lamp
-        - light.office_leds
-        - light.smart_fan_3
         - light.smart_fan_backlight
-  - action: switch.turn_off
-    target:
-      entity_id:
-        - switch.den_floor_lamp_bottom_light
-        - switch.den_floor_lamp_side_light
-        - switch.den_floor_lamp_ripple_light
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_night_light_active

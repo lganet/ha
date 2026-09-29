@@ -1,7 +1,7 @@
 # Proposal: Home Assistant Label Strategy & Repository Provenance
 
 **Date**: 2026-09-28  
-**Status**: Deferred / Future Improvement  
+**Status**: Implemented (Step 2 Roadmap - see `doc/2026-09-28-labels-and-governance.md`)  
 
 ---
 
