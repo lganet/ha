@@ -27,16 +27,20 @@
       unique_id: den_lights_on
       unit_of_measurement: "on"
       state: >-
-        {% set fan_lights = ['light.smart_fan_3', 'light.smart_fan_backlight', 'light.smart_fan_nightlight'] %}
-        {% set room_lights_on = expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | rejectattr('entity_id', 'in', fan_lights) | selectattr('state', 'eq', 'on') | list | count %}
+        {% set dfl_entities = ['switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_ripple_light'] %}
+        {% set dfl_on = 1 if (expand(dfl_entities) | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set fl_on = 1 if is_state('light.floor_lamp', 'on') else 0 %}
+        {% set ol_on = 1 if is_state('light.office_leds', 'on') else 0 %}
         {% set fan_on = 1 if is_state('light.smart_fan_3', 'on') or is_state('light.smart_fan_backlight', 'on') or is_state('light.smart_fan_nightlight', 'on') else 0 %}
-        {{ room_lights_on + fan_on }}
+        {{ dfl_on + fl_on + ol_on + fan_on }}
 
     - name: Den Lights Off
       unique_id: den_lights_off
       unit_of_measurement: "off"
       state: >-
-        {% set fan_lights = ['light.smart_fan_3', 'light.smart_fan_backlight', 'light.smart_fan_nightlight'] %}
-        {% set room_lights_off = expand(area_entities('den')) | selectattr('domain', 'eq', 'light') | rejectattr('entity_id', 'in', fan_lights) | selectattr('state', 'eq', 'off') | list | count %}
-        {% set fan_off = 1 if is_state('light.smart_fan_3', 'off') and is_state('light.smart_fan_backlight', 'off') and is_state('light.smart_fan_nightlight', 'off') else 0 %}
-        {{ room_lights_off + fan_off }}
+        {% set dfl_entities = ['switch.den_floor_lamp_side_light', 'switch.den_floor_lamp_bottom_light', 'switch.den_floor_lamp_ripple_light'] %}
+        {% set dfl_on = 1 if (expand(dfl_entities) | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set fl_on = 1 if is_state('light.floor_lamp', 'on') else 0 %}
+        {% set ol_on = 1 if is_state('light.office_leds', 'on') else 0 %}
+        {% set fan_on = 1 if is_state('light.smart_fan_3', 'on') or is_state('light.smart_fan_backlight', 'on') or is_state('light.smart_fan_nightlight', 'on') else 0 %}
+        {{ 4 - (dfl_on + fl_on + ol_on + fan_on) }}

@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.4.0 - 2026-09-26
+
+### Added
+- Created `script.den_all_lights_off` to dynamically snapshot active lighting states into persistent helper `input_text.den_lights_last_state` before turning them off.
+- Created helper `input_boolean.den_lights_snapshot_active` to track whether an active lighting snapshot exists and guard against overwriting snapshots when lights are already off.
+- Created `automation.den_floor_lamp_mutual_exclusion` to automatically turn off Side Light when Bottom Light is toggled on (and vice-versa), matching physical H60B0 lamp hardware behavior and preventing both switches from displaying "on" simultaneously.
+- Added Den Floor Lamp card (`custom:stack-in-card`) to Den dashboard with direct controls for sub-lights (`Side Light` full width, `Base` and `Ripple` in a 2-column grid to avoid UI text truncation).
+- Added implementation plan `doc/2026-09-26-govee-cloud-den-lights.md` and proposal `doc/2026-09-28-label-strategy-proposal.md`.
+
+### Changed
+- Migrated Den dashboard Govee lights from legacy local integration to HACS Govee Cloud integration (`light.floor_lamp`, `light.office_leds`), resolving "Entity not found" tiles.
+- Updated `sensor.den_lights_on` and `sensor.den_lights_off` template helpers to group multi-segment Govee lights and sub-lights into their 4 physical fixtures (Den Floor Lamp, Floor Lamp, Office LEDs, Fan composite), fixing the 35-light count badge explosion.
+- Updated "All Lights Off" master button to invoke `script.den_all_lights_off` with snapshot guard (`above: 0`) and `mode: single`.
+- Updated `script.den_all_lights_on` to restore Govee lights (`light.office_leds`, `light.floor_lamp`) using bare `light.turn_on` calls, preserving external app effects, DIY scenes, and music sync modes from the device's internal memory.
+- Shortened tile labels on Den Floor Lamp card to "Base" and "Ripple" to eliminate NSPanel text truncation (`Botto...`).
+- Removed unused and unresponsive `switch.den_floor_lamp_dreamview` from dashboard, scripts, and template counters, eliminating redundant Govee cloud API calls.
+
+### Fixed
+- Fixed Govee app effects on Office LEDs and Floor Lamp being erased during All Lights On by replacing attribute-heavy scene restoration with bare `light.turn_on` invocations.
+- Fixed Den Floor Lamp Side Light and Bottom Light displaying simultaneously "on" when physical fixture only supports one at a time.
+- Fixed Den Floor Lamp on-off-on glitch during "All Lights Off" by targeting specific fixture lights and switches instead of broadcasting area-wide `light.turn_off`, preventing Govee Cloud API command flooding across multi-segment entities.
+- Removed status-only `light.den_floor_lamp` tile to avoid conflicting commands, controlling the lamp exclusively through its physical sub-light switches.
+- Fixed snapshot overwrite issue where pressing "All Lights Off" while dark would save an empty room state, preventing "All Lights On" from doing nothing.
+
 ## 0.3.0 - 2026-09-21
 
 ### Added
