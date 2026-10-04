@@ -9,7 +9,7 @@
 - Created template binary sensor `binary_sensor.den_is_workday` which defaults Monday–Friday as workdays unless an event is active on `calendar.den_holidays` (leaving the calendar UI uncluttered by Mon–Fri workday events).
 - Created template sensor `sensor.den_presence_status` providing human-readable status (`Active (Occupied)`, `Active (Clear)`, `Paused (Resumes Tomorrow)`, or `Disabled`).
 - Created helpers `input_boolean.den_presence_automation` (master toggle) and `input_boolean.den_presence_override` (daily pause flag).
-- Created functional label `den_night_lights` (`mdi:weather-night`, purple) and tagged `light.den_night_light`, enabling flexible assignment of night lights without modifying automations.
+- Created functional label `den_night_lights` (`mdi:weather-night`, purple) and tagged `light.den_night_light`, `switch.den_floor_lamp_side_light`, and `light.humidifier_night_light`, enabling flexible assignment of night lights without modifying automations.
 - Created `script.den_presence_toggle` allowing one-tap resuming or pausing of presence automation without abruptly modifying current light states.
 - Added Motion Presence Control button card and Presence badge to the Den NSPanel dashboard (`dashboards/nspanel-den.yaml`).
 - Tagged all newly created entities, helpers, scripts, and automations with `git_managed` for repository provenance governance.

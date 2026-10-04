@@ -93,7 +93,10 @@ stateDiagram-v2
   - **Icon**: `mdi:weather-night`
   - **Color**: `purple`
   - **Description**: `Fixtures activated for night/off-hours presence in the Den`
-- Tag `light.den_night_light` with `den_night_lights` and `git_managed`.
+- Tag night lighting fixtures with `den_night_lights`:
+  - `light.den_night_light` (Fan Night Light, also tagged `git_managed`)
+  - `switch.den_floor_lamp_side_light` (Den Floor Lamp Side Light)
+  - `light.humidifier_night_light` (Govee Humidifier Night Light)
 
 ### B. Integrations & Calendars
 - Add `local_calendar` integration with calendar name `Den Holidays` (`calendar.den_holidays`), pre-populated with 2026/2027 official British Columbia statutory holidays.
