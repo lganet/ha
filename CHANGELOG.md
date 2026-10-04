@@ -13,6 +13,7 @@
 - Created `script.den_presence_toggle` allowing one-tap resuming or pausing of presence automation without abruptly modifying current light states.
 - Added Motion Presence Control button card and Presence badge to the Den NSPanel dashboard (`dashboards/nspanel-den.yaml`).
 - Tagged all newly created entities, helpers, scripts, and automations with `git_managed` for repository provenance governance.
+- Added 09:00:00 workday morning transition trigger to `automation.den_presence_adaptive_lighting`, automatically promoting active presence from Night Lights to full workday lighting, and unified absence shut-off to reliably extinguish both `den_night_lights` and daytime fixtures when leaving at any time of day.
 - Documented implementation plan in `doc/2026-10-03-den-fp300-presence-lighting.md`.
 
 ### Changed

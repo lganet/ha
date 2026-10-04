@@ -120,9 +120,9 @@ stateDiagram-v2
 
 ### F. Automations (`automations/`)
 - New `automations/den_presence_lighting.yaml`:
-  - Triggers on FP300 presence `on` / `off` (for 2 min) and `00:00:00` daily reset.
-  - Branches according to work hours vs. off-hours.
-  - Uses `label_id: den_night_lights` and `script.den_all_lights_on` / `script.den_all_lights_off`.
+  - Triggers on FP300 presence `on`, absence `off` (for 2 min), `09:00:00` workday morning transition, and `00:00:00` daily reset.
+  - Automatically transitions active occupants from Night Lights to full workday lighting at 09:00:00.
+  - Absence for 2 minutes reliably turns off both `den_night_lights` and `script.den_all_lights_off`.
 
 ### G. Dashboard (`dashboards/nspanel-den.yaml`)
 - Add a presence button/card in the Den Controls section showing status, occupancy badge, and one-tap restore.
