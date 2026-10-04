@@ -6,6 +6,21 @@ sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_night_light_active
+  - if:
+      - condition: not
+        conditions:
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.den_is_workday
+                state: "on"
+              - condition: time
+                after: "09:00:00"
+                before: "18:00:00"
+    then:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.den_presence_override
   - choose:
       - conditions:
           - condition: state

@@ -37,6 +37,12 @@ views:
         show_name: true
         show_state: true
         show_icon: true
+      - type: entity
+        entity: sensor.den_presence_status
+        name: Presence
+        show_name: true
+        show_state: true
+        show_icon: true
     sections:
       - type: grid
         cards:
@@ -126,6 +132,61 @@ views:
                   notification: >
                     [[[ return states['sensor.den_lights_off'] ?
                     states['sensor.den_lights_off'].state : '0'; ]]]
+          - type: custom:button-card
+            entity: sensor.den_presence_status
+            name: Motion Presence Control
+            show_name: true
+            show_state: true
+            icon: >-
+              [[[
+                if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return 'mdi:motion-sensor-off';
+                if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return 'mdi:account-clock';
+                if (states['binary_sensor.fp300_den_presence'] && states['binary_sensor.fp300_den_presence'].state === 'on') return 'mdi:motion-sensor';
+                return 'mdi:motion-sensor';
+              ]]]
+            tap_action:
+              action: call-service
+              service: script.den_presence_toggle
+            styles:
+              card:
+                - height: 60px
+                - padding: 8px 14px
+                - border-radius: var(--ha-card-border-radius, 12px)
+                - display: flex
+                - flex-direction: row
+                - align-items: center
+                - justify-content: flex-start
+                - margin-top: 4px
+              grid:
+                - grid-template-areas: '"i n" "i s"'
+                - grid-template-columns: 40px 1fr
+                - grid-template-rows: 1fr 1fr
+              icon:
+                - width: 32px
+                - height: 32px
+                - color: >-
+                    [[[
+                      if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return '#9E9E9E';
+                      if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return '#FFA726';
+                      if (states['binary_sensor.fp300_den_presence'] && states['binary_sensor.fp300_den_presence'].state === 'on') return '#4CAF50';
+                      return '#42A5F5';
+                    ]]]
+              name:
+                - font-size: 13px
+                - font-weight: 600
+                - justify-self: start
+                - color: var(--primary-text-color)
+              state:
+                - font-size: 12px
+                - font-weight: 500
+                - justify-self: start
+                - color: >-
+                    [[[
+                      if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return '#9E9E9E';
+                      if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return '#FFA726';
+                      if (states['binary_sensor.fp300_den_presence'] && states['binary_sensor.fp300_den_presence'].state === 'on') return '#4CAF50';
+                      return 'var(--secondary-text-color)';
+                    ]]]
 
       - type: grid
         cards:

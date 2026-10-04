@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.6.0 - 2026-10-03
+
+### Added
+- Created `automation.den_presence_adaptive_lighting` to automatically turn on and off Den lights using the Aqara FP300 presence sensor (`binary_sensor.fp300_den_presence`) with a 2-minute absence delay buffer.
+- Added adaptive scheduling logic: turning on all controlled fixtures via `script.den_all_lights_on` during working days (09:00–18:00), and turning on fixtures labeled `den_night_lights` during off-hours, weekends, and holidays.
+- Integrated British Columbia / Vancouver statutory holiday detection via Home Assistant's native `workday` integration (`binary_sensor.workday_sensor_ca_bc`).
+- Created dedicated Local Calendar `calendar.den_holidays` enabling easy scheduling of custom non-working days and vacations directly from the Home Assistant calendar UI.
+- Created template binary sensor `binary_sensor.den_is_workday` combining BC statutory holidays and custom vacation calendar events.
+- Created template sensor `sensor.den_presence_status` providing human-readable status (`Active (Occupied)`, `Active (Clear)`, `Paused (Resumes Tomorrow)`, or `Disabled`).
+- Created helpers `input_boolean.den_presence_automation` (master toggle) and `input_boolean.den_presence_override` (daily pause flag).
+- Created functional label `den_night_lights` (`mdi:weather-night`, purple) and tagged `light.den_night_light`, enabling flexible assignment of night lights without modifying automations.
+- Created `script.den_presence_toggle` allowing one-tap resuming or pausing of presence automation without abruptly modifying current light states.
+- Added Motion Presence Control button card and Presence badge to the Den NSPanel dashboard (`dashboards/nspanel-den.yaml`).
+- Tagged all newly created entities, helpers, scripts, and automations with `git_managed` for repository provenance governance.
+- Documented implementation plan in `doc/2026-10-03-den-fp300-presence-lighting.md`.
+
+### Changed
+- Updated `script.den_all_lights_on` to activate `input_boolean.den_presence_override` when triggered manually during off-hours or non-work days.
+- Updated `script.den_all_lights_off` to clear `input_boolean.den_presence_override` and restore presence automation.
+
 ## 0.5.0 - 2026-09-28
 
 ### Added

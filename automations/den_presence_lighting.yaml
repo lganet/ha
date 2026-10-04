@@ -1,0 +1,85 @@
+id: "1791093928781"
+alias: Den Presence Adaptive Lighting
+description: Turn on/off Den lights automatically based on FP300 presence, schedule (workday 09-18 vs night lights), and override state.
+mode: single
+triggers:
+  - trigger: state
+    entity_id: binary_sensor.fp300_den_presence
+    to: "on"
+    id: presence_detected
+  - trigger: state
+    entity_id: binary_sensor.fp300_den_presence
+    to: "off"
+    for: "00:02:00"
+    id: presence_cleared
+  - trigger: time
+    at: "00:00:00"
+    id: daily_reset
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: daily_reset
+        sequence:
+          - action: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.den_presence_override
+          - action: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.den_presence_automation
+
+      - conditions:
+          - condition: trigger
+            id: presence_detected
+          - condition: state
+            entity_id: input_boolean.den_presence_automation
+            state: "on"
+          - condition: state
+            entity_id: input_boolean.den_presence_override
+            state: "off"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: binary_sensor.den_is_workday
+                    state: "on"
+                  - condition: time
+                    after: "09:00:00"
+                    before: "18:00:00"
+                sequence:
+                  - action: script.den_all_lights_on
+            default:
+              - action: homeassistant.turn_on
+                target:
+                  label_id: den_night_lights
+
+      - conditions:
+          - condition: trigger
+            id: presence_cleared
+          - condition: state
+            entity_id: input_boolean.den_presence_automation
+            state: "on"
+          - condition: state
+            entity_id: input_boolean.den_presence_override
+            state: "off"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: binary_sensor.den_is_workday
+                    state: "on"
+                  - condition: time
+                    after: "09:00:00"
+                    before: "18:00:00"
+                sequence:
+                  - action: script.den_all_lights_off
+            default:
+              - action: homeassistant.turn_off
+                target:
+                  label_id: den_night_lights
+              - if:
+                  - condition: numeric_state
+                    entity_id: sensor.den_lights_on
+                    above: 0
+                then:
+                  - action: script.den_all_lights_off
