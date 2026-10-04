@@ -5,9 +5,8 @@
 ### Added
 - Created `automation.den_presence_adaptive_lighting` to automatically turn on and off Den lights using the Aqara FP300 presence sensor (`binary_sensor.fp300_den_presence`) with a 2-minute absence delay buffer.
 - Added adaptive scheduling logic: turning on all controlled fixtures via `script.den_all_lights_on` during working days (09:00–18:00), and turning on fixtures labeled `den_night_lights` during off-hours, weekends, and holidays.
-- Integrated British Columbia / Vancouver statutory holiday detection via Home Assistant's native `workday` integration (`binary_sensor.workday_sensor_ca_bc`).
-- Created dedicated Local Calendar `calendar.den_holidays` enabling easy scheduling of custom non-working days and vacations directly from the Home Assistant calendar UI.
-- Created template binary sensor `binary_sensor.den_is_workday` combining BC statutory holidays and custom vacation calendar events.
+- Integrated British Columbia / Vancouver statutory holiday detection and custom vacation tracking using a dedicated Local Calendar `calendar.den_holidays`, pre-populated with official BC statutory holidays for 2026 and 2027.
+- Created template binary sensor `binary_sensor.den_is_workday` which defaults Monday–Friday as workdays unless an event is active on `calendar.den_holidays` (leaving the calendar UI uncluttered by Mon–Fri workday events).
 - Created template sensor `sensor.den_presence_status` providing human-readable status (`Active (Occupied)`, `Active (Clear)`, `Paused (Resumes Tomorrow)`, or `Disabled`).
 - Created helpers `input_boolean.den_presence_automation` (master toggle) and `input_boolean.den_presence_override` (daily pause flag).
 - Created functional label `den_night_lights` (`mdi:weather-night`, purple) and tagged `light.den_night_light`, enabling flexible assignment of night lights without modifying automations.

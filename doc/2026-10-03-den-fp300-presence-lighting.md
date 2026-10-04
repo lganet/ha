@@ -32,9 +32,9 @@ Key architectural goals:
 
 > [!IMPORTANT]
 > **1. Vancouver / BC Statutory Holidays & Custom Calendar**:
-> - Built-in **Workday Integration** (`country: CA`, `province: BC`): Natively includes BC statutory holidays (Family Day, Victoria Day, Canada Day, BC Day, National Day for Truth and Reconciliation, Thanksgiving, Remembrance Day, Christmas, etc.).
-> - **Local Calendar** (`calendar.den_holidays`): Enables adding personal vacation days or custom company holidays via the Home Assistant calendar UI.
-> - Combined sensor: `binary_sensor.den_is_workday`.
+> - **Clean Calendar-Only Model**: Rather than using the built-in `workday` integration (which clutters the Home Assistant calendar UI with Mon–Fri "Workday" events), weekdays (Mon–Fri) are treated as standard workdays in code (`now().weekday() < 5`).
+> - **Local Calendar (`calendar.den_holidays`)**: Holds only official British Columbia statutory holidays (pre-populated for 2026 & 2027) plus any user-added vacation days or time off. The calendar remains clean and easy to read.
+> - Combined sensor: `binary_sensor.den_is_workday` (`now().weekday() < 5 and is_state('calendar.den_holidays', 'off')`).
 
 > [!IMPORTANT]
 > **2. Presence Absence Delay (2 Minutes)**:
@@ -96,8 +96,7 @@ stateDiagram-v2
 - Tag `light.den_night_light` with `den_night_lights` and `git_managed`.
 
 ### B. Integrations & Calendars
-- Add `workday` integration (`country: CA`, `province: BC`, `excludes: [sat, sun, holiday]`).
-- Add `local_calendar` integration with calendar name `Den Holidays` (`calendar.den_holidays`).
+- Add `local_calendar` integration with calendar name `Den Holidays` (`calendar.den_holidays`), pre-populated with 2026/2027 official British Columbia statutory holidays.
 
 ### C. Helpers (`helpers/den_lighting_helpers.yaml`)
 - `input_boolean.den_presence_automation` (Master enable/disable)
@@ -106,7 +105,7 @@ stateDiagram-v2
 ### D. Templates (`templates/den_sensors.yaml`)
 - `binary_sensor.den_is_workday`:
   ```jinja2
-  {{ is_state('binary_sensor.workday', 'on') and is_state('calendar.den_holidays', 'off') }}
+  {{ now().weekday() < 5 and is_state('calendar.den_holidays', 'off') }}
   ```
 - `sensor.den_presence_status`:
   Displays `Active (Occupied)`, `Active (Clear)`, `Paused (Resumes Tomorrow)`, or `Disabled`.
