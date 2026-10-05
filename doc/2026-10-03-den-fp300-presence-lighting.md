@@ -114,8 +114,10 @@ stateDiagram-v2
   Displays `Active (Occupied)`, `Active (Clear)`, `Paused (Resumes Tomorrow)`, or `Disabled`.
 
 ### E. Scripts (`scripts/`)
-- Modify `scripts/den_all_lights_on.yaml`: Set `den_presence_override` to `on` when called outside work hours or from UI.
-- Modify `scripts/den_all_lights_off.yaml`: Clear `den_presence_override` to `off`.
+- Modify `scripts/den_all_lights_on.yaml`:
+  - Consistently turns on all primary fixtures (`light.floor_lamp`, `light.office_leds`, `light.den_fan_light`, `switch.den_floor_lamp_side_light`), eliminating partial-snapshot states.
+  - Takes `override` parameter (default `true` for UI/dashboard button taps to pause presence for the day; automation passes `override: false`).
+- Modify `scripts/den_all_lights_off.yaml`: Turn off room fixtures and clear `den_presence_override` to restore presence.
 - New `scripts/den_presence_toggle.yaml`: Toggle or restore presence automation state without changing lights.
 
 ### F. Automations (`automations/`)

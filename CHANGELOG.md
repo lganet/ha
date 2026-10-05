@@ -16,9 +16,9 @@
 - Added 09:00:00 workday morning transition trigger to `automation.den_presence_adaptive_lighting`, automatically promoting active presence from Night Lights to full workday lighting, and unified absence shut-off to reliably extinguish both `den_night_lights` and daytime fixtures when leaving at any time of day.
 - Documented implementation plan in `doc/2026-10-03-den-fp300-presence-lighting.md`.
 
-### Changed
-- Updated `script.den_all_lights_on` to activate `input_boolean.den_presence_override` when triggered manually during off-hours or non-work days.
-- Updated `script.den_all_lights_off` to clear `input_boolean.den_presence_override` and restore presence automation.
+- Refactored `script.den_all_lights_on` to consistently turn on all primary Den fixtures (`light.floor_lamp`, `light.office_leds`, `light.den_fan_light`, `switch.den_floor_lamp_side_light`), eliminating legacy partial-snapshot restoration that caused incomplete lighting during presence activation.
+- Added `override` parameter to `script.den_all_lights_on` (defaulting to `true` when pressed from the dashboard) to pause presence automation for the day, while `automation.den_presence_adaptive_lighting` passes `override: false` to keep presence tracking active.
+- Updated `script.den_all_lights_off` to reliably clear `input_boolean.den_presence_override` and restore presence automation.
 
 ## 0.5.0 - 2026-09-28
 
