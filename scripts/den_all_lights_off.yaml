@@ -1,30 +1,8 @@
 alias: Den All Lights Off
-description: Snapshot active lighting states and turn off all lights in the Den.
+description: Turn off all lights in the Den and restore presence automation.
 icon: mdi:lightbulb-group-off
 mode: single
 sequence:
-  - if:
-      - condition: numeric_state
-        entity_id: sensor.den_lights_on
-        above: 0
-    then:
-      - action: input_text.set_value
-        target:
-          entity_id: input_text.den_lights_last_state
-        data:
-          value: >-
-            {{ {
-              'ol': is_state('light.office_leds', 'on'),
-              'fl': is_state('light.floor_lamp', 'on'),
-              'sl': is_state('switch.den_floor_lamp_side_light', 'on'),
-              'bl': is_state('switch.den_floor_lamp_bottom_light', 'on'),
-              'rl': is_state('switch.den_floor_lamp_ripple_light', 'on'),
-              'fan': is_state('light.smart_fan_3', 'on'),
-              'fbl': is_state('light.smart_fan_backlight', 'on')
-            } | to_json }}
-      - action: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.den_lights_snapshot_active
   - action: homeassistant.turn_off
     target:
       label_id: den_controlled_lights
@@ -35,3 +13,12 @@ sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_night_light_active
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.den_presence_override
+  - action: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.den_presence_automation
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.den_lights_snapshot_active

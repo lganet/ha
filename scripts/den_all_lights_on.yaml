@@ -1,80 +1,33 @@
 alias: Den All Lights On
-description: Restore previous Den lighting state from snapshot or fallback to primary fixtures.
+description: Turn on all primary fixtures in the Den, optionally engaging daily presence override.
 icon: mdi:lightbulb-group
 mode: single
+fields:
+  override:
+    description: "Whether to pause presence automation for the rest of the day"
+    default: true
+    selector:
+      boolean: {}
 sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_night_light_active
-  - choose:
-      - conditions:
-          - condition: state
-            entity_id: input_boolean.den_lights_snapshot_active
-            state: "on"
-        sequence:
-          - if:
-              - condition: template
-                value_template: "{{ (states('input_text.den_lights_last_state') | from_json).get('ol', false) }}"
-            then:
-              - action: light.turn_on
-                target:
-                  entity_id: light.office_leds
-          - if:
-              - condition: template
-                value_template: "{{ (states('input_text.den_lights_last_state') | from_json).get('fl', false) }}"
-            then:
-              - action: light.turn_on
-                target:
-                  entity_id: light.floor_lamp
-          - choose:
-              - conditions:
-                  - condition: template
-                    value_template: "{{ (states('input_text.den_lights_last_state') | from_json).get('sl', false) }}"
-                sequence:
-                  - action: switch.turn_on
-                    target:
-                      entity_id: switch.den_floor_lamp_side_light
-              - conditions:
-                  - condition: template
-                    value_template: "{{ (states('input_text.den_lights_last_state') | from_json).get('bl', false) }}"
-                sequence:
-                  - action: switch.turn_on
-                    target:
-                      entity_id: switch.den_floor_lamp_bottom_light
-          - if:
-              - condition: template
-                value_template: "{{ (states('input_text.den_lights_last_state') | from_json).get('rl', false) }}"
-            then:
-              - action: switch.turn_on
-                target:
-                  entity_id: switch.den_floor_lamp_ripple_light
-          - if:
-              - condition: template
-                value_template: "{{ (states('input_text.den_lights_last_state') | from_json).get('fan', false) }}"
-            then:
-              - action: light.turn_on
-                target:
-                  entity_id: light.den_fan_light
-          - if:
-              - condition: template
-                value_template: "{{ (states('input_text.den_lights_last_state') | from_json).get('fbl', false) }}"
-            then:
-              - action: light.turn_on
-                target:
-                  entity_id: light.smart_fan_backlight
-          - action: input_boolean.turn_off
-            target:
-              entity_id: input_boolean.den_lights_snapshot_active
-    default:
-      - action: light.turn_on
+  - if:
+      - condition: template
+        value_template: "{{ override | default(true) }}"
+    then:
+      - action: input_boolean.turn_on
         target:
-          entity_id:
-            - light.floor_lamp
-            - light.office_leds
-            - light.den_fan_light
-      - action: switch.turn_on
-        target:
-          entity_id: switch.den_floor_lamp_side_light
-      - action: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.den_lights_snapshot_active
+          entity_id: input_boolean.den_presence_override
+  - action: light.turn_on
+    target:
+      entity_id:
+        - light.floor_lamp
+        - light.office_leds
+        - light.den_fan_light
+  - action: switch.turn_on
+    target:
+      entity_id: switch.den_floor_lamp_side_light
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.den_lights_snapshot_active

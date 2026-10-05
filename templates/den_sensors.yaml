@@ -41,3 +41,24 @@
         {% set other_on = den_lights | reject('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
         {% set total_fixtures = (1 if (den_lights | select('match', 'switch.den_floor_lamp_') | list | count > 0) else 0) + (den_lights | reject('match', 'switch.den_floor_lamp_') | list | count) %}
         {{ total_fixtures - (dfl_on + other_on) }}
+
+    - name: Den Presence Status
+      unique_id: den_presence_status
+      icon: mdi:motion-sensor
+      state: >-
+        {% if is_state('input_boolean.den_presence_automation', 'off') %}
+          Disabled
+        {% elif is_state('input_boolean.den_presence_override', 'on') %}
+          Paused (Resumes Tomorrow)
+        {% elif is_state('binary_sensor.fp300_den_presence', 'on') %}
+          Active (Occupied)
+        {% else %}
+          Active (Clear)
+        {% endif %}
+
+- binary_sensor:
+    - name: Den Is Workday
+      unique_id: den_is_workday
+      icon: mdi:briefcase
+      state: >-
+        {{ now().weekday() < 5 and is_state('calendar.den_holidays', 'off') }}
