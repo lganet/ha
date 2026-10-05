@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.0 - 2026-10-03
+## 0.6.0 - 2026-10-05
 
 ### Added
 - Created `automation.den_presence_adaptive_lighting` to automatically turn on and off Den lights using the Aqara FP300 presence sensor (`binary_sensor.fp300_den_presence`) with a 2-minute absence delay buffer.
