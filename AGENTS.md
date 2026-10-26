@@ -97,6 +97,11 @@ When working with lighting entities, automations, scripts, or dashboard controls
 
 - **Preserve User Preferences**: Do not reset lights to arbitrary hardcoded brightness or color temperatures when turning them on, unless a specific default is explicitly requested.
 - **External Integration State**: For lights controlled by external ecosystems or companion apps (e.g., Govee, Hue, Tuya), prefer issuing bare `light.turn_on` calls without overriding brightness, color, or effect parameters so the device can restore its last active state, DIY scene, or app-configured mode.
+- **Govee & Multi-Segment Fixtures (Domain Separation & Race Condition Prevention)**:
+  - Multi-segment Govee devices (e.g., Floor Lamp Pro/Corner H60B0) expose both a primary `light` entity and auxiliary `switch` entities (e.g., side light, reading light, bottom light, ripple light).
+  - **Never use generic `homeassistant.turn_off` or broad area/label targets that mix `light` and `switch` entities simultaneously for Govee devices.** Sending simultaneous commands across heterogeneous domains causes dropped Cloud/LAN API packets and broker state bounce where toggling the sub-switches immediately wakes the parent lamp back on (or vice versa).
+  - Always separate actions by domain: call `light.turn_off` on the light entities first, followed by `switch.turn_off` on auxiliary switches (or vice versa for turning on: `light.turn_on` followed by `switch.turn_on`).
+  - Do not bundle secondary Govee sub-switches directly into general lighting groups/labels if their state reports independently; control them explicitly and sequentially in room scripts and automations.
 - **Multi-Mode Fixtures**: When a physical device serves multiple lighting roles (e.g., a ceiling fan with normal task lighting and a night light mode):
   - Do not create conflicting automations that cut master fixture power or cause race conditions.
   - Implement independent state tracking (helpers or template lights) so each mode retains its own brightness and color temperature settings.
