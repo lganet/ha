@@ -9,8 +9,9 @@
   - Physical connectivity protocols: `wifi`, `zigbee`, `lora`, `matter_wifi`, `ethernet`, `bluetooth`.
   - Topology: `hub_connected` (reserved for YoLink & SwitchBot intermediate gateways).
   - Energy & metering: `power_monitoring` (applied to all active Watt and kWh measuring devices for upcoming energy dashboards).
-  - Functional & Governance: `all_off_exempt`, `den_controlled_lights`, `git_managed`.
+  - Functional & Governance: `all_off_exempt`, `always_on`, `den_controlled_lights`, `git_managed`.
   - Domain categories: `light`, `fan`, `climate`, `media`, `camera`, `lock`, `sensor`, `switch`, `plug`, `mobile`, `system`.
+- Created `automation.always_on_switch_watchdog_auto_recovery` to immediately restore power and dispatch critical push notifications if any critical switch labeled `always_on` (`switch.office_homelab_plug`, `switch.kitchen_freezer_plug`, `switch.office_fan_light_switch`, `switch.office_pc_plug`) is ever turned off.
 - Added **Naming Conventions & Voice Accessibility (Areas, Devices, Entity IDs)** principles to `AGENTS.md` mandating clean device friendly names (omitting area prefix), full area-prefixed entity IDs (`<domain>.<area>_<descriptor>`), phonetic simplicity, and proactive alignment checks.
 - Documented complete device inventory, entity transition mapping, and execution plan in `doc/2026-10-25-device-area-naming-review.md`, `doc/2026-10-25-device-area-execution-plan.md`, `doc/devices-inventory-and-proposals.csv`, and `doc/entities-inventory-and-proposals.csv`.
 
