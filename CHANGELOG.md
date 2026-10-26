@@ -1,5 +1,57 @@
 # Changelog
 
+## 0.7.0 - 2026-10-26
+
+### Added
+- Standardized Home Assistant area names, spoken aliases, and icons across 10 primary home spaces to optimize voice assistant recognition (Google Assistant, Alexa, Assist) for non-native English speakers.
+- Added spoken voice aliases for key rooms (e.g., `Patio` aliases: `["Balcony", "Deck", "Backyard", "Outside", "Terrace", "Pátio"]`, `Office` aliases: `["Den", "Study", "Workroom", "Escritorio"]`, `Main Bedroom` aliases: `["Master Bedroom", "Master", "Quarto Principal", "Suite"]`).
+- Established comprehensive multi-dimensional Label Taxonomy in Home Assistant:
+  - Physical connectivity protocols: `wifi`, `zigbee`, `lora`, `matter_wifi`, `ethernet`, `bluetooth`.
+  - Topology: `hub_connected` (reserved for YoLink & SwitchBot intermediate gateways).
+  - Energy & metering: `power_monitoring` (applied to all active Watt and kWh measuring devices for upcoming energy dashboards).
+  - Functional & Governance: `all_off_exempt`, `always_on`, `den_controlled_lights`, `git_managed`.
+  - Domain categories: `light`, `fan`, `climate`, `media`, `camera`, `lock`, `sensor`, `switch`, `plug`, `mobile`, `system`.
+- Created `automation.always_on_switch_watchdog_auto_recovery` to immediately restore power and dispatch critical push notifications if any critical switch labeled `always_on` (`switch.office_homelab_plug`, `switch.kitchen_freezer_plug`, `switch.office_fan_light_switch`, `switch.office_pc_plug`, `switch.living_room_tv_console_plug`) is ever turned off.
+- Tagged `fan.office_air_purifier` with `all_off_exempt` and `git_managed` to protect room air filtration from bulk turn-off routines.
+- Tagged `light.humidifier_night_light` with `den_controlled_lights` and `git_managed`, and integrated it into `script.den_all_lights_on` so that All Lights On/Off reliably controls the humidifier night light alongside room lights.
+- Added Humidifier Night Light (`light.humidifier_night_light`) and Humidifier (`humidifier.humidifier`) tiles to the NSPanel Den dashboard (`dashboards/nspanel-den.yaml`), renaming the ceiling fan night light tile to "Fan Night Light" for clarity.
+- Added **Naming Conventions & Voice Accessibility (Areas, Devices, Entity IDs)**, **Always-On Protection & Explicit Confirmation Mandate**, and **Govee Multi-Segment Fixtures (Domain Separation & Race Condition Prevention)** principles to `AGENTS.md` mandating clean device friendly names (omitting area prefix), full area-prefixed entity IDs (`<domain>.<area>_<descriptor>`), phonetic simplicity, proactive alignment checks, strict confirmation prompts before turning off any `always_on` device, and deterministic sequential domain calls (`light.turn_off` followed by `switch.turn_off`) for multi-segment Govee fixtures to prevent Cloud/LAN race conditions.
+- Documented complete device inventory, entity transition mapping, and execution plan in `doc/2026-10-25-device-area-naming-review.md`, `doc/2026-10-25-device-area-execution-plan.md`, `doc/devices-inventory-and-proposals.csv`, and `doc/entities-inventory-and-proposals.csv`.
+
+### Changed
+- Standardized friendly names, area assignments, and labels across all 152 registered devices in Home Assistant, eliminating redundant area prefixes in UI dashboards and voice assistant prompts.
+- Renamed 53 primary entity IDs in Home Assistant to adhere to the `<domain>.<area>_<descriptor>` global convention.
+- Refactored repository automations (`automations/den_fan_light_state_tracker.yaml`, `automations/den_floor_lamp_mutual_exclusion.yaml`, `automations/den_presence_lighting.yaml`) to reference the newly standardized entity IDs.
+- Refactored scripts (`scripts/den_all_lights_on.yaml`, `scripts/den_all_lights_off.yaml`) to target standardized entity IDs (`light.office_floor_lamp`, `light.office_desk_leds`, `switch.office_floor_lamp_side_light`, `light.office_ceiling_fan_backlight`).
+- Refactored template sensors and template lights (`templates/den_sensors.yaml`, `templates/den_lights.yaml`) to reference standardized fan, lamp, and presence sensor entities.
+- Updated the live NSPanel Den dashboard (`dashboards/nspanel-den.yaml` and live storage dashboard `nspanel-den`) in Home Assistant to reference the new entity IDs without breaking tile controls.
+
+### Fixed
+- Removed inadvertent `den_controlled_lights` label from non-lighting infrastructure devices (`HomeLab Plug`, `PC Plug`, `SLZB-MR4U` coordinator, `NSPanel Pro`, and `FP300`), preventing room-wide light turn-off scripts from cutting AC power to servers or hardware controllers.
+- Configured Third Reality `HomeLab Plug` with `metering_only_mode: on` and `all_off_exempt` to permanently safeguard critical server infrastructure from accidental power cutoff.
+- Restored missing badge and fan tile entities on the live NSPanel Den dashboard (`nspanel-den`) and updated Home Assistant UI template helpers (`sensor.den_pm2_5_level`, `sensor.den_light_level`, `sensor.den_presence_status`, `light.den_fan_light`, `light.den_night_light`) to query standardized entity IDs.
+- Fixed `script.den_all_lights_off` leaving Govee Floor Lamp and Office LEDs turned on by replacing heterogeneous `homeassistant.turn_off` calls with deterministic, sequential domain turn-off commands (`light.turn_off` for primary lamps, followed by `switch.turn_off` for auxiliary sub-switches), eliminating Govee Cloud/LAN race conditions that inadvertently toggled parent lamps back on.
+
+## 0.6.0 - 2026-10-05
+
+### Added
+- Created `automation.den_presence_adaptive_lighting` to automatically turn on and off Den lights using the Aqara FP300 presence sensor (`binary_sensor.fp300_den_presence`) with a 2-minute absence delay buffer.
+- Added adaptive scheduling logic: turning on all controlled fixtures via `script.den_all_lights_on` during working days (09:00–18:00), and turning on fixtures labeled `den_night_lights` during off-hours, weekends, and holidays.
+- Integrated British Columbia / Vancouver statutory holiday detection and custom vacation tracking using a dedicated Local Calendar `calendar.den_holidays`, pre-populated with official BC statutory holidays for 2026 and 2027.
+- Created template binary sensor `binary_sensor.den_is_workday` which defaults Monday–Friday as workdays unless an event is active on `calendar.den_holidays` (leaving the calendar UI uncluttered by Mon–Fri workday events).
+- Created template sensor `sensor.den_presence_status` providing human-readable status (`Active (Occupied)`, `Active (Clear)`, `Paused (Resumes Tomorrow)`, or `Disabled`).
+- Created helpers `input_boolean.den_presence_automation` (master toggle) and `input_boolean.den_presence_override` (daily pause flag).
+- Created functional label `den_night_lights` (`mdi:weather-night`, purple) and tagged `light.den_night_light`, `switch.den_floor_lamp_side_light`, and `light.humidifier_night_light`, enabling flexible assignment of night lights without modifying automations.
+- Created `script.den_presence_toggle` allowing one-tap resuming or pausing of presence automation without abruptly modifying current light states.
+- Added Motion Presence Control button card and Presence badge to the Den NSPanel dashboard (`dashboards/nspanel-den.yaml`).
+- Tagged all newly created entities, helpers, scripts, and automations with `git_managed` for repository provenance governance.
+- Added 09:00:00 workday morning transition trigger to `automation.den_presence_adaptive_lighting`, automatically promoting active presence from Night Lights to full workday lighting, and unified absence shut-off to reliably extinguish both `den_night_lights` and daytime fixtures when leaving at any time of day.
+- Documented implementation plan in `doc/2026-10-03-den-fp300-presence-lighting.md`.
+
+- Refactored `script.den_all_lights_on` to consistently turn on all primary Den fixtures (`light.floor_lamp`, `light.office_leds`, `light.den_fan_light`, `switch.den_floor_lamp_side_light`), eliminating legacy partial-snapshot restoration that caused incomplete lighting during presence activation.
+- Added `override` parameter to `script.den_all_lights_on` (defaulting to `true` when pressed from the dashboard) to pause presence automation for the day, while `automation.den_presence_adaptive_lighting` passes `override: false` to keep presence tracking active.
+- Updated `script.den_all_lights_off` to reliably clear `input_boolean.den_presence_override` and restore presence automation.
+
 ## 0.5.0 - 2026-09-28
 
 ### Added

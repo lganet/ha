@@ -97,6 +97,11 @@ When working with lighting entities, automations, scripts, or dashboard controls
 
 - **Preserve User Preferences**: Do not reset lights to arbitrary hardcoded brightness or color temperatures when turning them on, unless a specific default is explicitly requested.
 - **External Integration State**: For lights controlled by external ecosystems or companion apps (e.g., Govee, Hue, Tuya), prefer issuing bare `light.turn_on` calls without overriding brightness, color, or effect parameters so the device can restore its last active state, DIY scene, or app-configured mode.
+- **Govee & Multi-Segment Fixtures (Domain Separation & Race Condition Prevention)**:
+  - Multi-segment Govee devices (e.g., Floor Lamp Pro/Corner H60B0) expose both a primary `light` entity and auxiliary `switch` entities (e.g., side light, reading light, bottom light, ripple light).
+  - **Never use generic `homeassistant.turn_off` or broad area/label targets that mix `light` and `switch` entities simultaneously for Govee devices.** Sending simultaneous commands across heterogeneous domains causes dropped Cloud/LAN API packets and broker state bounce where toggling the sub-switches immediately wakes the parent lamp back on (or vice versa).
+  - Always separate actions by domain: call `light.turn_off` on the light entities first, followed by `switch.turn_off` on auxiliary switches (or vice versa for turning on: `light.turn_on` followed by `switch.turn_on`).
+  - Do not bundle secondary Govee sub-switches directly into general lighting groups/labels if their state reports independently; control them explicitly and sequentially in room scripts and automations.
 - **Multi-Mode Fixtures**: When a physical device serves multiple lighting roles (e.g., a ceiling fan with normal task lighting and a night light mode):
   - Do not create conflicting automations that cut master fixture power or cause race conditions.
   - Implement independent state tracking (helpers or template lights) so each mode retains its own brightness and color temperature settings.
@@ -111,6 +116,42 @@ Home Assistant Labels (HA 2024.4+) provide a flexible tagging mechanism for enti
 - **Avoid Rigid Entity Arrays in Code**: Use `label_entities('<label_id>')` in template sensors and scripts instead of hardcoded entity lists. This allows newly added fixtures to automatically inherit room automations and state badges simply by assigning them the appropriate label in Home Assistant.
 - **Inspect Before Creating**: Check existing labels using `ha_config_get_label` before creating new ones to prevent duplicate tags or fragmented naming conventions.
 - **Repository Provenance Mandate**: Every helper, automation, script, or template entity managed in this repository must be tagged with the `git_managed` label in Home Assistant. This provides clear provenance indicating that configuration is version-controlled and should be modified via Git rather than ad-hoc UI changes.
+- **Always-On Protection & Explicit Confirmation Mandate**:
+  - Any entity or device tagged with the `always_on` label (e.g., `switch.office_homelab_plug`, `switch.kitchen_freezer_plug`, `switch.office_fan_light_switch`, `switch.office_pc_plug`, `switch.living_room_tv_console_plug`) supplies continuous line power to servers, critical infrastructure, refrigeration, or downstream smart fixtures.
+  - **Confirmation Required**: If the user ever asks to add, modify, or include an `always_on` entity in ANY automation, script, schedule, scene, or routine that could turn it off or power-cycle it, **you must explicitly pause, remind the user that this device is designated as `always_on`, and ask for their explicit confirmation before proceeding**.
+  - **Exclusion from Room and All-Off Groups**: Never assign room lighting labels (like `den_controlled_lights`), general switch groups, or bulk turn-off targets to any `always_on` entity or device.
+  - **Relays vs. Smart Fixtures**: Always distinguish between an in-wall relay providing constant line power (e.g., `switch.office_fan_light_switch`) and the smart fixture downstream (e.g., `light.den_fan_light`, `fan.office_ceiling_fan`). Only toggle the smart fixture's internal states; the line relay must remain `always_on` and protected by `all_off_exempt`.
+
+## Naming Conventions & Voice Accessibility (Areas, Devices, Entity IDs)
+
+Standardized naming ensures consistency across dashboards, automations, and voice assistants (Google Assistant, Alexa, Home Assistant Assist).
+
+### 1. Device Friendly Names: Omit the Area Prefix
+- **Pattern**: `[Descriptor] [Device Type]` (e.g., `SHIELD TV`, `Floor Lamp Left`, `Desk LEDs`, `Ceiling Fan`, `Freezer Plug`, `Door Lock`).
+- **Never include the Area in the Device Friendly Name**: The device is already assigned to an Area in Home Assistant. Including the room name causes UI stuttering in dashboards (e.g., `Living Room > Living Room SHIELD TV > Living Room SHIELD TV Media Player`) and confuses voice assistants (e.g., Google Home registering `"Living Room Living Room SHIELD TV"`).
+- Inside Google Home or HA Assist, rooms are contextual: saying *"Turn off the fan"* targets the fan in the current room, while saying *"Turn off the Office fan"* automatically pairs the Area with the Device.
+
+### 2. Entity IDs: Always Include the Area Prefix
+- **Pattern**: `<domain>.<area>_<descriptor>` (lowercase, words separated by underscores).
+  - Examples: `media_player.living_room_shield`, `light.office_desk_leds`, `fan.office_ceiling_fan`, `switch.kitchen_freezer_plug`, `lock.patio_door_lock`.
+- **Global Scope**: While device friendly names are scoped visually inside areas, Entity IDs live in a single global flat namespace in Home Assistant. The area prefix is required for unambiguous references in YAML automations, Jinja templates, scripts, and dashboards.
+
+### 3. Voice Accessibility & Non-Native English Pronunciation
+Voice assistants frequently mishear non-native English accents, soft vowel transitions, and nasal or ambiguous monosyllabic words.
+- **Phonetic Simplicity**: Choose clear, distinct, universally recognizable English words:
+  - Prefer **`Office`** over **`Den`** (avoids confusion with *Dan*, *them*, *then*, *ten*, or *bed*).
+  - Prefer **`Main Bedroom`** over **`Primary Bedroom`** (avoids difficult consonant clusters `pr-` and unstressed syllables).
+  - Prefer **`Guest Bedroom`** over ambiguous `Bedroom`.
+- **Area & Device Spoken Aliases**: Always configure spoken aliases on areas and devices to support accent variations, multilingual phrasing, and natural synonyms:
+  - Example (`Patio`): Aliases `["Balcony", "Deck", "Backyard", "Outside", "Terrace", "Pátio"]`.
+  - Example (`Office`): Aliases `["Den", "Study", "Workroom", "Escritorio"]`.
+  - Example (`Main Bedroom`): Aliases `["Master Bedroom", "Master", "Quarto Principal", "Suite"]`.
+
+### 4. Proactive Alignment Mandate
+Whenever inspecting, creating, modifying, or refactoring devices, areas, entities, automations, scripts, or helpers:
+- Inspect the names and entity IDs involved.
+- If any device friendly name, area name, or entity ID violates these conventions, **proactively suggest aligning it** with this standard pattern before proceeding.
+
 
 ## Change Planning
 

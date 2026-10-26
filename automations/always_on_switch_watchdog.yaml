@@ -1,0 +1,31 @@
+id: "1792993482977"
+alias: Always-On Switch Watchdog & Auto-Recovery
+description: Immediately turns back on any critical switch labeled always_on if it turns off, and sends notifications.
+mode: parallel
+max: 10
+triggers:
+  - trigger: state
+    entity_id:
+      - switch.office_homelab_plug
+      - switch.kitchen_freezer_plug
+      - switch.office_fan_light_switch
+      - switch.office_pc_plug
+      - switch.living_room_tv_console_plug
+    to: "off"
+conditions: []
+actions:
+  - action: switch.turn_on
+    target:
+      entity_id: "{{ trigger.entity_id }}"
+  - action: persistent_notification.create
+    data:
+      title: "⚠️ Always-On Switch Restored"
+      message: "Critical switch {{ trigger.to_state.name | default(trigger.entity_id) }} was turned OFF. Power has been automatically restored."
+      notification_id: "always_on_guard_{{ trigger.entity_id }}"
+  - action: notify.mobile_app_fold_8
+    data:
+      title: "⚠️ Always-On Power Restored"
+      message: "Critical switch {{ trigger.to_state.name | default(trigger.entity_id) }} was turned OFF! Automatically restored power."
+      data:
+        priority: high
+        channel: alert

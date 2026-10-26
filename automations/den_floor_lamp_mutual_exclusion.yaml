@@ -4,11 +4,11 @@ mode: queued
 max: 5
 triggers:
   - trigger: state
-    entity_id: switch.den_floor_lamp_side_light
+    entity_id: switch.office_floor_lamp_side_light
     to: "on"
     id: side_on
   - trigger: state
-    entity_id: switch.den_floor_lamp_bottom_light
+    entity_id: switch.office_floor_lamp_bottom_light
     to: "on"
     id: bottom_on
 actions:
@@ -17,19 +17,19 @@ actions:
           - condition: trigger
             id: side_on
           - condition: state
-            entity_id: switch.den_floor_lamp_bottom_light
+            entity_id: switch.office_floor_lamp_bottom_light
             state: "on"
         sequence:
           - action: switch.turn_off
             target:
-              entity_id: switch.den_floor_lamp_bottom_light
+              entity_id: switch.office_floor_lamp_bottom_light
       - conditions:
           - condition: trigger
             id: bottom_on
           - condition: state
-            entity_id: switch.den_floor_lamp_side_light
+            entity_id: switch.office_floor_lamp_side_light
             state: "on"
         sequence:
           - action: switch.turn_off
             target:
-              entity_id: switch.den_floor_lamp_side_light
+              entity_id: switch.office_floor_lamp_side_light

@@ -8,13 +8,13 @@ views:
     theme: ios-dark-mode
     badges:
       - type: entity
-        entity: sensor.fp300_den_temperature
+        entity: sensor.office_presence_fp300_temperature
         name: Temp
         show_name: true
         show_state: true
         show_icon: true
       - type: entity
-        entity: sensor.fp300_den_humidity
+        entity: sensor.office_presence_fp300_humidity
         name: Humidity
         show_name: true
         show_state: true
@@ -26,7 +26,7 @@ views:
         show_state: true
         show_icon: true
       - type: entity
-        entity: sensor.air_purifier_air_quality_2
+        entity: sensor.office_air_purifier_air_quality
         name: Air
         show_name: true
         show_state: true
@@ -34,6 +34,12 @@ views:
       - type: entity
         entity: sensor.den_pm2_5_level
         name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_presence_status
+        name: Presence
         show_name: true
         show_state: true
         show_icon: true
@@ -126,6 +132,61 @@ views:
                   notification: >
                     [[[ return states['sensor.den_lights_off'] ?
                     states['sensor.den_lights_off'].state : '0'; ]]]
+          - type: custom:button-card
+            entity: sensor.den_presence_status
+            name: Motion Presence Control
+            show_name: true
+            show_state: true
+            icon: >-
+              [[[
+                if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return 'mdi:motion-sensor-off';
+                if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return 'mdi:account-clock';
+                if (states['binary_sensor.office_presence_fp300'] && states['binary_sensor.office_presence_fp300'].state === 'on') return 'mdi:motion-sensor';
+                return 'mdi:motion-sensor';
+              ]]]
+            tap_action:
+              action: call-service
+              service: script.den_presence_toggle
+            styles:
+              card:
+                - height: 60px
+                - padding: 8px 14px
+                - border-radius: var(--ha-card-border-radius, 12px)
+                - display: flex
+                - flex-direction: row
+                - align-items: center
+                - justify-content: flex-start
+                - margin-top: 4px
+              grid:
+                - grid-template-areas: '"i n" "i s"'
+                - grid-template-columns: 40px 1fr
+                - grid-template-rows: 1fr 1fr
+              icon:
+                - width: 32px
+                - height: 32px
+                - color: >-
+                    [[[
+                      if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return '#9E9E9E';
+                      if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return '#FFA726';
+                      if (states['binary_sensor.office_presence_fp300'] && states['binary_sensor.office_presence_fp300'].state === 'on') return '#4CAF50';
+                      return '#42A5F5';
+                    ]]]
+              name:
+                - font-size: 13px
+                - font-weight: 600
+                - justify-self: start
+                - color: var(--primary-text-color)
+              state:
+                - font-size: 12px
+                - font-weight: 500
+                - justify-self: start
+                - color: >-
+                    [[[
+                      if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return '#9E9E9E';
+                      if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return '#FFA726';
+                      if (states['binary_sensor.office_presence_fp300'] && states['binary_sensor.office_presence_fp300'].state === 'on') return '#4CAF50';
+                      return 'var(--secondary-text-color)';
+                    ]]]
 
       - type: grid
         cards:
@@ -145,7 +206,7 @@ views:
                     heading_style: subtitle
                     icon: mdi:floor-lamp-torchiere
                   - type: tile
-                    entity: switch.den_floor_lamp_side_light
+                    entity: switch.office_floor_lamp_side_light
                     name: Side Light
                     icon: mdi:wall-sconce-flat
                     tap_action:
@@ -155,19 +216,19 @@ views:
                     square: false
                     cards:
                       - type: tile
-                        entity: switch.den_floor_lamp_bottom_light
+                        entity: switch.office_floor_lamp_bottom_light
                         name: Base
                         icon: mdi:lamp
                         tap_action:
                           action: more-info
                       - type: tile
-                        entity: switch.den_floor_lamp_ripple_light
+                        entity: switch.office_floor_lamp_ripple_light
                         name: Ripple
                         icon: mdi:waves
                         tap_action:
                           action: more-info
               - type: tile
-                entity: light.office_leds
+                entity: light.office_desk_leds
                 name: Office LEDs
                 icon: mdi:led-strip-variant
                 features:
@@ -175,7 +236,7 @@ views:
                 tap_action:
                   action: more-info
               - type: tile
-                entity: light.floor_lamp
+                entity: light.office_floor_lamp
                 name: Floor Lamp
                 icon: mdi:floor-lamp
                 features:
@@ -193,18 +254,26 @@ views:
                   action: more-info
               - type: tile
                 entity: light.den_night_light
-                name: Night Light
+                name: Fan Night Light
                 icon: mdi:weather-night
                 features:
                   - type: light-brightness
                   - type: light-color-temp
                 tap_action:
                   action: more-info
+              - type: tile
+                entity: light.humidifier_night_light
+                name: Humidifier Light
+                icon: mdi:air-humidifier
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
               - type: custom:stack-in-card
                 mode: vertical
                 cards:
                   - type: tile
-                    entity: light.smart_fan_backlight
+                    entity: light.office_ceiling_fan_backlight
                     name: Fan Backlight
                     icon: mdi:palette-outline
                     features:
@@ -231,7 +300,7 @@ views:
             square: false
             cards:
               - type: tile
-                entity: fan.smart_fan
+                entity: fan.office_ceiling_fan
                 name: Smart Fan
                 icon: mdi:fan
                 features:
@@ -240,11 +309,17 @@ views:
                 tap_action:
                   action: more-info
               - type: tile
-                entity: fan.air_purifier_2
+                entity: fan.office_air_purifier
                 name: Air Purifier
                 icon: mdi:air-purifier
                 features:
                   - type: fan-preset-modes
                     style: dropdown
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: humidifier.humidifier
+                name: Humidifier
+                icon: mdi:air-humidifier
                 tap_action:
                   action: more-info

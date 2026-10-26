@@ -7,6 +7,14 @@ input_boolean:
     name: Den Lights Snapshot Active
     icon: mdi:camera
 
+  den_presence_automation:
+    name: Den Presence Automation
+    icon: mdi:motion-sensor
+
+  den_presence_override:
+    name: Den Presence Override
+    icon: mdi:account-clock
+
 input_text:
   den_lights_last_state:
     name: Den Lights Last State

@@ -1,0 +1,26 @@
+alias: Den Presence Toggle
+description: Toggle presence automation or resume from pause/override without changing light state.
+icon: mdi:motion-sensor
+mode: single
+sequence:
+  - choose:
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.den_presence_override
+                state: "on"
+              - condition: state
+                entity_id: input_boolean.den_presence_automation
+                state: "off"
+        sequence:
+          - action: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.den_presence_override
+          - action: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.den_presence_automation
+    default:
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.den_presence_automation

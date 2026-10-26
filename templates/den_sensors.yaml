@@ -3,7 +3,7 @@
       unique_id: den_pm2_5_level
       icon: mdi:molecule
       state: >-
-        {% set pm = states('sensor.air_purifier_pm2_5_2') | float(-1) %}
+        {% set pm = states('sensor.office_air_purifier_pm2_5') | float(-1) %}
         {% if pm < 0 %}Unknown
         {% elif pm <= 12 %}Clean
         {% elif pm <= 35 %}Fair
@@ -15,7 +15,7 @@
       unique_id: den_light_level
       icon: mdi:brightness-6
       state: >-
-        {% set lx = states('sensor.fp300_den_illuminance') | float(0) %}
+        {% set lx = states('sensor.office_presence_fp300_illuminance') | float(0) %}
         {% if lx < 10 %}Dark
         {% elif lx < 50 %}Poor Light
         {% elif lx < 150 %}Soft Light
@@ -28,8 +28,8 @@
       unit_of_measurement: "on"
       state: >-
         {% set den_lights = label_entities('den_controlled_lights') %}
-        {% set dfl_on = 1 if (den_lights | select('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
-        {% set other_on = den_lights | reject('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
+        {% set dfl_on = 1 if (den_lights | select('match', 'switch.office_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set other_on = den_lights | reject('match', 'switch.office_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
         {{ dfl_on + other_on }}
 
     - name: Den Lights Off
@@ -37,7 +37,28 @@
       unit_of_measurement: "off"
       state: >-
         {% set den_lights = label_entities('den_controlled_lights') %}
-        {% set dfl_on = 1 if (den_lights | select('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
-        {% set other_on = den_lights | reject('match', 'switch.den_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
-        {% set total_fixtures = (1 if (den_lights | select('match', 'switch.den_floor_lamp_') | list | count > 0) else 0) + (den_lights | reject('match', 'switch.den_floor_lamp_') | list | count) %}
+        {% set dfl_on = 1 if (den_lights | select('match', 'switch.office_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
+        {% set other_on = den_lights | reject('match', 'switch.office_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
+        {% set total_fixtures = (1 if (den_lights | select('match', 'switch.office_floor_lamp_') | list | count > 0) else 0) + (den_lights | reject('match', 'switch.office_floor_lamp_') | list | count) %}
         {{ total_fixtures - (dfl_on + other_on) }}
+
+    - name: Den Presence Status
+      unique_id: den_presence_status
+      icon: mdi:motion-sensor
+      state: >-
+        {% if is_state('input_boolean.den_presence_automation', 'off') %}
+          Disabled
+        {% elif is_state('input_boolean.den_presence_override', 'on') %}
+          Paused (Resumes Tomorrow)
+        {% elif is_state('binary_sensor.office_presence_fp300', 'on') %}
+          Active (Occupied)
+        {% else %}
+          Active (Clear)
+        {% endif %}
+
+- binary_sensor:
+    - name: Den Is Workday
+      unique_id: den_is_workday
+      icon: mdi:briefcase
+      state: >-
+        {{ now().weekday() < 5 and is_state('calendar.den_holidays', 'off') }}
