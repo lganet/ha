@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.0 - 2026-10-25
+## 0.7.0 - 2026-10-26
 
 ### Added
 - Standardized Home Assistant area names, spoken aliases, and icons across 10 primary home spaces to optimize voice assistant recognition (Google Assistant, Alexa, Assist) for non-native English speakers.
