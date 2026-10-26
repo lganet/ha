@@ -30,6 +30,7 @@
 - Removed inadvertent `den_controlled_lights` label from non-lighting infrastructure devices (`HomeLab Plug`, `PC Plug`, `SLZB-MR4U` coordinator, `NSPanel Pro`, and `FP300`), preventing room-wide light turn-off scripts from cutting AC power to servers or hardware controllers.
 - Configured Third Reality `HomeLab Plug` with `metering_only_mode: on` and `all_off_exempt` to permanently safeguard critical server infrastructure from accidental power cutoff.
 - Restored missing badge and fan tile entities on the live NSPanel Den dashboard (`nspanel-den`) and updated Home Assistant UI template helpers (`sensor.den_pm2_5_level`, `sensor.den_light_level`, `sensor.den_presence_status`, `light.den_fan_light`, `light.den_night_light`) to query standardized entity IDs.
+- Fixed `script.den_all_lights_off` leaving Govee Floor Lamp and Office LEDs turned on by replacing heterogeneous `homeassistant.turn_off` calls with deterministic, sequential domain turn-off commands (`light.turn_off` for primary lamps, followed by `switch.turn_off` for auxiliary sub-switches), eliminating Govee Cloud/LAN race conditions that inadvertently toggled parent lamps back on.
 
 ## 0.6.0 - 2026-10-05
 
