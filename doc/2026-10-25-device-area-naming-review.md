@@ -1,9 +1,10 @@
-# Home Assistant Device & Area Naming Standardization Proposal
+# Home Assistant Device, Area & Entity Naming Standardization
 
 **Date**: 2026-10-25  
 **Branch**: `feature/device-area-naming-standardization`  
-**CSV Data**: [`doc/devices-inventory-and-proposals.csv`](file:///Users/gustavo/src/ha/doc/devices-inventory-and-proposals.csv)  
-**Total Devices**: 152 (105 Physical Smart Devices, 47 System / Platform Integrations)
+**Device Proposal CSV**: [`doc/devices-inventory-and-proposals.csv`](file:///Users/gustavo/src/ha/doc/devices-inventory-and-proposals.csv)  
+**All 1,587 Entities CSV**: [`doc/entities-inventory-and-proposals.csv`](file:///Users/gustavo/src/ha/doc/entities-inventory-and-proposals.csv)  
+**Total Devices**: 152 | **Physical Smart Devices**: 105 | **Platform / Integrations**: 47
 
 ---
 
@@ -20,8 +21,9 @@ When voice assistants (Google Assistant, Alexa, Home Assistant Assist) process s
    * *Example*: Area `Patio` can have aliases: `Balcony`, `Deck`, `Backyard`, `Outside`, `Terrace`, `Pátio`. If Google struggles with "Patio", saying "Balcony lights" or "Deck lights" will trigger the same room effortlessly.
 3. **Consistent Device Pattern**:
    $$\mathbf{[Area]\ [Descriptor]\ [Device\ Type]}$$
-   * *Example*: `Living Room Lamp`, `Office Floor Lamp`, `Patio Right Light`, `Main Bedroom Fan`.
-   * Clear in device lists, voice prompts, and notification messages.
+4. **Standardized Entity ID Pattern**:
+   $$\mathbf{<\text{domain}>.<\text{area}>\_<\text{descriptor}>}$$
+   * Aligns the device and entity naming permanently so future automations and scripts are intuitive to write.
 
 ---
 
@@ -57,236 +59,239 @@ Each device or entity belongs to **one Area**, but can hold **multiple Labels**:
 
 ---
 
-## 4. Smart Devices Review by Area
+## 4. Smart Devices & Primary Entity Proposals by Room
 
-Below is the proposal for all physical smart devices, categorized by room.
+Below is the proposal for all physical smart devices, showing both the device name change and the primary control entity ID transition.
 
-### Office (16 devices)
+### Office (17 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Den display` | **Office Hub Display** | `Unassigned` | cast | `media` |  |
-| `Den display` | **Office Hub Display** | `Unassigned` | music_assistant | `media` | Music Assistant media player |
-| `FP300` | **Office FP300** | `den` | zigbee2mqtt | `switch; den_controlled_lights` |  |
-| `NSPanel Pro` | **Office Wall Panel** | `den` | mqtt | `switch; den_controlled_lights` |  |
-| `Den PC plug` | **Office PC Plug** | `den` | zigbee2mqtt | `plug; den_controlled_lights` |  |
-| `Office Leds` | **Office Desk LEDs** | `den` | govee | `light; switch; den_controlled_lights` |  |
-| `Floor Lamp` | **Office Floor Lamp** | `den` | govee | `light; switch; den_controlled_lights` |  |
-| `Den Floor Lamp` | **Office Floor Lamp** | `den` | govee | `light; switch; den_controlled_lights` |  |
-| `Humidifier` | **Office Humidifier** | `den` | govee | `light; climate; den_controlled_lights` |  |
-| `SLZB-MR4U` | **Office Zigbee Coordinator** | `den` | unknown | `switch; den_controlled_lights` |  |
-| `Den Fan Light` | **Office Ceiling Fan Light** | `Unassigned` | zigbee2mqtt | `switch; fan; den_controlled_lights` |  |
-| `Den display` | **Office Hub Display** | `Unassigned` | music_assistant | `media` | Music Assistant media player |
-| `Den display` | **Office Hub Display** | `Unassigned` | music_assistant | `media` | Music Assistant media player |
-| `HomeLab Plug` | **Office HomeLab Plug** | `den` | zigbee2mqtt | `plug; all_off_exempt; den_controlled_lights` |  |
-| `Air purifier` | **Office Air Purifier** | `den` | tuya_local | `fan; climate` |  |
-| `Fan` | **Office Ceiling Fan** | `den` | tuya_local | `light; switch; fan; den_controlled_lights` |  |
+| **Office Hub Display** | `Den display` | `media_player.office_hub_display` | `media_player.den_display` | cast | `media` |
+| **Office Hub Display** | `Den display` | `media_player.office_hub_display` | `media_player.den_display_2` | music_assistant | `media` |
+| **Office Presence Sensor FP300** | `FP300` | `binary_sensor.office_presence_fp300` | `switch.fp300_den_ai_interference_source_selfidentification` | zigbee2mqtt | `switch; den_controlled_lights` |
+| **Office Wall Panel** | `NSPanel Pro` | `button.office_wall_panel_restart` | `switch.zigbee2cube_1002a32fc7_transmit_power` | mqtt | `switch; den_controlled_lights` |
+| **Office PC Plug** | `Den PC plug` | `switch.office_pc_plug` | `switch.den_pc_plug` | zigbee2mqtt | `plug; den_controlled_lights` |
+| **Office Desk LEDs** | `Office Leds` | `light.office_desk_leds` | `light.office_leds` | govee | `light; switch; den_controlled_lights` |
+| **Office Floor Lamp** | `Floor Lamp` | `light.office_floor_lamp` | `light.floor_lamp` | govee | `light; switch; den_controlled_lights` |
+| **Office Floor Lamp Corner** | `Den Floor Lamp` | `light.office_floor_lamp_corner` | `light.den_floor_lamp` | govee | `light; switch; den_controlled_lights` |
+| **Office Humidifier** | `Humidifier` | `humidifier.office_humidifier` | `light.humidifier_night_light` | govee | `light; climate; den_controlled_lights` |
+| **Office Zigbee Coordinator** | `SLZB-MR4U` | `binary_sensor.office_zigbee_coordinator_ethernet` | `switch.slzb_mr4u_disable_leds` | unknown | `switch; den_controlled_lights` |
+| **Office Ceiling Fan Light Switch** | `Den Fan Light` | `switch.office_fan_light` | `switch.den_fan_light` | zigbee2mqtt | `switch; fan; den_controlled_lights` |
+| **Office Hub Display** | `Den display` | `media_player.office_hub_display` | `media_player.nesthubfa85_2` | music_assistant | `media` |
+| **Office Hub Display** | `Den display` | `media_player.office_hub_display` | `media_player.nesthubfa85_4` | music_assistant | `media` |
+| **Office HomeLab Plug** | `HomeLab Plug` | `switch.office_homelab_plug` | `switch.homelab_plug` | zigbee2mqtt | `plug; all_off_exempt; den_controlled_lights` |
+| **Office Air Purifier** | `Air purifier` | `fan.office_air_purifier` | `fan.air_purifier_2` | tuya_local | `fan; climate` |
+| **Office Ceiling Fan** | `Fan` | `fan.office_ceiling_fan` | `light.smart_fan_3` | tuya_local | `light; switch; fan; den_controlled_lights` |
+| **Office NSPanel Screen** | `nspanel den` | `device_tracker.den_panel` | `device_tracker.den_panel` | mobile_app | `mobile` |
 
-### Living Room (16 devices)
+### Living Room (22 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Living Room Lamp` | **Living Room Lamp** | `living_room` | tplink | `light; switch` |  |
-| `Samsung OLED` | **Living Room TV** | `living_room` | samsungtv | `media` |  |
-| `Samsung OLED` | **Living Room TV** | `living_room` | unknown | `media` | Duplicate / SmartThings mirror device |
-| `SHIELD` | **Living Room SHIELD TV** | `living_room` | androidtv_remote | `media` | Android TV Remote control device |
-| `Air Quality` | **Living Room Air Quality** | `living_room` | alexa_devices | `sensor` |  |
-| `Luis's Echo` | **Living Room Luis's Echo** | `living_room` | alexa_devices | `switch; media` |  |
-| `Samsung OLED` | **Living Room TV** | `living_room` | smartthings | `media` |  |
-| `Samsung CU7700 43` | **Living Room Samsung CU7700 43** | `living_room` | smartthings | `media` |  |
-| `Presence-Sensor-FP2-9698` | **Living Room Presence Sensor** | `living_room` | homekit_controller:accessory-id | `sensor` |  |
-| `Air Purifier plug` | **Living Room Air Purifier Plug** | `living_room` | zigbee2mqtt | `plug; climate` |  |
-| `Leds plug` | **Living Room LEDs Plug** | `living_room` | zigbee2mqtt | `plug` |  |
-| `TV Gaming plug` | **Living Room TV Console Plug** | `living_room` | zigbee2mqtt | `plug` |  |
-| `TV Backlight` | **Living Room TV Backlight** | `living_room` | govee | `light; switch` |  |
-| `Floor Lamp TV right` | **Living Room Floor Lamp Right** | `living_room` | govee | `light; switch` |  |
-| `Floor Lamp TV left` | **Living Room Floor Lamp Left** | `living_room` | govee | `light; switch` |  |
-| `360 Camera` | **Living Room Camera** | `living_room` | tplink | `switch; camera` |  |
+| **Living Room SHIELD TV** | `SHIELD` | `media_player.living_room_shield` | `media_player.shield` | cast | `media` |
+| **Living Room Stereo Speakers** | `Stereo` | `media_player.living_room_stereo` | `media_player.stereo` | cast | `media` |
+| **Living Room Lamp** | `Living Room Lamp` | `light.living_room_lamp` | `light.living_room_lamp` | tplink | `light; switch` |
+| **Living Room TV** | `Samsung OLED` | `media_player.living_room_tv` | `media_player.samsung_oled_2` | samsungtv | `media` |
+| **Living Room TV** | `Samsung OLED` | `media_player.living_room_tv` | `media_player.samsung_oled` | unknown | `media` |
+| **Living Room SHIELD TV** | `SHIELD` | `media_player.living_room_shield_tv` | `media_player.shield_2` | androidtv_remote | `media` |
+| **Living Room SHIELD TV** | `SHIELD` | `media_player.living_room_shield` | `media_player.shield_3` | cast | `media` |
+| **Living Room Air Quality** | `Air Quality` | `binary_sensor.living_room_air_quality` | `binary_sensor.air_quality_connectivity` | alexa_devices | `sensor` |
+| **Living Room Luis's Echo** | `Luis's Echo` | `media_player.living_room_luis_s_echo` | `media_player.luis_s_echo` | alexa_devices | `switch; media` |
+| **Living Room SHIELD TV** | `SHIELD` | `media_player.living_room_shield_tv` | `media_player.shield_4` | music_assistant | `media` |
+| **Living Room TV** | `Samsung OLED` | `media_player.living_room_tv` | `media_player.samsung_oled_4` | music_assistant | `media` |
+| **Living Room Stereo Speakers** | `Stereo` | `media_player.living_room_stereo` | `media_player.stereo_2` | music_assistant | `media` |
+| **Living Room TV** | `Samsung OLED` | `media_player.living_room_tv` | `media_player.living_room_samsung_oled_2` | smartthings | `media` |
+| **Living Room Samsung CU7700 43** | `Samsung CU7700 43` | `media_player.living_room_samsung_cu7700_43` | `media_player.living_room_samsung_cu7700_43` | smartthings | `media` |
+| **Living Room Presence Sensor FP2** | `Presence-Sensor-FP2-9698` | `binary_sensor.living_room_presence_fp2` | `binary_sensor.presence_sensor_fp2_9698_presence_sensor_1` | homekit_controller:accessory-id | `sensor` |
+| **Living Room Air Purifier Plug** | `Air Purifier plug` | `switch.living_room_air_purifier_plug` | `switch.air_purifier_plug` | zigbee2mqtt | `plug; climate` |
+| **Living Room LEDs Plug** | `Leds plug` | `switch.living_room_leds_plug` | `switch.leds_plug` | zigbee2mqtt | `plug` |
+| **Living Room TV Console Plug** | `TV Gaming plug` | `switch.living_room_tv_console_plug` | `switch.tv_gaming_plug` | zigbee2mqtt | `plug` |
+| **Living Room TV Backlight** | `TV Backlight` | `light.living_room_tv_backlight` | `light.tv_backlight` | govee | `light; switch` |
+| **Living Room Floor Lamp Right** | `Floor Lamp TV right` | `light.living_room_floor_lamp_right` | `light.floor_lamp_tv_right` | govee | `light; switch` |
+| **Living Room Floor Lamp Left** | `Floor Lamp TV left` | `light.living_room_floor_lamp_left` | `light.floor_lamp_tv_left` | govee | `light; switch` |
+| **Living Room Camera** | `360 Camera` | `camera.living_room_camera` | `switch.living_room_baby_cry_detection` | tplink | `switch; camera` |
 
 ### Dining Room (3 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Dining room speaker` | **Dining Room Speaker** | `Unassigned` | cast | `media` |  |
-| `Dining` | **Dining Room Light** | `dining` | tplink | `light; switch` |  |
-| `Dining room speaker` | **Dining Room Speaker** | `Unassigned` | music_assistant | `media` |  |
+| **Dining Room Speaker** | `Dining room speaker` | `media_player.dining_room_speaker` | `media_player.dining_room_speaker` | cast | `media` |
+| **Dining Room Light** | `Dining` | `light.dining_room_light` | `light.dining` | tplink | `light; switch` |
+| **Dining Room Speaker** | `Dining room speaker` | `media_player.dining_room_speaker` | `media_player.dining_room_speaker_2` | music_assistant | `media` |
 
 ### Kitchen (16 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Kitchen display` | **Kitchen Hub Display** | `Unassigned` | cast | `media` |  |
-| `X55` | **Kitchen X55** | `kitchen` | upnp_serial_number | `sensor` |  |
-| `Kitchen speaker` | **Kitchen Speaker** | `Unassigned` | cast | `media` |  |
-| `GusHomeBase` | **Kitchen GusHomeBase** | `kitchen` | eufy_security | `sensor` |  |
-| `Kitchen display` | **Kitchen Hub Display** | `Unassigned` | music_assistant | `media` |  |
-| `Door Sensor` | **Kitchen Door Sensor** | `kitchen` | yolink | `sensor` |  |
-| `Temperature Sensor` | **Kitchen Temperature Sensor** | `kitchen` | yolink | `sensor` |  |
-| `kitchen leds` | **kitchen leds** | `kitchen` | tplink | `light; switch` |  |
-| `Refrigerator` | **Kitchen Refrigerator** | `kitchen` | smartthings | `switch` |  |
-| `Oven` | **Kitchen Oven** | `kitchen` | smartthings | `light` |  |
-| `Botao Ikea 1` | **Kitchen Botao Ikea 1** | `kitchen` | zigbee2mqtt | `sensor` |  |
-| `Roborock Dyad Pro Combo` | **Kitchen Roborock Dyad Pro Combo** | `kitchen` | roborock | `sensor` |  |
-| `Kitchen Lights` | **Kitchen Lights** | `kitchen` | tplink | `light; switch` |  |
-| `Kitchen Hallway Lights` | **Kitchen Hallway Light** | `Unassigned` | tplink | `light; switch` |  |
-| `IR Remoto` | **Kitchen IR Remote** | `kitchen` | zigbee2mqtt | `switch; fan` |  |
-| `Freezer Plug` | **Kitchen Freezer Plug** | `Unassigned` | zigbee2mqtt | `plug; all_off_exempt` |  |
+| **Kitchen Hub Display** | `Kitchen display` | `media_player.kitchen_hub_display` | `media_player.kitchen_display` | cast | `media` |
+| **Kitchen X55** | `X55` | `binary_sensor.kitchen_x55` | `binary_sensor.x55_wan_status` | upnp_serial_number | `sensor` |
+| **Kitchen Speaker** | `Kitchen speaker` | `media_player.kitchen_speaker` | `media_player.kitchen_speaker` | cast | `media` |
+| **Kitchen GusHomeBase** | `GusHomeBase` | `binary_sensor.kitchen_gushomebase` | `binary_sensor.gushomebase_alarm` | eufy_security | `sensor` |
+| **Kitchen Hub Display** | `Kitchen display` | `media_player.kitchen_hub_display` | `media_player.kitchen_display_2` | music_assistant | `media` |
+| **Kitchen Door Sensor** | `Door Sensor` | `binary_sensor.kitchen_door_sensor` | `binary_sensor.door_sensor_door` | yolink | `sensor` |
+| **Kitchen Temperature Sensor** | `Temperature Sensor` | `sensor.kitchen_temperature_sensor` | `sensor.temperature_sensor_battery` | yolink | `sensor` |
+| **kitchen leds** | `kitchen leds` | `light.kitchen_leds` | `light.kitchen_leds` | tplink | `light; switch` |
+| **Kitchen Refrigerator** | `Refrigerator` | `switch.kitchen_refrigerator` | `switch.kitchen_refrigerator_cubed_ice` | smartthings | `switch` |
+| **Kitchen Oven** | `Oven` | `light.kitchen_oven` | `light.kitchen_range_light` | smartthings | `light` |
+| **Kitchen Botao Ikea 1** | `Botao Ikea 1` | `sensor.kitchen_botao_ikea_1` | `sensor.botao_ikea_1_battery` | zigbee2mqtt | `sensor` |
+| **Kitchen Roborock Dyad Pro Combo** | `Roborock Dyad Pro Combo` | `sensor.kitchen_roborock_dyad_pro_combo` | `sensor.roborock_dyad_pro_combo_status` | roborock | `sensor` |
+| **Kitchen Lights** | `Kitchen Lights` | `light.kitchen_lights` | `light.kitchen_lights` | tplink | `light; switch` |
+| **Kitchen Hallway Light** | `Kitchen Hallway Lights` | `light.kitchen_hallway_light` | `light.kitchen_hallway_lights` | tplink | `light; switch` |
+| **Kitchen IR Remote** | `IR Remoto` | `switch.kitchen_ir_remote` | `fan.kitchen_ir_remoto_switch2` | zigbee2mqtt | `switch; fan` |
+| **Kitchen Freezer Plug** | `Freezer Plug` | `switch.kitchen_freezer_plug` | `switch.freezer_plug` | zigbee2mqtt | `plug; all_off_exempt` |
 
 ### Hallway (1 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Hallway Night Light` | **Hallway Night Light** | `Unassigned` | zigbee2mqtt | `light` |  |
+| **Hallway Night Light** | `Hallway Night Light` | `light.hallway_night_light` | `light.hallway_night_light` | zigbee2mqtt | `light` |
 
 ### Main Bedroom (7 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Main Bedroom Two` | **Main Bedroom Light 2** | `main_bedroom` | tplink | `light; switch` |  |
-| `Main Bedroom Closet Light` | **Main Bedroom Closet Light** | `main_bedroom` | tplink | `light; switch` |  |
-| `Main Bedroom One` | **Main Bedroom Light 1** | `main_bedroom` | tplink | `light; switch` |  |
-| `Main Bedroom Sensor` | **Main Bedroom Motion Sensor** | `Unassigned` | deconz | `sensor` |  |
-| `Luis's Echo Spot` | **Main Bedroom Luis's Echo Spot** | `main_bedroom` | alexa_devices | `switch; media` |  |
-| `NSPanel Pro` | **Main Bedroom Wall Panel** | `main_bedroom` | mqtt | `switch` |  |
-| `Fan` | **Main Bedroom Ceiling Fan** | `main_bedroom` | tuya_local | `light; switch; fan` |  |
+| **Main Bedroom Light 2** | `Main Bedroom Two` | `light.main_bedroom_light_2` | `light.main_bedroom_two` | tplink | `light; switch` |
+| **Main Bedroom Closet Light** | `Main Bedroom Closet Light` | `light.main_bedroom_closet_light` | `light.main_bedroom_closet_light` | tplink | `light; switch` |
+| **Main Bedroom Light 1** | `Main Bedroom One` | `light.main_bedroom_light_1` | `light.main_bedroom_one` | tplink | `light; switch` |
+| **Main Bedroom Motion Sensor** | `Main Bedroom Sensor` | `binary_sensor.main_bedroom_motion` | `binary_sensor.presence_4` | deconz | `sensor` |
+| **Main Bedroom Luis's Echo Spot** | `Luis's Echo Spot` | `media_player.main_bedroom_luis_s_echo_spot` | `media_player.luis_s_echo_spot` | alexa_devices | `switch; media` |
+| **Main Bedroom Wall Panel** | `NSPanel Pro` | `button.main_bedroom_wall_panel_restart` | `switch.zigbee2cube_1002c15147_transmit_power` | mqtt | `switch` |
+| **Main Bedroom Ceiling Fan** | `Fan` | `fan.main_bedroom_ceiling_fan` | `light.smart_fan_4` | tuya_local | `light; switch; fan` |
 
 ### Guest Bedroom (5 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Guest Room Light` | **Guest Bedroom Light** | `bedroom` | tplink | `light; switch` |  |
-| `Guest Sensor` | **Guest Bedroom Motion Sensor** | `bedroom` | deconz | `sensor` |  |
-| `Guest Room speaker` | **Guest Bedroom Speaker** | `Unassigned` | cast | `media` |  |
-| `Luis's Fire TV` | **Guest Bedroom Luis's Fire TV** | `bedroom` | alexa_devices | `switch` |  |
-| `Bedroom bed plug` | **Guest Bedroom Bedside Plug** | `Unassigned` | zigbee2mqtt | `plug` |  |
+| **Guest Bedroom Light** | `Guest Room Light` | `light.guest_bedroom_light` | `light.bedroom_light` | tplink | `light; switch` |
+| **Guest Bedroom Motion Sensor** | `Guest Sensor` | `binary_sensor.guest_bedroom_motion` | `binary_sensor.presence_2` | deconz | `sensor` |
+| **Guest Bedroom Speaker** | `Guest Room speaker` | `media_player.guest_bedroom_speaker` | `media_player.googlehome5153` | cast | `media` |
+| **Guest Bedroom Luis's Fire TV** | `Luis's Fire TV` | `switch.guest_bedroom_luis_s_fire_tv` | `switch.luis_s_fire_tv_do_not_disturb` | alexa_devices | `switch` |
+| **Guest Bedroom Bedside Plug** | `Bedroom bed plug` | `switch.guest_bedroom_bed_plug` | `switch.bedroom_bed_plug` | zigbee2mqtt | `plug` |
 
 ### Main Bathroom (6 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Main Bathroom Lights` | **Main Bathroom Vanity Light** | `main_bathroom` | tplink | `light; switch` |  |
-| `Main Bathroom Light Shower` | **Main Bathroom Shower Light** | `main_bathroom` | tplink | `light; switch` |  |
-| `Master Bathroom speaker` | **Main Bathroom Speaker** | `Unassigned` | cast | `media` |  |
-| `Main Bathroom Fan` | **Main Bathroom Exhaust Fan** | `Unassigned` | zigbee2mqtt | `switch; fan` |  |
-| `Master Bathroom display` | **Main Bathroom Speaker** | `Unassigned` | cast | `media` |  |
-| `Master Bathroom display` | **Main Bathroom Speaker** | `Unassigned` | music_assistant | `media` |  |
+| **Main Bathroom Vanity Light** | `Main Bathroom Lights` | `light.main_bathroom_vanity_light` | `light.main_bathroom_lights` | tplink | `light; switch` |
+| **Main Bathroom Shower Light** | `Main Bathroom Light Shower` | `light.main_bathroom_shower_light` | `light.main_bathroom_light_shower` | tplink | `light; switch` |
+| **Main Bathroom Speaker** | `Master Bathroom speaker` | `media_player.main_bathroom_speaker` | `media_player.googlehome6735` | cast | `media` |
+| **Main Bathroom Exhaust Fan** | `Main Bathroom Fan` | `switch.main_bathroom_fan` | `switch.main_bathroom_fan` | zigbee2mqtt | `switch; fan` |
+| **Main Bathroom Speaker** | `Master Bathroom display` | `media_player.main_bathroom_speaker` | `media_player.nesthubfa85_5` | cast | `media` |
+| **Main Bathroom Speaker** | `Master Bathroom display` | `media_player.main_bathroom_speaker` | `media_player.nesthubfa85_6` | music_assistant | `media` |
 
 ### Guest Bathroom (2 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Bathroom Bathtub Light` | **Guest Bathroom Bathtub Light** | `bathroom` | tplink | `light; switch` |  |
-| `Bathroom Lights` | **Guest Bathroom Vanity Light** | `bathroom` | tplink | `light; switch` |  |
+| **Guest Bathroom Bathtub Light** | `Bathroom Bathtub Light` | `light.guest_bathroom_bathtub_light` | `light.bathroom_bathtub_light` | tplink | `light; switch` |
+| **Guest Bathroom Vanity Light** | `Bathroom Lights` | `light.guest_bathroom_vanity_light` | `light.bathroom_lights` | tplink | `light; switch` |
 
 ### Patio (11 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Patio Right Light` | **Patio Right Light** | `pstio` | tplink | `switch` |  |
-| `Patio Left Light` | **Patio Left Light** | `pstio` | tplink | `light; switch` |  |
-| `Lock` | **Patio Door Lock** | `pstio` | matter | `sensor` |  |
-| `Patio Lock` | **Patio Door Lock (Cloud)** | `Unassigned` | switchbot_cloud | `` |  |
-| `Patio Right` | **Patio Right Camera** | `pstio` | eufy_security | `switch; camera` |  |
-| `Patio Left` | **Patio Left Camera** | `pstio` | eufy_security | `switch; camera` |  |
-| `Fence Sensor` | **Patio Fence Sensor** | `pstio` | yolink | `sensor` |  |
-| `Motion Sensor Right` | **Patio Motion Sensor Right** | `pstio` | yolink | `sensor` |  |
-| `Patio Lock` | **Patio Door Lock (Cloud)** | `Unassigned` | switchbot_cloud | `sensor` |  |
-| `Light patio left` | **Patio Left Light** | `Unassigned` | zigbee2mqtt | `switch` |  |
-| `Plug Patio Right` | **Patio Right Plug** | `pstio` | tuya_local | `plug` |  |
+| **Patio Right Light** | `Patio Right Light` | `switch.patio_right_light` | `switch.patio_right_light` | tplink | `switch` |
+| **Patio Left Light** | `Patio Left Light` | `light.patio_left_light` | `light.patio_left_light` | tplink | `light; switch` |
+| **Patio Door Lock** | `Lock` | `lock.patio_door_lock` | `lock.lock_lock` | matter | `sensor` |
+| **Patio Door Lock Cloud** | `Patio Lock` | `lock.patio_door_lock_cloud` | `` | switchbot_cloud | `` |
+| **Patio Right Camera** | `Patio Right` | `camera.patio_right_camera` | `camera.patio_right` | eufy_security | `switch; camera` |
+| **Patio Left Camera** | `Patio Left` | `camera.patio_left_camera` | `camera.patio_left` | eufy_security | `switch; camera` |
+| **Patio Fence Sensor** | `Fence Sensor` | `binary_sensor.patio_fence_sensor` | `binary_sensor.fence_sensor_door` | yolink | `sensor` |
+| **Patio Motion Sensor Right** | `Motion Sensor Right` | `binary_sensor.patio_motion_sensor_right` | `binary_sensor.motion_sensor_right_motion` | yolink | `sensor` |
+| **Patio Door Lock Cloud** | `Patio Lock` | `lock.patio_door_lock_cloud` | `lock.patio_lock` | switchbot_cloud | `sensor` |
+| **Patio Left Light** | `Light patio left` | `switch.patio_left_light` | `switch.light_patio_left` | zigbee2mqtt | `switch` |
+| **Patio Right Plug** | `Plug Patio Right` | `switch.patio_right_plug` | `lock.plug_patio_right_child_lock` | tuya_local | `plug` |
 
-### Unassigned (25 devices)
+### Unassigned (19 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `SHIELD` | **Unassigned SHIELD TV** | `Unassigned` | cast | `media` | Cast media player target |
-| `Stereo` | **Unassigned Stereo Speakers** | `Unassigned` | cast | `media` |  |
-| `Nova` | **Unassigned Nova Speaker Group** | `Unassigned` | cast | `media` |  |
-| `SwitchBot Hub Mini` | **SwitchBot Hub Mini** | `Unassigned` | matter | `sensor` |  |
-| `[Empty Name]` | **** | `Unassigned` | unknown | `` |  |
-| `Phoscon-GW` | **Phoscon-GW** | `Unassigned` | deconz | `` |  |
-| `Daylight` | **Daylight** | `Unassigned` | deconz | `sensor` |  |
-| `SHIELD` | **Unassigned SHIELD TV** | `Unassigned` | cast | `media` | Cast media player target |
-| `[Empty Name]` | **** | `Unassigned` | unknown | `` |  |
-| `[Empty Name]` | **** | `Unassigned` | unknown | `` |  |
-| `Everywhere` | **Everywhere** | `Unassigned` | alexa_devices | `media` |  |
-| `lganet@gmail.com` | **lganet@gmail.com** | `Unassigned` | alexa_devices | `` |  |
-| `SHIELD` | **Unassigned SHIELD TV** | `Unassigned` | music_assistant | `media` |  |
-| `Samsung OLED` | **Unassigned TV** | `Unassigned` | music_assistant | `media` |  |
-| `Luis’s MacBook Air` | **Luis’s MacBook Air** | `Unassigned` | music_assistant | `media` |  |
-| `Stereo` | **Unassigned Stereo Speakers** | `Unassigned` | music_assistant | `media` |  |
-| `Nova` | **Unassigned Nova Speaker Group** | `Unassigned` | music_assistant | `media` |  |
-| `Vibration Sensor` | **Vibration Sensor** | `Unassigned` | yolink | `sensor` |  |
-| `Samsung QN90AA 55 TV BR` | **Samsung QN90AA 55 TV BR** | `Unassigned` | music_assistant | `media` |  |
-| `Window Sensor` | **Window Sensor** | `Unassigned` | yolink | `sensor` |  |
-| `Zigbee2MQTT Bridge` | **Zigbee2MQTT Bridge** | `Unassigned` | zigbee2mqtt | `switch` |  |
-| `Govee Integration` | **Govee Integration** | `Unassigned` | govee | `sensor` |  |
-| `NestHubFA85` | **NestHubFA85** | `Unassigned` | cast | `media` |  |
-| `NestHubFA85` | **NestHubFA85** | `Unassigned` | cast | `media` |  |
-| `Smartplug Tuya 1` | **Unassigned Smart Plug 1** | `Unassigned` | tuya_local | `plug` |  |
+| **Speaker Group Nova** | `Nova` | `media_player.speaker_group_nova` | `media_player.nova` | cast | `media` |
+| **SwitchBot Hub Mini** | `SwitchBot Hub Mini` | `sensor.switchbot_hub_mini` | `sensor.switchbot_hub_mini_wi_fi_rssi` | matter | `sensor` |
+| **** | `[Empty Name]` | `` | `` | unknown | `` |
+| **Phoscon-GW** | `Phoscon-GW` | `` | `` | deconz | `` |
+| **Daylight** | `Daylight` | `sensor.daylight` | `sensor.daylight` | deconz | `sensor` |
+| **** | `[Empty Name]` | `` | `` | unknown | `` |
+| **** | `[Empty Name]` | `` | `` | unknown | `` |
+| **Everywhere** | `Everywhere` | `media_player.everywhere` | `media_player.everywhere` | alexa_devices | `media` |
+| **lganet@gmail.com** | `lganet@gmail.com` | `button.lganet_gmail_com` | `button.lganet_gmail_com_good_morning_lights_on` | alexa_devices | `` |
+| **Luis’s MacBook Air** | `Luis’s MacBook Air` | `media_player.luis_s_macbook_air` | `media_player.luiss_macbook_air` | music_assistant | `media` |
+| **Speaker Group Nova** | `Nova` | `media_player.speaker_group_nova` | `media_player.nova_2` | music_assistant | `media` |
+| **Vibration Sensor** | `Vibration Sensor` | `binary_sensor.vibration_sensor` | `binary_sensor.vibration_sensor_vibration` | yolink | `sensor` |
+| **Samsung QN90AA 55 TV BR** | `Samsung QN90AA 55 TV BR` | `media_player.samsung_qn90aa_55_tv_br` | `media_player.samsung_qn90aa_55_tv_br` | music_assistant | `media` |
+| **Window Sensor** | `Window Sensor` | `binary_sensor.window_sensor` | `binary_sensor.window_sensor_door` | yolink | `sensor` |
+| **Zigbee2MQTT Bridge** | `Zigbee2MQTT Bridge` | `switch.zigbee2mqtt_bridge` | `switch.zigbee2mqtt_bridge_permit_join` | zigbee2mqtt | `switch` |
+| **Govee Integration** | `Govee Integration` | `sensor.govee_integration` | `sensor.govee_integration_api_rate_limit_remaining` | govee | `sensor` |
+| **NestHubFA85** | `NestHubFA85` | `media_player.nesthubfa85` | `media_player.nesthubfa85` | cast | `media` |
+| **NestHubFA85** | `NestHubFA85` | `media_player.nesthubfa85` | `media_player.nesthubfa85_3` | cast | `media` |
+| **Unassigned Smart Plug 1** | `Smartplug Tuya 1` | `switch.unassigned_smart_plug_1` | `switch.smartplug_tuya_1` | tuya_local | `plug` |
 
-### System / Server (42 devices)
+### System / Server (38 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `Sun` | **Sun** | `Unassigned` | sun | `system` | Internal integration / system device |
-| `Home Assistant Core` | **Home Assistant Core** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `Home Assistant Supervisor` | **Home Assistant Supervisor** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `Home Assistant Host` | **Home Assistant Host** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `Home Assistant Operating System` | **Home Assistant Operating System** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `Matter Server` | **Matter Server** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `Forecast` | **Forecast** | `Unassigned` | met | `system` | Internal integration / system device |
-| `Advanced SSH & Web Terminal` | **Advanced SSH & Web Terminal** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `GusNAS` | **GusNAS** | `kitchen` | synology_dsm | `system` | Internal integration / system device |
-| `GusNAS (Drive 1)` | **GusNAS (Drive 1)** | `kitchen` | synology_dsm | `system` | Internal integration / system device |
-| `GusNAS (Drive 2)` | **GusNAS (Drive 2)** | `kitchen` | synology_dsm | `system` | Internal integration / system device |
-| `GusNAS (Volume 1)` | **GusNAS (Volume 1)** | `kitchen` | synology_dsm | `system` | Internal integration / system device |
-| `Studio Code Server` | **Studio Code Server** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `SM-S928W` | **SM-S928W** | `Unassigned` | mobile_app | `system` | Internal integration / system device |
-| `Livia` | **Livia** | `Unassigned` | mobile_app | `system` | Internal integration / system device |
-| `Get HACS` | **Get HACS** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `HACS` | **HACS** | `Unassigned` | hacs | `system` | Internal integration / system device |
-| `Node-RED` | **Node-RED** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `deCONZ` | **deCONZ** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `LivingRoom` | **LivingRoom** | `Unassigned` | synology_dsm | `system` | Internal integration / system device |
-| `GusNAS Surveillance Station` | **GusNAS Surveillance Station** | `Unassigned` | synology_dsm | `system` | Internal integration / system device |
-| `Google Translate en com` | **Google Translate en com** | `Unassigned` | google_translate | `system` | Internal integration / system device |
-| `Backup` | **Backup** | `Unassigned` | backup | `system` | Internal integration / system device |
-| `Google AI Task` | **Google AI Task** | `Unassigned` | google_generative_ai_conversation | `system` | Internal integration / system device |
-| `Google AI Conversation` | **Google AI Conversation** | `Unassigned` | google_generative_ai_conversation | `system` | Internal integration / system device |
-| `Google AI STT` | **Google AI STT** | `Unassigned` | google_generative_ai_conversation | `system` | Internal integration / system device |
-| `Google AI TTS` | **Google AI TTS** | `Unassigned` | google_generative_ai_conversation | `system` | Internal integration / system device |
-| `eufy-security-ws` | **eufy-security-ws** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `OpenCode` | **OpenCode** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `Music Assistant` | **Music Assistant** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `HA-MCP Custom Component` | **HA-MCP Custom Component** | `Unassigned` | hacs | `system` | Internal integration / system device |
-| `HA-MCP Server` | **HA-MCP Server** | `Unassigned` | ha_mcp_tools | `system` | Internal integration / system device |
-| `WebRTC Camera` | **WebRTC Camera** | `Unassigned` | hacs | `system` | Internal integration / system device |
-| `button-card` | **button-card** | `Unassigned` | hacs | `system` | Internal integration / system device |
-| `iOS Dark Mode Theme` | **iOS Dark Mode Theme** | `Unassigned` | hacs | `system` | Internal integration / system device |
-| `Zigbee2MQTT` | **Zigbee2MQTT** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `Mosquitto broker` | **Mosquitto broker** | `Unassigned` | hassio | `system` | Internal integration / system device |
-| `Tuya Local` | **Tuya Local** | `Unassigned` | hacs | `system` | Internal integration / system device |
-| `Stack In Card` | **Stack In Card** | `Unassigned` | hacs | `system` | Internal integration / system device |
-| `Govee Cloud Integration` | **Govee Cloud Integration** | `Unassigned` | hacs | `system` | Internal integration / system device |
-| `nspanel den` | **nspanel den** | `Unassigned` | mobile_app | `system` | Internal integration / system device |
-| `Fold 8` | **Fold 8** | `Unassigned` | mobile_app | `system` | Internal integration / system device |
+| **Sun** | `Sun` | `sensor.sun_next_dawn` | `sensor.sun_next_dawn` | sun | `system` |
+| **Home Assistant Core** | `Home Assistant Core` | `sensor.home_assistant_core_cpu_percent` | `sensor.home_assistant_core_cpu_percent` | hassio | `system` |
+| **Home Assistant Supervisor** | `Home Assistant Supervisor` | `sensor.home_assistant_supervisor_cpu_percent` | `sensor.home_assistant_supervisor_cpu_percent` | hassio | `system` |
+| **Home Assistant Host** | `Home Assistant Host` | `sensor.home_assistant_host_os_agent_version` | `sensor.home_assistant_host_os_agent_version` | hassio | `system` |
+| **Home Assistant Operating System** | `Home Assistant Operating System` | `sensor.home_assistant_operating_system_version` | `sensor.home_assistant_operating_system_version` | hassio | `system` |
+| **Matter Server** | `Matter Server` | `binary_sensor.matter_server_running` | `binary_sensor.matter_server_running` | hassio | `system` |
+| **Forecast** | `Forecast` | `weather.forecast_home` | `weather.forecast_home` | met | `system` |
+| **Advanced SSH & Web Terminal** | `Advanced SSH & Web Terminal` | `binary_sensor.advanced_ssh_web_terminal_running` | `binary_sensor.advanced_ssh_web_terminal_running` | hassio | `system` |
+| **GusNAS** | `GusNAS` | `binary_sensor.gusnas_security_status` | `binary_sensor.gusnas_security_status` | synology_dsm | `system` |
+| **GusNAS (Drive 1)** | `GusNAS (Drive 1)` | `binary_sensor.gusnas_drive_1_exceeded_max_bad_sectors` | `binary_sensor.gusnas_drive_1_exceeded_max_bad_sectors` | synology_dsm | `system` |
+| **GusNAS (Drive 2)** | `GusNAS (Drive 2)` | `binary_sensor.gusnas_drive_2_exceeded_max_bad_sectors` | `binary_sensor.gusnas_drive_2_exceeded_max_bad_sectors` | synology_dsm | `system` |
+| **GusNAS (Volume 1)** | `GusNAS (Volume 1)` | `sensor.gusnas_volume_1_status` | `sensor.gusnas_volume_1_status` | synology_dsm | `system` |
+| **Studio Code Server** | `Studio Code Server` | `binary_sensor.studio_code_server_running` | `binary_sensor.studio_code_server_running` | hassio | `system` |
+| **Get HACS** | `Get HACS` | `binary_sensor.get_hacs_running` | `binary_sensor.get_hacs_running` | hassio | `system` |
+| **HACS** | `HACS` | `update.hacs_update` | `update.hacs_update` | hacs | `system` |
+| **Node-RED** | `Node-RED` | `binary_sensor.node_red_running` | `binary_sensor.node_red_running` | hassio | `system` |
+| **deCONZ** | `deCONZ` | `binary_sensor.deconz_running` | `binary_sensor.deconz_running` | hassio | `system` |
+| **LivingRoom** | `LivingRoom` | `camera.livingroom` | `camera.livingroom` | synology_dsm | `system` |
+| **GusNAS Surveillance Station** | `GusNAS Surveillance Station` | `switch.gusnas_surveillance_station_home_mode` | `switch.gusnas_surveillance_station_home_mode` | synology_dsm | `system` |
+| **Google Translate en com** | `Google Translate en com` | `tts.google_translate_en_com` | `tts.google_translate_en_com` | google_translate | `system` |
+| **Backup** | `Backup` | `event.backup_automatic_backup` | `event.backup_automatic_backup` | backup | `system` |
+| **Google AI Task** | `Google AI Task` | `ai_task.google_ai_task` | `ai_task.google_ai_task` | google_generative_ai_conversation | `system` |
+| **Google AI Conversation** | `Google AI Conversation` | `conversation.google_ai_conversation` | `conversation.google_ai_conversation` | google_generative_ai_conversation | `system` |
+| **Google AI STT** | `Google AI STT` | `stt.google_ai_stt` | `stt.google_ai_stt` | google_generative_ai_conversation | `system` |
+| **Google AI TTS** | `Google AI TTS` | `tts.google_ai_tts` | `tts.google_ai_tts` | google_generative_ai_conversation | `system` |
+| **eufy-security-ws** | `eufy-security-ws` | `binary_sensor.eufy_security_ws_running` | `binary_sensor.eufy_security_ws_running` | hassio | `system` |
+| **OpenCode** | `OpenCode` | `binary_sensor.opencode_running` | `binary_sensor.opencode_running` | hassio | `system` |
+| **Music Assistant** | `Music Assistant` | `binary_sensor.music_assistant_running` | `binary_sensor.music_assistant_running` | hassio | `system` |
+| **HA-MCP Custom Component** | `HA-MCP Custom Component` | `update.ha_mcp_custom_component_update` | `update.ha_mcp_custom_component_update` | hacs | `system` |
+| **HA-MCP Server** | `HA-MCP Server` | `update.ha_mcp_server_update` | `update.ha_mcp_server_update` | ha_mcp_tools | `system` |
+| **WebRTC Camera** | `WebRTC Camera` | `update.webrtc_camera_update` | `update.webrtc_camera_update` | hacs | `system` |
+| **button-card** | `button-card` | `update.button_card_update` | `update.button_card_update` | hacs | `system` |
+| **iOS Dark Mode Theme** | `iOS Dark Mode Theme` | `update.ios_dark_mode_theme_update` | `update.ios_dark_mode_theme_update` | hacs | `system` |
+| **Zigbee2MQTT** | `Zigbee2MQTT` | `binary_sensor.zigbee2mqtt_running` | `binary_sensor.zigbee2mqtt_running` | hassio | `system` |
+| **Mosquitto broker** | `Mosquitto broker` | `binary_sensor.mosquitto_broker_running` | `binary_sensor.mosquitto_broker_running` | hassio | `system` |
+| **Tuya Local** | `Tuya Local` | `update.tuya_local_update` | `update.tuya_local_update` | hacs | `system` |
+| **Stack In Card** | `Stack In Card` | `update.stack_in_card_update` | `update.stack_in_card_update` | hacs | `system` |
+| **Govee Cloud Integration** | `Govee Cloud Integration` | `update.govee_cloud_integration_update` | `update.govee_cloud_integration_update` | hacs | `system` |
 
-### On The Go (2 devices)
+### On The Go (5 devices)
 
-| Current Name | Proposed Name | Current Area | Integration | Suggested Labels | Notes |
+| Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| `motorcycle tag` | **On The Go motorcycle tag** | `on_the_go` | smartthings | `` |  |
-| `SmartTag+ Car Key` | **On The Go SmartTag+ Car Key** | `on_the_go` | smartthings | `` |  |
+| **Samsung Galaxy Phone** | `SM-S928W` | `device_tracker.sm_s928w` | `device_tracker.sm_s928w` | mobile_app | `mobile` |
+| **Livia Phone** | `Livia` | `device_tracker.iphone` | `device_tracker.iphone` | mobile_app | `mobile` |
+| **On The Go motorcycle tag** | `motorcycle tag` | `` | `` | smartthings | `` |
+| **On The Go SmartTag+ Car Key** | `SmartTag+ Car Key` | `` | `` | smartthings | `` |
+| **Gustavo Phone** | `Fold 8` | `device_tracker.fold_8` | `device_tracker.fold_8` | mobile_app | `mobile` |
 
 ---
 
-## 5. Next Steps & Safe Execution Plan
+## 5. Next Steps & Execution Workflow
 
-1. **Review and Adjust**:
-   * Review the suggested device names and area assignments above or in [`doc/devices-inventory-and-proposals.csv`](file:///Users/gustavo/src/ha/doc/devices-inventory-and-proposals.csv).
-   * Confirm if you prefer **`Office`** or **`Den`** as the primary name (remembering we can set the other as an alias).
-   * Mark any changes or additions to the suggested names.
-2. **Execution Phase**:
-   * We will create a scripted migration via Home Assistant MCP (`ha_set_device` / `ha_set_area_or_floor`).
-   * We will check whether any entity IDs need alignment, and update all corresponding automations, helpers, and dashboard YAML files in this repository.
-   * Validate the configuration before merging.
+1. **Review Together**:
+   * Review the suggested device names and entity IDs above or in [`doc/devices-inventory-and-proposals.csv`](file:///Users/gustavo/src/ha/doc/devices-inventory-and-proposals.csv).
+   * Note any adjustments or overrides you want.
+2. **Execute via Home Assistant MCP**:
+   * Update Area definitions and spoken aliases (`ha_set_area_or_floor`).
+   * Update device friendly names and assigned areas (`ha_set_device`).
+   * Rename entity IDs (`ha_set_entity(entity_id=..., new_entity_id=...)`).
+3. **Repository Refactor & Validation**:
+   * Batch-update referenced entity IDs in the 10 automations, 3 scripts, and NSPanel dashboard in this repository.
+   * Validate configuration and test automations.
+   * Review the Git diff and finalize the branch.
