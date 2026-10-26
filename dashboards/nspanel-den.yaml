@@ -254,11 +254,19 @@ views:
                   action: more-info
               - type: tile
                 entity: light.den_night_light
-                name: Night Light
+                name: Fan Night Light
                 icon: mdi:weather-night
                 features:
                   - type: light-brightness
                   - type: light-color-temp
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: light.humidifier_night_light
+                name: Humidifier Light
+                icon: mdi:air-humidifier
+                features:
+                  - type: light-brightness
                 tap_action:
                   action: more-info
               - type: custom:stack-in-card
@@ -307,5 +315,11 @@ views:
                 features:
                   - type: fan-preset-modes
                     style: dropdown
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: humidifier.humidifier
+                name: Humidifier
+                icon: mdi:air-humidifier
                 tap_action:
                   action: more-info

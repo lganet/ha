@@ -12,6 +12,9 @@
   - Functional & Governance: `all_off_exempt`, `always_on`, `den_controlled_lights`, `git_managed`.
   - Domain categories: `light`, `fan`, `climate`, `media`, `camera`, `lock`, `sensor`, `switch`, `plug`, `mobile`, `system`.
 - Created `automation.always_on_switch_watchdog_auto_recovery` to immediately restore power and dispatch critical push notifications if any critical switch labeled `always_on` (`switch.office_homelab_plug`, `switch.kitchen_freezer_plug`, `switch.office_fan_light_switch`, `switch.office_pc_plug`, `switch.living_room_tv_console_plug`) is ever turned off.
+- Tagged `fan.office_air_purifier` with `all_off_exempt` and `git_managed` to protect room air filtration from bulk turn-off routines.
+- Tagged `light.humidifier_night_light` with `den_controlled_lights` and `git_managed`, and integrated it into `script.den_all_lights_on` so that All Lights On/Off reliably controls the humidifier night light alongside room lights.
+- Added Humidifier Night Light (`light.humidifier_night_light`) and Humidifier (`humidifier.humidifier`) tiles to the NSPanel Den dashboard (`dashboards/nspanel-den.yaml`), renaming the ceiling fan night light tile to "Fan Night Light" for clarity.
 - Added **Naming Conventions & Voice Accessibility (Areas, Devices, Entity IDs)** and **Always-On Protection & Explicit Confirmation Mandate** principles to `AGENTS.md` mandating clean device friendly names (omitting area prefix), full area-prefixed entity IDs (`<domain>.<area>_<descriptor>`), phonetic simplicity, proactive alignment checks, and strict confirmation prompts before turning off any `always_on` device.
 - Documented complete device inventory, entity transition mapping, and execution plan in `doc/2026-10-25-device-area-naming-review.md`, `doc/2026-10-25-device-area-execution-plan.md`, `doc/devices-inventory-and-proposals.csv`, and `doc/entities-inventory-and-proposals.csv`.
 
