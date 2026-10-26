@@ -249,44 +249,44 @@ Below is the proposal for all physical smart devices. Notice that **Device Names
 
 | Proposed Device Name | Current Device Name | Proposed Primary Entity ID | Current Primary Entity ID | Integration | Labels |
 |---|---|---|---|---|---|
-| **Sun** | `Sun` | `sensor.sun_next_dawn` | `sensor.sun_next_dawn` | sun | `system; system` |
-| **Home Assistant Core** | `Home Assistant Core` | `sensor.home_assistant_core_cpu_percent` | `sensor.home_assistant_core_cpu_percent` | hassio | `system; system` |
-| **Home Assistant Supervisor** | `Home Assistant Supervisor` | `sensor.home_assistant_supervisor_cpu_percent` | `sensor.home_assistant_supervisor_cpu_percent` | hassio | `system; system` |
-| **Home Assistant Host** | `Home Assistant Host` | `sensor.home_assistant_host_os_agent_version` | `sensor.home_assistant_host_os_agent_version` | hassio | `system; system` |
-| **Home Assistant Operating System** | `Home Assistant Operating System` | `sensor.home_assistant_operating_system_version` | `sensor.home_assistant_operating_system_version` | hassio | `system; system` |
-| **Matter Server** | `Matter Server` | `binary_sensor.matter_server_running` | `binary_sensor.matter_server_running` | hassio | `system; system` |
-| **Forecast** | `Forecast` | `weather.forecast_home` | `weather.forecast_home` | met | `system; system` |
-| **Advanced SSH & Web Terminal** | `Advanced SSH & Web Terminal` | `binary_sensor.advanced_ssh_web_terminal_running` | `binary_sensor.advanced_ssh_web_terminal_running` | hassio | `system; system` |
+| **Sun** | `Sun` | `sensor.sun_next_dawn` | `sensor.sun_next_dawn` | sun | `system` |
+| **Home Assistant Core** | `Home Assistant Core` | `sensor.home_assistant_core_cpu_percent` | `sensor.home_assistant_core_cpu_percent` | hassio | `system` |
+| **Home Assistant Supervisor** | `Home Assistant Supervisor` | `sensor.home_assistant_supervisor_cpu_percent` | `sensor.home_assistant_supervisor_cpu_percent` | hassio | `system` |
+| **Home Assistant Host** | `Home Assistant Host` | `sensor.home_assistant_host_os_agent_version` | `sensor.home_assistant_host_os_agent_version` | hassio | `system` |
+| **Home Assistant Operating System** | `Home Assistant Operating System` | `sensor.home_assistant_operating_system_version` | `sensor.home_assistant_operating_system_version` | hassio | `system` |
+| **Matter Server** | `Matter Server` | `binary_sensor.matter_server_running` | `binary_sensor.matter_server_running` | hassio | `system` |
+| **Forecast** | `Forecast` | `weather.forecast_home` | `weather.forecast_home` | met | `system` |
+| **Advanced SSH & Web Terminal** | `Advanced SSH & Web Terminal` | `binary_sensor.advanced_ssh_web_terminal_running` | `binary_sensor.advanced_ssh_web_terminal_running` | hassio | `system` |
 | **GusNAS** | `GusNAS` | `binary_sensor.gusnas_security_status` | `binary_sensor.gusnas_security_status` | synology_dsm | `ethernet; system` |
 | **GusNAS (Drive 1)** | `GusNAS (Drive 1)` | `binary_sensor.gusnas_drive_1_exceeded_max_bad_sectors` | `binary_sensor.gusnas_drive_1_exceeded_max_bad_sectors` | synology_dsm | `ethernet; system` |
 | **GusNAS (Drive 2)** | `GusNAS (Drive 2)` | `binary_sensor.gusnas_drive_2_exceeded_max_bad_sectors` | `binary_sensor.gusnas_drive_2_exceeded_max_bad_sectors` | synology_dsm | `ethernet; system` |
 | **GusNAS (Volume 1)** | `GusNAS (Volume 1)` | `sensor.gusnas_volume_1_status` | `sensor.gusnas_volume_1_status` | synology_dsm | `ethernet; system` |
-| **Studio Code Server** | `Studio Code Server` | `binary_sensor.studio_code_server_running` | `binary_sensor.studio_code_server_running` | hassio | `system; system` |
-| **Get HACS** | `Get HACS` | `binary_sensor.get_hacs_running` | `binary_sensor.get_hacs_running` | hassio | `system; system` |
-| **HACS** | `HACS` | `update.hacs_update` | `update.hacs_update` | hacs | `system; system` |
-| **Node-RED** | `Node-RED` | `binary_sensor.node_red_running` | `binary_sensor.node_red_running` | hassio | `system; system` |
-| **deCONZ** | `deCONZ` | `binary_sensor.deconz_running` | `binary_sensor.deconz_running` | hassio | `system; system` |
+| **Studio Code Server** | `Studio Code Server` | `binary_sensor.studio_code_server_running` | `binary_sensor.studio_code_server_running` | hassio | `system` |
+| **Get HACS** | `Get HACS` | `binary_sensor.get_hacs_running` | `binary_sensor.get_hacs_running` | hassio | `system` |
+| **HACS** | `HACS` | `update.hacs_update` | `update.hacs_update` | hacs | `system` |
+| **Node-RED** | `Node-RED` | `binary_sensor.node_red_running` | `binary_sensor.node_red_running` | hassio | `system` |
+| **deCONZ** | `deCONZ` | `binary_sensor.deconz_running` | `binary_sensor.deconz_running` | hassio | `system` |
 | **LivingRoom** | `LivingRoom` | `camera.livingroom` | `camera.livingroom` | synology_dsm | `ethernet; system` |
 | **GusNAS Surveillance Station** | `GusNAS Surveillance Station` | `switch.gusnas_surveillance_station_home_mode` | `switch.gusnas_surveillance_station_home_mode` | synology_dsm | `ethernet; system` |
-| **Google Translate en com** | `Google Translate en com` | `tts.google_translate_en_com` | `tts.google_translate_en_com` | google_translate | `system; system` |
-| **Backup** | `Backup` | `event.backup_automatic_backup` | `event.backup_automatic_backup` | backup | `system; system` |
-| **Google AI Task** | `Google AI Task` | `ai_task.google_ai_task` | `ai_task.google_ai_task` | google_generative_ai_conversation | `system; system` |
-| **Google AI Conversation** | `Google AI Conversation` | `conversation.google_ai_conversation` | `conversation.google_ai_conversation` | google_generative_ai_conversation | `system; system` |
-| **Google AI STT** | `Google AI STT` | `stt.google_ai_stt` | `stt.google_ai_stt` | google_generative_ai_conversation | `system; system` |
-| **Google AI TTS** | `Google AI TTS` | `tts.google_ai_tts` | `tts.google_ai_tts` | google_generative_ai_conversation | `system; system` |
-| **eufy-security-ws** | `eufy-security-ws` | `binary_sensor.eufy_security_ws_running` | `binary_sensor.eufy_security_ws_running` | hassio | `system; system` |
-| **OpenCode** | `OpenCode` | `binary_sensor.opencode_running` | `binary_sensor.opencode_running` | hassio | `system; system` |
-| **Music Assistant** | `Music Assistant` | `binary_sensor.music_assistant_running` | `binary_sensor.music_assistant_running` | hassio | `system; system` |
-| **HA-MCP Custom Component** | `HA-MCP Custom Component` | `update.ha_mcp_custom_component_update` | `update.ha_mcp_custom_component_update` | hacs | `system; system` |
-| **HA-MCP Server** | `HA-MCP Server` | `update.ha_mcp_server_update` | `update.ha_mcp_server_update` | ha_mcp_tools | `system; system` |
-| **WebRTC Camera** | `WebRTC Camera` | `update.webrtc_camera_update` | `update.webrtc_camera_update` | hacs | `system; system` |
-| **button-card** | `button-card` | `update.button_card_update` | `update.button_card_update` | hacs | `system; system` |
-| **iOS Dark Mode Theme** | `iOS Dark Mode Theme` | `update.ios_dark_mode_theme_update` | `update.ios_dark_mode_theme_update` | hacs | `system; system` |
-| **Zigbee2MQTT** | `Zigbee2MQTT` | `binary_sensor.zigbee2mqtt_running` | `binary_sensor.zigbee2mqtt_running` | hassio | `system; system` |
-| **Mosquitto broker** | `Mosquitto broker` | `binary_sensor.mosquitto_broker_running` | `binary_sensor.mosquitto_broker_running` | hassio | `system; system` |
-| **Tuya Local** | `Tuya Local` | `update.tuya_local_update` | `update.tuya_local_update` | hacs | `system; system` |
-| **Stack In Card** | `Stack In Card` | `update.stack_in_card_update` | `update.stack_in_card_update` | hacs | `system; system` |
-| **Govee Cloud Integration** | `Govee Cloud Integration` | `update.govee_cloud_integration_update` | `update.govee_cloud_integration_update` | hacs | `system; system` |
+| **Google Translate en com** | `Google Translate en com` | `tts.google_translate_en_com` | `tts.google_translate_en_com` | google_translate | `system` |
+| **Backup** | `Backup` | `event.backup_automatic_backup` | `event.backup_automatic_backup` | backup | `system` |
+| **Google AI Task** | `Google AI Task` | `ai_task.google_ai_task` | `ai_task.google_ai_task` | google_generative_ai_conversation | `system` |
+| **Google AI Conversation** | `Google AI Conversation` | `conversation.google_ai_conversation` | `conversation.google_ai_conversation` | google_generative_ai_conversation | `system` |
+| **Google AI STT** | `Google AI STT` | `stt.google_ai_stt` | `stt.google_ai_stt` | google_generative_ai_conversation | `system` |
+| **Google AI TTS** | `Google AI TTS` | `tts.google_ai_tts` | `tts.google_ai_tts` | google_generative_ai_conversation | `system` |
+| **eufy-security-ws** | `eufy-security-ws` | `binary_sensor.eufy_security_ws_running` | `binary_sensor.eufy_security_ws_running` | hassio | `system` |
+| **OpenCode** | `OpenCode` | `binary_sensor.opencode_running` | `binary_sensor.opencode_running` | hassio | `system` |
+| **Music Assistant** | `Music Assistant` | `binary_sensor.music_assistant_running` | `binary_sensor.music_assistant_running` | hassio | `system` |
+| **HA-MCP Custom Component** | `HA-MCP Custom Component` | `update.ha_mcp_custom_component_update` | `update.ha_mcp_custom_component_update` | hacs | `system` |
+| **HA-MCP Server** | `HA-MCP Server` | `update.ha_mcp_server_update` | `update.ha_mcp_server_update` | ha_mcp_tools | `system` |
+| **WebRTC Camera** | `WebRTC Camera` | `update.webrtc_camera_update` | `update.webrtc_camera_update` | hacs | `system` |
+| **button-card** | `button-card` | `update.button_card_update` | `update.button_card_update` | hacs | `system` |
+| **iOS Dark Mode Theme** | `iOS Dark Mode Theme` | `update.ios_dark_mode_theme_update` | `update.ios_dark_mode_theme_update` | hacs | `system` |
+| **Zigbee2MQTT** | `Zigbee2MQTT` | `binary_sensor.zigbee2mqtt_running` | `binary_sensor.zigbee2mqtt_running` | hassio | `system` |
+| **Mosquitto broker** | `Mosquitto broker` | `binary_sensor.mosquitto_broker_running` | `binary_sensor.mosquitto_broker_running` | hassio | `system` |
+| **Tuya Local** | `Tuya Local` | `update.tuya_local_update` | `update.tuya_local_update` | hacs | `system` |
+| **Stack In Card** | `Stack In Card` | `update.stack_in_card_update` | `update.stack_in_card_update` | hacs | `system` |
+| **Govee Cloud Integration** | `Govee Cloud Integration` | `update.govee_cloud_integration_update` | `update.govee_cloud_integration_update` | hacs | `system` |
 
 ### On The Go (5 devices)
 

@@ -22,12 +22,12 @@ sequence:
   - action: light.turn_on
     target:
       entity_id:
-        - light.floor_lamp
-        - light.office_leds
+        - light.office_floor_lamp
+        - light.office_desk_leds
         - light.den_fan_light
   - action: switch.turn_on
     target:
-      entity_id: switch.den_floor_lamp_side_light
+      entity_id: switch.office_floor_lamp_side_light
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_lights_snapshot_active

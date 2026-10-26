@@ -9,7 +9,7 @@ sequence:
   - action: light.turn_off
     target:
       entity_id:
-        - light.smart_fan_backlight
+        - light.office_ceiling_fan_backlight
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_night_light_active

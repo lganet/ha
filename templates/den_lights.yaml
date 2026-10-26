@@ -1,7 +1,7 @@
 - light:
     - name: Den Fan Light
       unique_id: den_fan_light
-      state: "{{ is_state('light.smart_fan_3', 'on') and is_state('input_boolean.den_night_light_active', 'off') }}"
+      state: "{{ is_state('light.office_ceiling_fan_light', 'on') and is_state('input_boolean.den_night_light_active', 'off') }}"
       turn_on:
         - action: input_boolean.turn_off
           target:
@@ -11,11 +11,11 @@
             brightness_pct: "{{ states('input_number.den_fan_light_last_brightness') | int(77) }}"
             color_temp_kelvin: "{{ states('input_number.den_fan_light_last_color_temp') | int(6000) }}"
           target:
-            entity_id: light.smart_fan_3
+            entity_id: light.office_ceiling_fan_light
       turn_off:
         - action: light.turn_off
           target:
-            entity_id: light.smart_fan_3
+            entity_id: light.office_ceiling_fan_light
         - action: input_boolean.turn_off
           target:
             entity_id: input_boolean.den_night_light_active
@@ -33,7 +33,7 @@
           data:
             brightness: "{{ brightness }}"
           target:
-            entity_id: light.smart_fan_3
+            entity_id: light.office_ceiling_fan_light
       temperature_template: "{{ (1000000 / (states('input_number.den_fan_light_last_color_temp') | float(6000))) | round(0) }}"
       set_temperature:
         - action: input_boolean.turn_off
@@ -48,11 +48,11 @@
           data:
             color_temp_kelvin: "{{ (1000000 / color_temp) | round(0) }}"
           target:
-            entity_id: light.smart_fan_3
+            entity_id: light.office_ceiling_fan_light
 
     - name: Den Night Light
       unique_id: den_night_light
-      state: "{{ is_state('light.smart_fan_3', 'on') and is_state('input_boolean.den_night_light_active', 'on') }}"
+      state: "{{ is_state('light.office_ceiling_fan_light', 'on') and is_state('input_boolean.den_night_light_active', 'on') }}"
       turn_on:
         - action: input_boolean.turn_on
           target:
@@ -62,11 +62,11 @@
             brightness_pct: "{{ states('input_number.den_night_light_last_brightness') | int(10) }}"
             color_temp_kelvin: "{{ states('input_number.den_night_light_last_color_temp') | int(3000) }}"
           target:
-            entity_id: light.smart_fan_3
+            entity_id: light.office_ceiling_fan_light
       turn_off:
         - action: light.turn_off
           target:
-            entity_id: light.smart_fan_3
+            entity_id: light.office_ceiling_fan_light
         - action: input_boolean.turn_off
           target:
             entity_id: input_boolean.den_night_light_active
@@ -84,7 +84,7 @@
           data:
             brightness: "{{ brightness }}"
           target:
-            entity_id: light.smart_fan_3
+            entity_id: light.office_ceiling_fan_light
       temperature_template: "{{ (1000000 / (states('input_number.den_night_light_last_color_temp') | float(3000))) | round(0) }}"
       set_temperature:
         - action: input_boolean.turn_on
@@ -99,4 +99,4 @@
           data:
             color_temp_kelvin: "{{ (1000000 / color_temp) | round(0) }}"
           target:
-            entity_id: light.smart_fan_3
+            entity_id: light.office_ceiling_fan_light

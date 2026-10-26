@@ -4,11 +4,11 @@ description: Turn on/off Den lights automatically based on FP300 presence, sched
 mode: single
 triggers:
   - trigger: state
-    entity_id: binary_sensor.fp300_den_presence
+    entity_id: binary_sensor.office_presence_fp300
     to: "on"
     id: presence_detected
   - trigger: state
-    entity_id: binary_sensor.fp300_den_presence
+    entity_id: binary_sensor.office_presence_fp300
     to: "off"
     for: "00:02:00"
     id: presence_cleared
@@ -38,7 +38,7 @@ actions:
             entity_id: binary_sensor.den_is_workday
             state: "on"
           - condition: state
-            entity_id: binary_sensor.fp300_den_presence
+            entity_id: binary_sensor.office_presence_fp300
             state: "on"
           - condition: state
             entity_id: input_boolean.den_presence_automation

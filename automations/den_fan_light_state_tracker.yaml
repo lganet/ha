@@ -2,11 +2,11 @@ id: "1790016568798"
 alias: Den Fan Light State Tracker
 description: Tracks Fan Light brightness/color temp when in normal mode, and Night Light brightness/color temp when in night mode.
 triggers:
-  - entity_id: light.smart_fan_3
+  - entity_id: light.office_ceiling_fan_light
     trigger: state
 conditions:
   - condition: state
-    entity_id: light.smart_fan_3
+    entity_id: light.office_ceiling_fan_light
     state: "on"
 actions:
   - choose:
@@ -17,18 +17,18 @@ actions:
         sequence:
           - action: input_number.set_value
             data:
-              value: "{{ (state_attr('light.smart_fan_3', 'brightness') | float(25) / 2.55) | round(0) }}"
+              value: "{{ (state_attr('light.office_ceiling_fan_light', 'brightness') | float(25) / 2.55) | round(0) }}"
             target:
               entity_id: input_number.den_night_light_last_brightness
           - if:
               - condition: numeric_state
-                entity_id: light.smart_fan_3
+                entity_id: light.office_ceiling_fan_light
                 attribute: color_temp_kelvin
                 above: 0
             then:
               - action: input_number.set_value
                 data:
-                  value: "{{ state_attr('light.smart_fan_3', 'color_temp_kelvin') | int(3000) }}"
+                  value: "{{ state_attr('light.office_ceiling_fan_light', 'color_temp_kelvin') | int(3000) }}"
                 target:
                   entity_id: input_number.den_night_light_last_color_temp
       - conditions:
@@ -38,18 +38,18 @@ actions:
         sequence:
           - action: input_number.set_value
             data:
-              value: "{{ (state_attr('light.smart_fan_3', 'brightness') | float(196) / 2.55) | round(0) }}"
+              value: "{{ (state_attr('light.office_ceiling_fan_light', 'brightness') | float(196) / 2.55) | round(0) }}"
             target:
               entity_id: input_number.den_fan_light_last_brightness
           - if:
               - condition: numeric_state
-                entity_id: light.smart_fan_3
+                entity_id: light.office_ceiling_fan_light
                 attribute: color_temp_kelvin
                 above: 0
             then:
               - action: input_number.set_value
                 data:
-                  value: "{{ state_attr('light.smart_fan_3', 'color_temp_kelvin') | int(6000) }}"
+                  value: "{{ state_attr('light.office_ceiling_fan_light', 'color_temp_kelvin') | int(6000) }}"
                 target:
                   entity_id: input_number.den_fan_light_last_color_temp
 mode: single
