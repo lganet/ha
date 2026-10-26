@@ -10,6 +10,7 @@ triggers:
       - switch.kitchen_freezer_plug
       - switch.office_fan_light_switch
       - switch.office_pc_plug
+      - switch.living_room_tv_console_plug
     to: "off"
 conditions: []
 actions:
