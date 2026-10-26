@@ -111,6 +111,11 @@ Home Assistant Labels (HA 2024.4+) provide a flexible tagging mechanism for enti
 - **Avoid Rigid Entity Arrays in Code**: Use `label_entities('<label_id>')` in template sensors and scripts instead of hardcoded entity lists. This allows newly added fixtures to automatically inherit room automations and state badges simply by assigning them the appropriate label in Home Assistant.
 - **Inspect Before Creating**: Check existing labels using `ha_config_get_label` before creating new ones to prevent duplicate tags or fragmented naming conventions.
 - **Repository Provenance Mandate**: Every helper, automation, script, or template entity managed in this repository must be tagged with the `git_managed` label in Home Assistant. This provides clear provenance indicating that configuration is version-controlled and should be modified via Git rather than ad-hoc UI changes.
+- **Always-On Protection & Explicit Confirmation Mandate**:
+  - Any entity or device tagged with the `always_on` label (e.g., `switch.office_homelab_plug`, `switch.kitchen_freezer_plug`, `switch.office_fan_light_switch`, `switch.office_pc_plug`, `switch.living_room_tv_console_plug`) supplies continuous line power to servers, critical infrastructure, refrigeration, or downstream smart fixtures.
+  - **Confirmation Required**: If the user ever asks to add, modify, or include an `always_on` entity in ANY automation, script, schedule, scene, or routine that could turn it off or power-cycle it, **you must explicitly pause, remind the user that this device is designated as `always_on`, and ask for their explicit confirmation before proceeding**.
+  - **Exclusion from Room and All-Off Groups**: Never assign room lighting labels (like `den_controlled_lights`), general switch groups, or bulk turn-off targets to any `always_on` entity or device.
+  - **Relays vs. Smart Fixtures**: Always distinguish between an in-wall relay providing constant line power (e.g., `switch.office_fan_light_switch`) and the smart fixture downstream (e.g., `light.den_fan_light`, `fan.office_ceiling_fan`). Only toggle the smart fixture's internal states; the line relay must remain `always_on` and protected by `all_off_exempt`.
 
 ## Naming Conventions & Voice Accessibility (Areas, Devices, Entity IDs)
 
