@@ -112,6 +112,37 @@ Home Assistant Labels (HA 2024.4+) provide a flexible tagging mechanism for enti
 - **Inspect Before Creating**: Check existing labels using `ha_config_get_label` before creating new ones to prevent duplicate tags or fragmented naming conventions.
 - **Repository Provenance Mandate**: Every helper, automation, script, or template entity managed in this repository must be tagged with the `git_managed` label in Home Assistant. This provides clear provenance indicating that configuration is version-controlled and should be modified via Git rather than ad-hoc UI changes.
 
+## Naming Conventions & Voice Accessibility (Areas, Devices, Entity IDs)
+
+Standardized naming ensures consistency across dashboards, automations, and voice assistants (Google Assistant, Alexa, Home Assistant Assist).
+
+### 1. Device Friendly Names: Omit the Area Prefix
+- **Pattern**: `[Descriptor] [Device Type]` (e.g., `SHIELD TV`, `Floor Lamp Left`, `Desk LEDs`, `Ceiling Fan`, `Freezer Plug`, `Door Lock`).
+- **Never include the Area in the Device Friendly Name**: The device is already assigned to an Area in Home Assistant. Including the room name causes UI stuttering in dashboards (e.g., `Living Room > Living Room SHIELD TV > Living Room SHIELD TV Media Player`) and confuses voice assistants (e.g., Google Home registering `"Living Room Living Room SHIELD TV"`).
+- Inside Google Home or HA Assist, rooms are contextual: saying *"Turn off the fan"* targets the fan in the current room, while saying *"Turn off the Office fan"* automatically pairs the Area with the Device.
+
+### 2. Entity IDs: Always Include the Area Prefix
+- **Pattern**: `<domain>.<area>_<descriptor>` (lowercase, words separated by underscores).
+  - Examples: `media_player.living_room_shield`, `light.office_desk_leds`, `fan.office_ceiling_fan`, `switch.kitchen_freezer_plug`, `lock.patio_door_lock`.
+- **Global Scope**: While device friendly names are scoped visually inside areas, Entity IDs live in a single global flat namespace in Home Assistant. The area prefix is required for unambiguous references in YAML automations, Jinja templates, scripts, and dashboards.
+
+### 3. Voice Accessibility & Non-Native English Pronunciation
+Voice assistants frequently mishear non-native English accents, soft vowel transitions, and nasal or ambiguous monosyllabic words.
+- **Phonetic Simplicity**: Choose clear, distinct, universally recognizable English words:
+  - Prefer **`Office`** over **`Den`** (avoids confusion with *Dan*, *them*, *then*, *ten*, or *bed*).
+  - Prefer **`Main Bedroom`** over **`Primary Bedroom`** (avoids difficult consonant clusters `pr-` and unstressed syllables).
+  - Prefer **`Guest Bedroom`** over ambiguous `Bedroom`.
+- **Area & Device Spoken Aliases**: Always configure spoken aliases on areas and devices to support accent variations, multilingual phrasing, and natural synonyms:
+  - Example (`Patio`): Aliases `["Balcony", "Deck", "Backyard", "Outside", "Terrace", "Pátio"]`.
+  - Example (`Office`): Aliases `["Den", "Study", "Workroom", "Escritorio"]`.
+  - Example (`Main Bedroom`): Aliases `["Master Bedroom", "Master", "Quarto Principal", "Suite"]`.
+
+### 4. Proactive Alignment Mandate
+Whenever inspecting, creating, modifying, or refactoring devices, areas, entities, automations, scripts, or helpers:
+- Inspect the names and entity IDs involved.
+- If any device friendly name, area name, or entity ID violates these conventions, **proactively suggest aligning it** with this standard pattern before proceeding.
+
+
 ## Change Planning
 
 For non-trivial changes:
