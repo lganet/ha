@@ -49,13 +49,8 @@ actions:
               entity_id: switch.fan_opnsense_plug
           - delay:
               seconds: 1
-          # 2. Pulse IR Turn On as momentary push-button (turn_on -> delay 1s -> turn_off)
-          - action: switch.turn_on
-            target:
-              entity_id: switch.kitchen_ir_remote_switch_1
-          - delay:
-              seconds: 1
-          - action: switch.turn_off
+          # 2. Pulse IR Power (toggle sends single IR burst without double-clicking)
+          - action: switch.toggle
             target:
               entity_id: switch.kitchen_ir_remote_switch_1
           # 3. Wait 2 seconds for fan to register power-on into baseline Speed 1 (~14W)
@@ -140,13 +135,8 @@ actions:
             entity_id: sensor.fan_opnsense_plug_power
             above: 3.0
         sequence:
-          # Pulse IR Power button to toggle fan off, then reset switch to off
-          - action: switch.turn_on
-            target:
-              entity_id: switch.kitchen_ir_remote_switch_1
-          - delay:
-              seconds: 1
-          - action: switch.turn_off
+          # Pulse IR Power button to toggle fan off
+          - action: switch.toggle
             target:
               entity_id: switch.kitchen_ir_remote_switch_1
           - action: persistent_notification.create
@@ -212,13 +202,8 @@ actions:
               entity_id: switch.fan_opnsense_plug
           - delay:
               seconds: 1
-          # 2. Pulse IR Turn On as momentary push-button (turn_on -> delay 1s -> turn_off)
-          - action: switch.turn_on
-            target:
-              entity_id: switch.kitchen_ir_remote_switch_1
-          - delay:
-              seconds: 1
-          - action: switch.turn_off
+          # 2. Pulse IR Power (toggle sends single IR burst without double-clicking)
+          - action: switch.toggle
             target:
               entity_id: switch.kitchen_ir_remote_switch_1
           # 3. Wait 2 seconds for fan to register the command
@@ -306,12 +291,7 @@ actions:
                 entity_id: sensor.fan_opnsense_plug_power
                 below: 3.0
             then:
-              - action: switch.turn_on
-                target:
-                  entity_id: switch.kitchen_ir_remote_switch_1
-              - delay:
-                  seconds: 1
-              - action: switch.turn_off
+              - action: switch.toggle
                 target:
                   entity_id: switch.kitchen_ir_remote_switch_1
               - delay:
@@ -345,12 +325,7 @@ actions:
                 entity_id: sensor.fan_opnsense_plug_power
                 below: 3.0
             then:
-              - action: switch.turn_on
-                target:
-                  entity_id: switch.kitchen_ir_remote_switch_1
-              - delay:
-                  seconds: 1
-              - action: switch.turn_off
+              - action: switch.toggle
                 target:
                   entity_id: switch.kitchen_ir_remote_switch_1
               - delay:
@@ -384,12 +359,7 @@ actions:
                 entity_id: sensor.fan_opnsense_plug_power
                 below: 3.0
             then:
-              - action: switch.turn_on
-                target:
-                  entity_id: switch.kitchen_ir_remote_switch_1
-              - delay:
-                  seconds: 1
-              - action: switch.turn_off
+              - action: switch.toggle
                 target:
                   entity_id: switch.kitchen_ir_remote_switch_1
               - delay:
