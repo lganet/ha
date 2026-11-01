@@ -1,0 +1,192 @@
+id: "1793498100000"
+alias: Closet Homelab Fan Thermal Watchdog
+description: 4-Speed closed-loop thermal cooling for OPNsense/Proxmox homelab using YoLink temperature, Proxmox status, Third Reality power metering, and Zigbee IR remote control.
+mode: single
+triggers:
+  - trigger: state
+    entity_id: sensor.temperature_sensor_temperature
+    id: yolink_temp_changed
+  - trigger: state
+    entity_id: binary_sensor.pve_status
+    id: pve_status_changed
+  - trigger: state
+    entity_id: sensor.ups_status_data
+    id: ups_power_restored
+  - trigger: homeassistant
+    event: start
+    id: ha_started
+  - trigger: time_pattern
+    minutes: "/5"
+    id: periodic_watchdog
+
+conditions: []
+
+actions:
+  - choose:
+      # SCENARIO 1: 100% Confirmed Proxmox Shutdown AND Closet is Cool -> Turn Fan OFF
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.pve_status
+                state: "off"
+              - condition: state
+                entity_id: sensor.pve_status
+                state: "offline"
+          - condition: numeric_state
+            entity_id: sensor.temperature_sensor_temperature
+            below: 23.5
+          - condition: numeric_state
+            entity_id: sensor.fan_opnsense_plug_power
+            above: 5.0
+        sequence:
+          - action: switch.turn_off
+            target:
+              entity_id: switch.kitchen_ir_remote_switch_1
+          - action: persistent_notification.create
+            data:
+              title: "❄️ Homelab Fan Cooldown"
+              message: "Proxmox is confirmed OFF and closet ambient temperature is cool ({{ states('sensor.temperature_sensor_temperature') }}°C). Fan turned off."
+              notification_id: homelab_fan_cooldown
+
+      # SCENARIO 2: Base Cooling (Speed 1 Turn-On) - Warm, Fail-Safe, or Power Recovery
+      - conditions:
+          # Not 100% confirmed off (running OR uncertain/unavailable)
+          - condition: not
+            conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: binary_sensor.pve_status
+                    state: "off"
+                  - condition: state
+                    entity_id: sensor.pve_status
+                    state: "offline"
+          # Fan is currently off or in standby (power < 5W or plug switch off)
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.fan_opnsense_plug_power
+                below: 5.0
+              - condition: state
+                entity_id: switch.fan_opnsense_plug
+                state: "off"
+          # Warm trigger OR Fail-Safe (sensors unavailable or low battery)
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.temperature_sensor_temperature
+                above: 25.0
+              - condition: template
+                value_template: >-
+                  {{ has_value('sensor.proxmox_host_pve_pve_cpu_package_temperature') and
+                     states('sensor.proxmox_host_pve_pve_cpu_package_temperature') | float(0) >= 52.0 }}
+              - condition: state
+                entity_id: sensor.temperature_sensor_temperature
+                state:
+                  - unavailable
+                  - unknown
+              - condition: numeric_state
+                entity_id: sensor.temperature_sensor_battery
+                below: 10
+              - condition: state
+                entity_id: binary_sensor.pve_status
+                state:
+                  - unavailable
+                  - unknown
+        sequence:
+          - action: switch.turn_on
+            target:
+              entity_id: switch.fan_opnsense_plug
+          - delay:
+              seconds: 2
+          - action: switch.turn_on
+            target:
+              entity_id: switch.kitchen_ir_remote_switch_1
+          - delay:
+              seconds: 5
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.fan_opnsense_plug_power
+                below: 5.0
+            then:
+              - action: switch.turn_on
+                target:
+                  entity_id: switch.kitchen_ir_remote_switch_1
+
+      # SCENARIO 3: Speed 4 (Max Turbo) - YoLink >= 31°C or Proxmox >= 75°C
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.temperature_sensor_temperature
+                above: 31.0
+              - condition: template
+                value_template: >-
+                  {{ has_value('sensor.proxmox_host_pve_pve_cpu_package_temperature') and
+                     states('sensor.proxmox_host_pve_pve_cpu_package_temperature') | float(0) >= 75.0 }}
+          # Running below Speed 4 (< 26.5W)
+          - condition: numeric_state
+            entity_id: sensor.fan_opnsense_plug_power
+            above: 5.0
+            below: 26.5
+        sequence:
+          - action: switch.toggle
+            target:
+              entity_id: switch.ir_remoto_switch2
+
+      # SCENARIO 4: Speed 3 (High Airflow) - YoLink >= 29°C or Proxmox >= 68°C
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.temperature_sensor_temperature
+                above: 29.0
+              - condition: template
+                value_template: >-
+                  {{ has_value('sensor.proxmox_host_pve_pve_cpu_package_temperature') and
+                     states('sensor.proxmox_host_pve_pve_cpu_package_temperature') | float(0) >= 68.0 }}
+          # Running at Speed 1 or 2 (< 22W)
+          - condition: numeric_state
+            entity_id: sensor.fan_opnsense_plug_power
+            above: 5.0
+            below: 22.0
+        sequence:
+          - action: switch.toggle
+            target:
+              entity_id: switch.ir_remoto_switch2
+
+      # SCENARIO 5: Speed 2 (Moderate Breeze) - YoLink >= 27°C or Proxmox >= 60°C
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.temperature_sensor_temperature
+                above: 27.0
+              - condition: template
+                value_template: >-
+                  {{ has_value('sensor.proxmox_host_pve_pve_cpu_package_temperature') and
+                     states('sensor.proxmox_host_pve_pve_cpu_package_temperature') | float(0) >= 60.0 }}
+          # Running at Speed 1 (< 17W)
+          - condition: numeric_state
+            entity_id: sensor.fan_opnsense_plug_power
+            above: 5.0
+            below: 17.0
+        sequence:
+          - action: switch.toggle
+            target:
+              entity_id: switch.ir_remoto_switch2
+
+      # SCENARIO 6: Step Down when Cooled (< 26°C and running above Speed 1)
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.temperature_sensor_temperature
+            below: 26.0
+          # Running at Speed 2, 3, or 4 (> 17W)
+          - condition: numeric_state
+            entity_id: sensor.fan_opnsense_plug_power
+            above: 17.0
+        sequence:
+          - action: switch.toggle
+            target:
+              entity_id: switch.ir_remoto_switch3
