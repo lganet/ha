@@ -5,10 +5,6 @@ mode: single
 triggers:
   - trigger: state
     entity_id: switch.fan_opnsense_plug
-    from:
-      - "off"
-      - unavailable
-      - unknown
     to: "on"
     id: plug_turned_on
   - trigger: homeassistant
@@ -111,7 +107,7 @@ actions:
                   - unavailable
                   - unknown
         sequence:
-          # Stabilization delay if triggered by plug power restoration or HA reboot
+          # Stabilization delay (10s) if triggered by plug power restoration or HA reboot
           - if:
               - condition: trigger
                 id:
@@ -119,7 +115,7 @@ actions:
                   - ha_started
             then:
               - delay:
-                  seconds: 3
+                  seconds: 10
           # 1. Ensure smart plug relay is on
           - action: switch.turn_on
             target:
