@@ -1,7 +1,7 @@
 id: "1793498100000"
 alias: Closet Homelab Fan Thermal Watchdog
 description: 4-Speed closed-loop thermal cooling for OPNsense/Proxmox homelab using YoLink temperature, Proxmox status, Third Reality power metering, and Zigbee IR remote control.
-mode: single
+mode: restart
 triggers:
   - trigger: state
     entity_id: switch.fan_opnsense_plug

@@ -13,7 +13,7 @@ Tested live using Third Reality Zigbee Smart Plug (`switch.fan_opnsense_plug`) a
 | Setting | Measured Power (Watts) | Profile | Action in Automation |
 | :---: | :---: | :--- | :--- |
 | **Standby / Off** | **`0.8 W`** ($< 3.0\text{ W}$) | Motor stopped | Cooldown state (`pve_status` confirmed off + temp < 23.5°C) |
-| **Speed 1** | **`14.0 W – 14.5 W`** ($> 10\text{ W}$) | Silent / Gentle | Base cooling ($T \ge 25.0^\circ\text{C}$ or fail-safe trigger) |
+| **Speed 1** | **`13.8 W – 14.5 W`** ($> 10\text{ W}$) | Silent / Gentle | Base cooling ($T \ge 25.0^\circ\text{C}$ or fail-safe trigger) |
 | **Speed 2** | **`19.2 W – 19.5 W`** | Moderate | Increased load / ambient ($T \ge 27.0^\circ\text{C}$) |
 | **Speed 3** | **`24.8 W`** | High Airflow | Warm closet ($T \ge 29.0^\circ\text{C}$) |
 | **Speed 4** | **`28.2 W`** | **Max Turbo** | Emergency cooling ($T \ge 31.0^\circ\text{C}$ or CPU $\ge 75^\circ\text{C}$) |
@@ -26,7 +26,7 @@ Tested live using Third Reality Zigbee Smart Plug (`switch.fan_opnsense_plug`) a
 flowchart TD
     Trigger["Periodic Watchdog (2m) OR<br/>YoLink Temp Update OR<br/>Proxmox Status/CPU Update OR<br/>Plug Turned On / HA Startup"] --> CheckTrigger{"Trigger is Plug Power-On<br/>or HA Startup?"}
 
-    CheckTrigger -->|YES: Blackout / Boot| BlackoutRecovery["1. Wait 15s for Zigbee/Plug Telemetry to Settle<br/>2. Guarantee Momentary Power Pulse<br/>3. Apply Target Speed based on Temp"]
+    CheckTrigger -->|YES: Blackout / Boot| BlackoutRecovery["1. Wait 15s for Zigbee/Plug Telemetry to Settle<br/>2. Guarantee Power Pulse via switch.toggle<br/>3. Apply Target Speed based on Temp"]
 
     CheckTrigger -->|NO: Periodic / Temp| CheckOff{"Is Proxmox 100% OFF?<br/>(pve_status == 'offline'/'off'<br/>AND YoLink < 23.5°C)"}
 
@@ -34,7 +34,7 @@ flowchart TD
 
     CheckOff -->|NO: Running or Uncertain| CheckPower{"Current Fan State<br/>(sensor.fan_opnsense_plug_power)"}
 
-    CheckPower -->|Standby: Watts < 3.0W OR Plug Off| SelfHeal["1. Ensure Plug ON<br/>2. Fire Momentary IR 'Turn On' (Starts Speed 1: 14W)<br/>3. Wait 2s for Fan to Register<br/>4. Immediately Apply Target Speed (1, 2, 3, or 4)"]
+    CheckPower -->|Standby: Watts < 3.0W OR Plug Off| SelfHeal["1. Ensure Plug ON<br/>2. Fire IR Toggle (Starts Speed 1: 14W)<br/>3. Wait 2s for Fan to Register<br/>4. Immediately Apply Target Speed (1, 2, 3, or 4)"]
 
     CheckPower -->|Running: Watts ≥ 10.0W| SpeedTiers{"Check Temperature Tiers (Pre-Check: Watts > 10W)"}
 
@@ -48,13 +48,22 @@ flowchart TD
 
 ## 3. Physical Hardware Quirks & Solutions
 
-### A. Stateless IR Remote Button Reset (Momentary Push-Button)
-- **Problem:** `switch.kitchen_ir_remote_switch_1` represents a single toggle button on the physical IR remote. Calling `switch.turn_on` leaves the entity in `on` state in Home Assistant. Future `switch.turn_on` calls become no-ops.
-- **Solution:** Every call to `switch.turn_on` is immediately followed by `delay: { seconds: 1 }` and `action: switch.turn_off` to reset the switch back to `off`, ensuring subsequent IR pulses are never dropped.
+### A. Stateless IR Remote Button Reset (Toggle vs Double-Click)
+- **Problem:** `switch.kitchen_ir_remote_switch_1` represents a single toggle button on the physical IR remote learned for both ON and OFF. Calling `switch.turn_on` followed by `switch.turn_off` transmits **two consecutive IR pulses**, turning the fan on and immediately off.
+- **Solution:** Use `action: switch.toggle` across all scenarios. Calling `switch.toggle` sends exactly ONE IR pulse regardless of current entity state, preventing double-clicks and ensuring the signal is never dropped by Home Assistant.
 
 ### B. Stale Power Metric Resolution on Boot / Recovery
 - **Problem:** On HA restart or smart plug reconnection, `sensor.fan_opnsense_plug_power` restores its pre-outage value ($14.2\text{ W}$) until the physical plug transmits a fresh measurement. This blocked the `< 3.0\text{ W}` condition.
 - **Solution:** Dedicated Scenario 0 for `plug_turned_on` and `ha_started`: waits 15 seconds for plug connection and guarantees the IR Power pulse is transmitted regardless of cached pre-outage wattage.
+
+### C. Live Power-Cycle Blackout Test Verification
+- **Verified on Hardware (Trace `ac4775bde6211d75649c21aacae817b9`):**
+  - Plug powered off: power dropped to `0.0 W`.
+  - Plug turned on: triggered Scenario 0 immediately.
+  - Settling delay: paused 15 seconds for Zigbee network stabilization.
+  - Power pulse: fired `switch.toggle` on `switch.kitchen_ir_remote_switch_1`.
+  - Fan response: automatically started up into Speed 1; measured power climbed to **`13.8 W`** and remained stable.
+  - Mode: configured with `mode: restart` to prevent trigger drops when power-on events coincide with periodic timers.
 
 ---
 
