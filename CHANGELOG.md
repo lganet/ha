@@ -4,6 +4,7 @@
 
 ### Added
 - Created `automation.closet_homelab_fan_thermal_watchdog` (`automations/fan_thermal_cooling_watchdog.yaml`) providing automated 4-speed closed-loop thermal cooling and blackout recovery for the OPNsense/Proxmox homelab equipment.
+- Added blackout recovery trigger: detects `switch.fan_opnsense_plug` transitioning from off/unavailable/unknown to `on` (and Home Assistant startup), waits 5 seconds for line power stabilization, and automatically sends the IR Turn On command if the fan is in electronic standby (< 5W).
 - Integrated Third Reality Zigbee smart plug (`switch.fan_opnsense_plug`) with hardware `power_on_behavior: on` and real-time power metering feedback (`sensor.fan_opnsense_plug_power`) across 5 discrete operational states (Standby: 0.8W, Speed 1: 14W, Speed 2: 19.5W, Speed 3: 24.8W, Speed 4: 28.2W).
 - Integrated Zigbee IR blaster (`switch.kitchen_ir_remote_switch_1`, `switch.ir_remoto_switch2`, `switch.ir_remoto_switch3`) for discrete power control and stepped speed pulse adjustments.
 - Built-in fail-safe protection: forces cooling fan ON whenever Proxmox state is uncertain or thermal sensors (YoLink climate sensor / battery) drop offline.

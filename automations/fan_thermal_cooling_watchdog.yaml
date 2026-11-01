@@ -4,6 +4,17 @@ description: 4-Speed closed-loop thermal cooling for OPNsense/Proxmox homelab us
 mode: single
 triggers:
   - trigger: state
+    entity_id: switch.fan_opnsense_plug
+    from:
+      - "off"
+      - unavailable
+      - unknown
+    to: "on"
+    id: plug_turned_on
+  - trigger: homeassistant
+    event: start
+    id: ha_started
+  - trigger: state
     entity_id: sensor.temperature_sensor_temperature
     id: yolink_temp_changed
   - trigger: state
@@ -12,9 +23,6 @@ triggers:
   - trigger: state
     entity_id: sensor.ups_status_data
     id: ups_power_restored
-  - trigger: homeassistant
-    event: start
-    id: ha_started
   - trigger: time_pattern
     minutes: "/5"
     id: periodic_watchdog
@@ -23,6 +31,36 @@ conditions: []
 
 actions:
   - choose:
+      # SCENARIO 0: Blackout / Plug Power-Up: When plug turns on or HA starts, wait 5s and wake fan from electronic standby
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: plug_turned_on
+              - condition: trigger
+                id: ha_started
+        sequence:
+          - delay:
+              seconds: 5
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.fan_opnsense_plug_power
+                below: 5.0
+            then:
+              - action: switch.turn_on
+                target:
+                  entity_id: switch.kitchen_ir_remote_switch_1
+              - delay:
+                  seconds: 5
+              - if:
+                  - condition: numeric_state
+                    entity_id: sensor.fan_opnsense_plug_power
+                    below: 5.0
+                then:
+                  - action: switch.turn_on
+                    target:
+                      entity_id: switch.kitchen_ir_remote_switch_1
+
       # SCENARIO 1: 100% Confirmed Proxmox Shutdown AND Closet is Cool -> Turn Fan OFF
       - conditions:
           - condition: or

@@ -24,7 +24,7 @@ Tested live using Third Reality Zigbee Smart Plug (`switch.fan_opnsense_plug`) a
 
 ```mermaid
 flowchart TD
-    Trigger["Periodic Watchdog (5m) OR<br/>YoLink Temp Update OR<br/>Proxmox Status Update OR<br/>HA Startup / Power Restore"] --> CheckOff{"Is Proxmox 100% OFF?<br/>(pve_status == 'offline'/'off'<br/>AND YoLink < 23.5°C)"}
+    Trigger["Periodic Watchdog (5m) OR<br/>YoLink Temp Update OR<br/>Proxmox Status Update OR<br/>Plug Turned On / HA Startup"] --> CheckOff{"Is Proxmox 100% OFF?<br/>(pve_status == 'offline'/'off'<br/>AND YoLink < 23.5°C)"}
 
     CheckOff -->|YES| SafeOff["Safe Shutdown: Fire IR 'Turn Off'<br/>Power drops to 0.8W"]
 
