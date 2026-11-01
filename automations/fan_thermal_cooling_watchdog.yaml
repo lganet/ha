@@ -30,6 +30,99 @@ conditions: []
 
 actions:
   - choose:
+      # SCENARIO 0: Blackout Recovery & System Startup (Unconditional Standby Wakeup)
+      # Bypasses stale power reading (14.2W) by waiting 15s for plug telemetry to settle, then guaranteed IR Turn On
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id: plug_turned_on
+              - condition: trigger
+                id: ha_started
+        sequence:
+          # Wait 15s for smart plug to boot, connect to Zigbee, and settle
+          - delay:
+              seconds: 15
+          # 1. Ensure smart plug relay is on
+          - action: switch.turn_on
+            target:
+              entity_id: switch.fan_opnsense_plug
+          - delay:
+              seconds: 1
+          # 2. Pulse IR Turn On as momentary push-button (turn_on -> delay 1s -> turn_off)
+          - action: switch.turn_on
+            target:
+              entity_id: switch.kitchen_ir_remote_switch_1
+          - delay:
+              seconds: 1
+          - action: switch.turn_off
+            target:
+              entity_id: switch.kitchen_ir_remote_switch_1
+          # 3. Wait 2 seconds for fan to register power-on into baseline Speed 1 (~14W)
+          - delay:
+              seconds: 2
+          # 4. Apply target speed tier based on thermal load if closet/CPU is warm
+          - choose:
+              # Target: Speed 4 (Turbo) - YoLink >= 31°C or CPU >= 75°C (requires 3 speed pulses from Speed 1)
+              - conditions:
+                  - condition: or
+                    conditions:
+                      - condition: numeric_state
+                        entity_id: sensor.temperature_sensor_temperature
+                        above: 31.0
+                      - condition: numeric_state
+                        entity_id: sensor.proxmox_host_pve_pve_cpu_package_temperature
+                        above: 75.0
+                sequence:
+                  - action: switch.toggle
+                    target:
+                      entity_id: switch.ir_remoto_switch2
+                  - delay:
+                      seconds: 1
+                  - action: switch.toggle
+                    target:
+                      entity_id: switch.ir_remoto_switch2
+                  - delay:
+                      seconds: 1
+                  - action: switch.toggle
+                    target:
+                      entity_id: switch.ir_remoto_switch2
+
+              # Target: Speed 3 (High) - YoLink >= 29°C or CPU >= 68°C (requires 2 speed pulses from Speed 1)
+              - conditions:
+                  - condition: or
+                    conditions:
+                      - condition: numeric_state
+                        entity_id: sensor.temperature_sensor_temperature
+                        above: 29.0
+                      - condition: numeric_state
+                        entity_id: sensor.proxmox_host_pve_pve_cpu_package_temperature
+                        above: 68.0
+                sequence:
+                  - action: switch.toggle
+                    target:
+                      entity_id: switch.ir_remoto_switch2
+                  - delay:
+                      seconds: 1
+                  - action: switch.toggle
+                    target:
+                      entity_id: switch.ir_remoto_switch2
+
+              # Target: Speed 2 (Moderate) - YoLink >= 27°C or CPU >= 60°C (requires 1 speed pulse from Speed 1)
+              - conditions:
+                  - condition: or
+                    conditions:
+                      - condition: numeric_state
+                        entity_id: sensor.temperature_sensor_temperature
+                        above: 27.0
+                      - condition: numeric_state
+                        entity_id: sensor.proxmox_host_pve_pve_cpu_package_temperature
+                        above: 60.0
+                sequence:
+                  - action: switch.toggle
+                    target:
+                      entity_id: switch.ir_remoto_switch2
+
       # SCENARIO 1: Safe Shutdown & Cooldown (Proxmox 100% OFF and Closet < 23.5°C)
       - conditions:
           - condition: or
@@ -47,6 +140,12 @@ actions:
             entity_id: sensor.fan_opnsense_plug_power
             above: 3.0
         sequence:
+          # Pulse IR Power button to toggle fan off, then reset switch to off
+          - action: switch.turn_on
+            target:
+              entity_id: switch.kitchen_ir_remote_switch_1
+          - delay:
+              seconds: 1
           - action: switch.turn_off
             target:
               entity_id: switch.kitchen_ir_remote_switch_1
@@ -56,7 +155,7 @@ actions:
               message: "Proxmox is confirmed OFF and closet ambient temperature is cool ({{ states('sensor.temperature_sensor_temperature') }}°C). Fan turned off."
               notification_id: homelab_fan_cooldown
 
-      # SCENARIO 2: Closed-Loop Standby Verification & Target Speed Setup
+      # SCENARIO 2: Closed-Loop Standby Verification & Target Speed Setup (Periodic / Temp updates)
       # Whenever cooling is required (Proxmox running/uncertain OR closet >= 25°C OR fail-safe)
       # and the fan is trapped in electronic standby (< 3.0 W) or plug is off:
       - conditions:
@@ -107,23 +206,19 @@ actions:
                   - unavailable
                   - unknown
         sequence:
-          # Stabilization delay (10s) if triggered by plug power restoration or HA reboot
-          - if:
-              - condition: trigger
-                id:
-                  - plug_turned_on
-                  - ha_started
-            then:
-              - delay:
-                  seconds: 10
           # 1. Ensure smart plug relay is on
           - action: switch.turn_on
             target:
               entity_id: switch.fan_opnsense_plug
           - delay:
               seconds: 1
-          # 2. Pulse IR Turn On (wakes fan into Speed 1: ~14W)
+          # 2. Pulse IR Turn On as momentary push-button (turn_on -> delay 1s -> turn_off)
           - action: switch.turn_on
+            target:
+              entity_id: switch.kitchen_ir_remote_switch_1
+          - delay:
+              seconds: 1
+          - action: switch.turn_off
             target:
               entity_id: switch.kitchen_ir_remote_switch_1
           # 3. Wait 2 seconds for fan to register the command
@@ -215,6 +310,11 @@ actions:
                 target:
                   entity_id: switch.kitchen_ir_remote_switch_1
               - delay:
+                  seconds: 1
+              - action: switch.turn_off
+                target:
+                  entity_id: switch.kitchen_ir_remote_switch_1
+              - delay:
                   seconds: 2
           - if:
               - condition: numeric_state
@@ -249,6 +349,11 @@ actions:
                 target:
                   entity_id: switch.kitchen_ir_remote_switch_1
               - delay:
+                  seconds: 1
+              - action: switch.turn_off
+                target:
+                  entity_id: switch.kitchen_ir_remote_switch_1
+              - delay:
                   seconds: 2
           - if:
               - condition: numeric_state
@@ -280,6 +385,11 @@ actions:
                 below: 3.0
             then:
               - action: switch.turn_on
+                target:
+                  entity_id: switch.kitchen_ir_remote_switch_1
+              - delay:
+                  seconds: 1
+              - action: switch.turn_off
                 target:
                   entity_id: switch.kitchen_ir_remote_switch_1
               - delay:

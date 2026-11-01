@@ -24,13 +24,17 @@ Tested live using Third Reality Zigbee Smart Plug (`switch.fan_opnsense_plug`) a
 
 ```mermaid
 flowchart TD
-    Trigger["Periodic Watchdog (2m) OR<br/>YoLink Temp Update OR<br/>Proxmox Status/CPU Update OR<br/>Plug Turned On / HA Startup"] --> CheckOff{"Is Proxmox 100% OFF?<br/>(pve_status == 'offline'/'off'<br/>AND YoLink < 23.5°C)"}
+    Trigger["Periodic Watchdog (2m) OR<br/>YoLink Temp Update OR<br/>Proxmox Status/CPU Update OR<br/>Plug Turned On / HA Startup"] --> CheckTrigger{"Trigger is Plug Power-On<br/>or HA Startup?"}
 
-    CheckOff -->|YES| SafeOff["Safe Shutdown: Fire IR 'Turn Off'<br/>Power drops to 0.8W"]
+    CheckTrigger -->|YES: Blackout / Boot| BlackoutRecovery["1. Wait 15s for Zigbee/Plug Telemetry to Settle<br/>2. Guarantee Momentary Power Pulse<br/>3. Apply Target Speed based on Temp"]
+
+    CheckTrigger -->|NO: Periodic / Temp| CheckOff{"Is Proxmox 100% OFF?<br/>(pve_status == 'offline'/'off'<br/>AND YoLink < 23.5°C)"}
+
+    CheckOff -->|YES| SafeOff["Safe Shutdown: Pulse IR 'Turn Off'<br/>Power drops to 0.8W"]
 
     CheckOff -->|NO: Running or Uncertain| CheckPower{"Current Fan State<br/>(sensor.fan_opnsense_plug_power)"}
 
-    CheckPower -->|Standby: Watts < 3.0W OR Plug Off| SelfHeal["1. Ensure Plug ON<br/>2. Fire IR 'Turn On' (Starts Speed 1: 14W)<br/>3. Wait 2s for Fan to Register<br/>4. Immediately Apply Target Speed (1, 2, 3, or 4)"]
+    CheckPower -->|Standby: Watts < 3.0W OR Plug Off| SelfHeal["1. Ensure Plug ON<br/>2. Fire Momentary IR 'Turn On' (Starts Speed 1: 14W)<br/>3. Wait 2s for Fan to Register<br/>4. Immediately Apply Target Speed (1, 2, 3, or 4)"]
 
     CheckPower -->|Running: Watts ≥ 10.0W| SpeedTiers{"Check Temperature Tiers (Pre-Check: Watts > 10W)"}
 
@@ -42,7 +46,19 @@ flowchart TD
 
 ---
 
-## 3. Fail-Safe Mode (Uncertainty Principle)
+## 3. Physical Hardware Quirks & Solutions
+
+### A. Stateless IR Remote Button Reset (Momentary Push-Button)
+- **Problem:** `switch.kitchen_ir_remote_switch_1` represents a single toggle button on the physical IR remote. Calling `switch.turn_on` leaves the entity in `on` state in Home Assistant. Future `switch.turn_on` calls become no-ops.
+- **Solution:** Every call to `switch.turn_on` is immediately followed by `delay: { seconds: 1 }` and `action: switch.turn_off` to reset the switch back to `off`, ensuring subsequent IR pulses are never dropped.
+
+### B. Stale Power Metric Resolution on Boot / Recovery
+- **Problem:** On HA restart or smart plug reconnection, `sensor.fan_opnsense_plug_power` restores its pre-outage value ($14.2\text{ W}$) until the physical plug transmits a fresh measurement. This blocked the `< 3.0\text{ W}` condition.
+- **Solution:** Dedicated Scenario 0 for `plug_turned_on` and `ha_started`: waits 15 seconds for plug connection and guarantees the IR Power pulse is transmitted regardless of cached pre-outage wattage.
+
+---
+
+## 4. Fail-Safe Mode (Uncertainty Principle)
 * If `binary_sensor.pve_status` is `unavailable` or `unknown`: **Fan Forced ON**.
 * If `sensor.temperature_sensor_temperature` is `unavailable` or `unknown`: **Fan Forced ON**.
 * If `sensor.fan_opnsense_plug_power` is `unavailable` or `unknown`: **Fan Forced ON**.
