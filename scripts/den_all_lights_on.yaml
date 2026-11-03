@@ -1,5 +1,5 @@
 alias: Den All Lights On
-description: Turn on all primary fixtures in the Den, optionally engaging daily presence override.
+description: Turn on all primary fixtures in the Office, optionally engaging daily presence override.
 icon: mdi:lightbulb-group
 mode: single
 fields:
@@ -19,16 +19,27 @@ sequence:
       - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.den_presence_override
-  - action: light.turn_on
-    target:
-      entity_id:
-        - light.office_floor_lamp
-        - light.office_desk_leds
-        - light.den_fan_light
-        - light.humidifier_night_light
-  - action: switch.turn_on
-    target:
-      entity_id: switch.office_floor_lamp_side_light
+  - if:
+      - condition: template
+        value_template: "{{ states('scene.office_day_preset') not in ['unavailable', 'unknown'] }}"
+    then:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.office_day_preset
+    else:
+      - action: light.turn_on
+        target:
+          entity_id:
+            - light.office_floor_lamp
+            - light.office_desk_leds
+            - light.den_fan_light
+            - light.humidifier_night_light
+      - action: switch.turn_on
+        target:
+          entity_id: switch.office_floor_lamp_side_light
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_lights_snapshot_active
+  - action: script.nspanel_audio_feedback
+    data:
+      tone: "on"

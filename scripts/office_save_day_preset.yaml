@@ -1,0 +1,19 @@
+alias: Office Save Day Lights Preset
+description: Overwrites the Day preset scene with current office light attributes.
+icon: mdi:content-save
+mode: single
+sequence:
+  - action: scene.create
+    data:
+      scene_id: office_day_preset
+      snapshot_entities:
+        - light.office_floor_lamp
+        - light.office_desk_leds
+        - light.den_fan_light
+        - light.humidifier_night_light
+        - switch.office_floor_lamp_side_light
+        - switch.office_floor_lamp_bottom_light
+        - switch.office_floor_lamp_ripple_light
+  - action: script.nspanel_audio_feedback
+    data:
+      tone: save

@@ -1,0 +1,23 @@
+alias: NSPanel Audio Feedback
+description: Plays audio or beep feedback on Sonoff NSPanel Pro.
+icon: mdi:volume-high
+mode: restart
+fields:
+  tone:
+    description: "Audio tone type: on, off, save"
+    default: "on"
+    selector:
+      select:
+        options:
+          - "on"
+          - "off"
+          - "save"
+sequence:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ states('button.zigbee2cube_1002a32fc7_speaker_start') not in ['unavailable', 'unknown'] }}"
+        sequence:
+          - action: button.press
+            target:
+              entity_id: button.zigbee2cube_1002a32fc7_speaker_start

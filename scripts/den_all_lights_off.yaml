@@ -1,5 +1,5 @@
 alias: Den All Lights Off
-description: Turn off all lights in the Den and restore presence automation.
+description: Turn off all lights in the Office and restore presence automation.
 icon: mdi:lightbulb-group-off
 mode: single
 sequence:
@@ -30,3 +30,6 @@ sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_lights_snapshot_active
+  - action: script.nspanel_audio_feedback
+    data:
+      tone: "off"

@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.8.0 - 2026-11-03
+
+### Added
+- Redesigned Sonoff NSPanel 120 Pro dashboard into a modular multi-panel architecture (`dashboards/nspanel-office.yaml`):
+  - **Office (Main)**: Instant room summary, dynamic master light button, presence control, compact fan and air purifier tiles, Patio Cameras (`alarm_control_panel.gushomebase`) mode selector, daily weather forecast (`weather.forecast_home`), and conditional security warning banners.
+  - **Lights**: Room fixture tiles (Floor Lamp with sub-lights, Desk LEDs, Fan Light, Fan Night Light, Fan Backlight/Scene, and Humidifier Light) alongside one-tap preset overwrite buttons.
+  - **Climate**: Dedicated controls for Ceiling Fan (speed slider, direction), Air Purifier (preset modes), and Humidifier.
+  - **Sensors**: Comprehensive security monitoring covering locks (`lock.patio_door_lock`), perimeter doors (`binary_sensor.door_sensor_door`, `binary_sensor.patio_lock_door`), fence gate (`binary_sensor.patio_fence_sensor`), windows (`binary_sensor.window_sensor_door`), and motion/vibration sensors.
+  - **Battery**: Complete battery monitoring surfacing low-battery devices (< 60%) first, followed by area groupings (Patio, Kitchen, Office, Other Rooms).
+- Created global template security warnings in `templates/security_warnings.yaml` (`binary_sensor.alert_patio_door_unlocked`, `binary_sensor.alert_patio_fence_open`, `binary_sensor.alert_front_door_open`, `binary_sensor.alert_patio_door_open`, `binary_sensor.alert_window_open`, `binary_sensor.active_security_warnings`) that trigger warning banners when entry points remain unsecured past safety thresholds (10m / 30m).
+- Added `script.office_save_day_preset` and `script.office_save_night_preset` (`scripts/office_save_day_preset.yaml`, `scripts/office_save_night_preset.yaml`) to enable manual snapshotting and overwriting of Day and Night scenes directly from the NSPanel UI.
+- Added `script.nspanel_audio_feedback` (`scripts/nspanel_audio_feedback.yaml`) to play audio/chime feedback through the NSPanel Pro speaker on state changes.
+- Registered new dashboard URL `nspanel-office` in Home Assistant while synchronizing `nspanel-den` for seamless backward compatibility.
+
+### Changed
+- Renamed dashboard from Den to Office (`dashboards/nspanel-office.yaml`, title: "Office Panel").
+- Consolidated header badges from 2 rows down to 1 single horizontal row across all panels by removing the redundant Presence badge (leaving Temp, Humidity, Light, Air, and PM2.5).
+- Replaced dual 2-button "All Lights On" / "All Lights Off" row with a single large, contextual button that dynamically flips state, icon, color, active count badge, and service call.
+- Updated `scripts/den_all_lights_on.yaml` and `scripts/den_all_lights_off.yaml` to trigger audio chime feedback and activate day presets.
+- Added tactile haptic vibration feedback (`haptic: selection`) across all touch tiles and buttons.
+
 ## 0.7.0 - 2026-10-26
 
 ### Added

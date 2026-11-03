@@ -1,0 +1,14 @@
+alias: Office Save Night Lights Preset
+description: Overwrites the Night preset scene with current night light attributes.
+icon: mdi:content-save-edit
+mode: single
+sequence:
+  - action: scene.create
+    data:
+      scene_id: office_night_preset
+      snapshot_entities:
+        - light.den_night_light
+        - light.humidifier_night_light
+  - action: script.nspanel_audio_feedback
+    data:
+      tone: save

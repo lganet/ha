@@ -1,0 +1,881 @@
+title: Office Panel
+views:
+  # =========================================================================
+  # 1. MAIN PANEL (OFFICE)
+  # =========================================================================
+  - title: Office
+    path: office
+    icon: mdi:home
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.office_presence_fp300_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_presence_fp300_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_air_purifier_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_pm2_5_level
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Active Security Warnings (Conditional) ---
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: binary_sensor.active_security_warnings
+                state: "on"
+            card:
+              type: vertical-stack
+              cards:
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_patio_door_unlocked
+                      state: "on"
+                  card:
+                    type: tile
+                    entity: lock.patio_door_lock
+                    name: "Warning: Patio Door Unlocked > 30m"
+                    icon: mdi:lock-alert
+                    color: red
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_patio_fence_open
+                      state: "on"
+                  card:
+                    type: tile
+                    entity: binary_sensor.patio_fence_sensor
+                    name: "Warning: Patio Fence Open > 10m"
+                    icon: mdi:gate-alert
+                    color: amber
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_front_door_open
+                      state: "on"
+                  card:
+                    type: tile
+                    entity: binary_sensor.door_sensor_door
+                    name: "Warning: Front Door Open > 10m"
+                    icon: mdi:door-open
+                    color: amber
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_patio_door_open
+                      state: "on"
+                  card:
+                    type: tile
+                    entity: binary_sensor.patio_lock_door
+                    name: "Warning: Patio Door Open > 10m"
+                    icon: mdi:door-open
+                    color: amber
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_window_open
+                      state: "on"
+                  card:
+                    type: tile
+                    entity: binary_sensor.window_sensor_door
+                    name: "Warning: Window Open > 10m"
+                    icon: mdi:window-open-variant
+                    color: amber
+
+          # --- Master Dynamic All Lights Button ---
+          - type: custom:button-card
+            entity: sensor.den_lights_on
+            name: >
+              [[[
+                var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                return count > 0 ? "All Lights Off" : "All Lights On";
+              ]]]
+            icon: >
+              [[[
+                var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                return count > 0 ? "mdi:lightbulb-group-off" : "mdi:lightbulb-group";
+              ]]]
+            tap_action:
+              action: call-service
+              haptic: selection
+              service: >
+                [[[
+                  var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                  return count > 0 ? "script.den_all_lights_off" : "script.den_all_lights_on";
+                ]]]
+            styles:
+              card:
+                - height: 80px
+                - padding: 12px 18px
+                - border-radius: var(--ha-card-border-radius, 14px)
+                - display: flex
+                - flex-direction: row
+                - align-items: center
+                - justify-content: flex-start
+                - background-color: >
+                    [[[
+                      var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                      return count > 0 ? 'rgba(251, 192, 45, 0.15)' : 'var(--ha-card-background, rgba(255, 255, 255, 0.05))';
+                    ]]]
+              grid:
+                - grid-template-areas: '"i n"'
+                - grid-template-columns: 50px 1fr
+              icon:
+                - width: 42px
+                - height: 42px
+                - color: >
+                    [[[
+                      var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                      return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #9E9E9E)';
+                    ]]]
+              name:
+                - font-size: 18px
+                - font-weight: 600
+                - justify-self: start
+                - color: var(--primary-text-color)
+              custom_fields:
+                notification:
+                  - background-color: >
+                      [[[
+                        var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                        return count > 0 ? '#4CAF50' : '#546E7A';
+                      ]]]
+                  - border-radius: 50%
+                  - position: absolute
+                  - right: 18px
+                  - top: 26px
+                  - height: 28px
+                  - width: 28px
+                  - font-size: 14px
+                  - font-weight: bold
+                  - color: '#FFFFFF'
+                  - display: flex
+                  - align-items: center
+                  - justify-content: center
+                  - box-shadow: 0 2px 4px rgba(0,0,0,0.3)
+            custom_fields:
+              notification: >
+                [[[
+                  var count = states['sensor.den_lights_on'] ? states['sensor.den_lights_on'].state : '0';
+                  return count;
+                ]]]
+
+          # --- Motion Presence Control ---
+          - type: custom:button-card
+            entity: sensor.den_presence_status
+            name: Motion Presence Control
+            show_name: true
+            show_state: true
+            icon: >-
+              [[[
+                if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return 'mdi:motion-sensor-off';
+                if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return 'mdi:account-clock';
+                if (states['binary_sensor.office_presence_fp300'] && states['binary_sensor.office_presence_fp300'].state === 'on') return 'mdi:motion-sensor';
+                return 'mdi:motion-sensor';
+              ]]]
+            tap_action:
+              action: call-service
+              haptic: selection
+              service: script.den_presence_toggle
+            styles:
+              card:
+                - height: 60px
+                - padding: 8px 14px
+                - border-radius: var(--ha-card-border-radius, 12px)
+                - display: flex
+                - flex-direction: row
+                - align-items: center
+                - justify-content: flex-start
+                - margin-top: 4px
+              grid:
+                - grid-template-areas: '"i n" "i s"'
+                - grid-template-columns: 40px 1fr
+                - grid-template-rows: 1fr 1fr
+              icon:
+                - width: 32px
+                - height: 32px
+                - color: >-
+                    [[[
+                      if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return '#9E9E9E';
+                      if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return '#FFA726';
+                      if (states['binary_sensor.office_presence_fp300'] && states['binary_sensor.office_presence_fp300'].state === 'on') return '#4CAF50';
+                      return '#42A5F5';
+                    ]]]
+              name:
+                - font-size: 13px
+                - font-weight: 600
+                - justify-self: start
+                - color: var(--primary-text-color)
+              state:
+                - font-size: 12px
+                - font-weight: 500
+                - justify-self: start
+                - color: >-
+                    [[[
+                      if (states['input_boolean.den_presence_automation'] && states['input_boolean.den_presence_automation'].state === 'off') return '#9E9E9E';
+                      if (states['input_boolean.den_presence_override'] && states['input_boolean.den_presence_override'].state === 'on') return '#FFA726';
+                      if (states['binary_sensor.office_presence_fp300'] && states['binary_sensor.office_presence_fp300'].state === 'on') return '#4CAF50';
+                      return 'var(--secondary-text-color)';
+                    ]]]
+
+          # --- Compact Fan & Air Row ---
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: fan.office_ceiling_fan
+                name: Ceiling Fan
+                icon: mdi:fan
+                tap_action:
+                  action: toggle
+                  haptic: selection
+                features:
+                  - type: fan-speed
+
+              - type: tile
+                entity: fan.office_air_purifier
+                name: Air Purifier
+                icon: mdi:air-purifier
+                tap_action:
+                  action: toggle
+                  haptic: selection
+                features:
+                  - type: fan-preset-modes
+                    style: dropdown
+
+          # --- Patio Cameras (GusHomeBase) ---
+          - type: tile
+            entity: alarm_control_panel.gushomebase
+            name: Patio Cameras
+            icon: mdi:shield-home
+            tap_action:
+              action: more-info
+              haptic: selection
+            features:
+              - type: alarm-modes
+                modes:
+                  - disarmed
+                  - armed_home
+                  - armed_away
+
+          # --- Weather Forecast Card ---
+          - type: weather-forecast
+            entity: weather.forecast_home
+            name: Weather
+            show_current: true
+            show_forecast: true
+            forecast_type: daily
+
+  # =========================================================================
+  # 2. LIGHTS PANEL
+  # =========================================================================
+  - title: Lights
+    path: lights
+    icon: mdi:lightbulb-multiple
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.office_presence_fp300_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_presence_fp300_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_air_purifier_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_pm2_5_level
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Preset Save Overwrite Buttons ---
+          - type: heading
+            heading: Presets Management
+            heading_style: subtitle
+            icon: mdi:bookmark-box-multiple
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:button-card
+                name: Save Day Lights
+                icon: mdi:content-save
+                tap_action:
+                  action: call-service
+                  haptic: selection
+                  service: script.office_save_day_preset
+                styles:
+                  card:
+                    - height: 60px
+                    - padding: 8px 12px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(76, 175, 80, 0.12)
+                  icon:
+                    - width: 26px
+                    - height: 26px
+                    - color: '#4CAF50'
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+
+              - type: custom:button-card
+                name: Save Night Lights
+                icon: mdi:content-save-edit
+                tap_action:
+                  action: call-service
+                  haptic: selection
+                  service: script.office_save_night_preset
+                styles:
+                  card:
+                    - height: 60px
+                    - padding: 8px 12px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(156, 39, 176, 0.12)
+                  icon:
+                    - width: 26px
+                    - height: 26px
+                    - color: '#BA68C8'
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+
+          # --- Fixtures Grid ---
+          - type: heading
+            heading: Room Fixtures
+            heading_style: subtitle
+            icon: mdi:lightbulb-group
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              # Govee Floor Lamp Multi-Segment
+              - type: custom:stack-in-card
+                mode: vertical
+                cards:
+                  - type: heading
+                    heading: Floor Lamp
+                    heading_style: subtitle
+                    icon: mdi:floor-lamp-torchiere
+                  - type: tile
+                    entity: switch.office_floor_lamp_side_light
+                    name: Side Light
+                    icon: mdi:wall-sconce-flat
+                    tap_action:
+                      action: more-info
+                      haptic: selection
+                  - type: grid
+                    columns: 2
+                    square: false
+                    cards:
+                      - type: tile
+                        entity: switch.office_floor_lamp_bottom_light
+                        name: Base
+                        icon: mdi:lamp
+                        tap_action:
+                          action: more-info
+                          haptic: selection
+                      - type: tile
+                        entity: switch.office_floor_lamp_ripple_light
+                        name: Ripple
+                        icon: mdi:waves
+                        tap_action:
+                          action: more-info
+                          haptic: selection
+
+              # Desk LEDs
+              - type: tile
+                entity: light.office_desk_leds
+                name: Desk LEDs
+                icon: mdi:led-strip-variant
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              # Floor Lamp Main
+              - type: tile
+                entity: light.office_floor_lamp
+                name: Floor Lamp Main
+                icon: mdi:floor-lamp
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              # Fan Light
+              - type: tile
+                entity: light.den_fan_light
+                name: Fan Light
+                icon: mdi:ceiling-fan-light
+                features:
+                  - type: light-brightness
+                  - type: light-color-temp
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              # Fan Night Light
+              - type: tile
+                entity: light.den_night_light
+                name: Fan Night Light
+                icon: mdi:weather-night
+                features:
+                  - type: light-brightness
+                  - type: light-color-temp
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              # Humidifier Light
+              - type: tile
+                entity: light.humidifier_night_light
+                name: Humidifier Light
+                icon: mdi:air-humidifier
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              # Fan Backlight & Scene Stack
+              - type: custom:stack-in-card
+                mode: vertical
+                cards:
+                  - type: tile
+                    entity: light.office_ceiling_fan_backlight
+                    name: Fan Backlight
+                    icon: mdi:palette-outline
+                    features:
+                      - type: light-brightness
+                    tap_action:
+                      action: more-info
+                      haptic: selection
+                  - type: tile
+                    entity: select.smart_fan_scene
+                    name: Fan Scene
+                    icon: mdi:palette
+                    features:
+                      - type: select-options
+                    tap_action:
+                      action: more-info
+                      haptic: selection
+
+  # =========================================================================
+  # 3. FAN & AIR PANEL (CLIMATE)
+  # =========================================================================
+  - title: Climate
+    path: climate
+    icon: mdi:fan
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.office_presence_fp300_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_presence_fp300_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_air_purifier_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_pm2_5_level
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Climate Controls
+            heading_style: subtitle
+            icon: mdi:thermostat
+
+          - type: tile
+            entity: fan.office_ceiling_fan
+            name: Ceiling Fan
+            icon: mdi:fan
+            tap_action:
+              action: more-info
+              haptic: selection
+            features:
+              - type: fan-speed
+              - type: fan-direction
+
+          - type: tile
+            entity: fan.office_air_purifier
+            name: Air Purifier
+            icon: mdi:air-purifier
+            tap_action:
+              action: more-info
+              haptic: selection
+            features:
+              - type: fan-preset-modes
+                style: dropdown
+
+          - type: tile
+            entity: humidifier.humidifier
+            name: Humidifier
+            icon: mdi:air-humidifier
+            tap_action:
+              action: more-info
+              haptic: selection
+
+  # =========================================================================
+  # 4. SENSORS PANEL
+  # =========================================================================
+  - title: Sensors
+    path: sensors
+    icon: mdi:shield-check
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.office_presence_fp300_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_presence_fp300_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_air_purifier_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_pm2_5_level
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Security & Locks
+            heading_style: subtitle
+            icon: mdi:lock
+
+          - type: tile
+            entity: lock.patio_door_lock
+            name: Patio Door Lock
+            icon: mdi:lock
+            tap_action:
+              action: more-info
+              haptic: selection
+
+          - type: heading
+            heading: Perimeter & Doors
+            heading_style: subtitle
+            icon: mdi:door
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: binary_sensor.door_sensor_door
+                name: Kitchen Door
+                icon: mdi:door
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.patio_lock_door
+                name: Patio Door
+                icon: mdi:door
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.patio_fence_sensor
+                name: Patio Fence Gate
+                icon: mdi:gate
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.window_sensor_door
+                name: Window Sensor
+                icon: mdi:window-closed-variant
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+          - type: heading
+            heading: Motion & Presence
+            heading_style: subtitle
+            icon: mdi:motion-sensor
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: binary_sensor.office_presence_fp300
+                name: Office FP300
+                icon: mdi:motion-sensor
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.patio_motion_right
+                name: Patio Motion
+                icon: mdi:motion-sensor
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.guest_bedroom_motion
+                name: Guest Bedroom Motion
+                icon: mdi:motion-sensor
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.vibration_sensor_vibration
+                name: Vibration Sensor
+                icon: mdi:vibrate
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+  # =========================================================================
+  # 5. BATTERY PANEL
+  # =========================================================================
+  - title: Battery
+    path: battery
+    icon: mdi:battery-high
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.office_presence_fp300_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_presence_fp300_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_air_purifier_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_pm2_5_level
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Low Batteries Priority Section ---
+          - type: heading
+            heading: Low Battery Attention (< 60%)
+            heading_style: subtitle
+            icon: mdi:battery-alert
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.motion_sensor_right_battery
+                name: Patio Motion
+                icon: mdi:battery-20
+                color: red
+              - type: tile
+                entity: sensor.vibration_sensor_battery
+                name: Vibration Sensor
+                icon: mdi:battery-50
+                color: amber
+
+          # --- Batteries by Area ---
+          - type: heading
+            heading: Patio
+            heading_style: subtitle
+            icon: mdi:balcony
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.motion_sensor_right_battery
+                name: Motion Right
+              - type: tile
+                entity: sensor.patio_lock_battery
+                name: Door Lock
+              - type: tile
+                entity: sensor.fence_sensor_battery
+                name: Fence Sensor
+
+          - type: heading
+            heading: Kitchen
+            heading_style: subtitle
+            icon: mdi:countertop
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.door_sensor_battery
+                name: Door Sensor
+              - type: tile
+                entity: sensor.botao_ikea_1_battery
+                name: Ikea Button
+              - type: tile
+                entity: sensor.ir_remoto_battery
+                name: IR Remote
+              - type: tile
+                entity: sensor.roborock_dyad_pro_combo_battery
+                name: Roborock Vacuum
+
+          - type: heading
+            heading: Office
+            heading_style: subtitle
+            icon: mdi:desktop-tower
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.fp300_den_battery
+                name: Presence FP300
+              - type: tile
+                entity: sensor.plant_pot_soil_moisture_3_battery
+                name: Plant Pot
+              - type: tile
+                entity: sensor.nspanel_den_battery_level
+                name: NSPanel Screen
+
+          - type: heading
+            heading: Other Rooms
+            heading_style: subtitle
+            icon: mdi:home-outline
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.presence_2_battery
+                name: Guest Bedroom Motion
+              - type: tile
+                entity: sensor.plant_pot_soil_moisture_1_battery
+                name: Dining Plant Pot
+              - type: tile
+                entity: sensor.plant_pot_soil_moisture_2_battery
+                name: Bath Plant Pot
+              - type: tile
+                entity: sensor.window_sensor_battery
+                name: Window Sensor
