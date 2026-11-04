@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.11.0 - 2026-11-04
+
+### Added
+- Added a dedicated 6th view `Alerts` (`dashboards/nspanel-office.yaml`, path: `alerts`, icon: `mdi:shield-alert-outline`) to NSPanel Pro dashboard:
+  - Sliders for all security warning delay thresholds (patio door unlocked, patio fence open, front door open, patio door open, window open).
+  - Audio and screen alert controls (chime repeat interval slider, screen power toggle).
+  - Live security warning status badge and a one-touch "Test Alert Chime" button.
+- Added input number helpers for user-configurable warning delay thresholds (`helpers/security_warning_helpers.yaml`):
+  - `input_number.warning_patio_door_unlocked_delay` (1–60 min, currently set to 1 min for live testing).
+  - `input_number.warning_patio_fence_open_delay` (1–60 min, default 10 min).
+  - `input_number.warning_front_door_open_delay` (1–60 min, default 10 min).
+  - `input_number.warning_patio_door_open_delay` (1–60 min, default 10 min).
+  - `input_number.warning_window_open_delay` (1–60 min, default 10 min).
+  - `input_number.warning_alert_repeat_interval` (10–120 sec, default 30 sec).
+
+### Changed
+- Converted perimeter security warning binary sensors (`templates/security_warnings.yaml`) from static durations to dynamic helper thresholds.
+- Updated warning alert repeat loop in `automations/nspanel_security_warning_alert.yaml` to read delay dynamically from `input_number.warning_alert_repeat_interval`.
+- Redesigned Day Preset and Night Preset buttons in the main lighting card (`dashboards/nspanel-office.yaml`):
+  - Implemented `layout: icon_name` for horizontal pill buttons with icon on the left and label on the right.
+  - Removed duplicate emojis from button labels to eliminate text truncation and clean up visual presentation.
+
 ## 0.10.0 - 2026-11-04
 
 ### Added

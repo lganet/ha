@@ -29,7 +29,8 @@ actions:
                 - action: script.nspanel_audio_feedback
                   data:
                     tone: warning
-                - delay: "00:00:30"
+                - delay:
+                    seconds: "{{ states('input_number.warning_alert_repeat_interval') | int(30) }}"
 
       - conditions:
           - condition: trigger

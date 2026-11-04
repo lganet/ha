@@ -61,7 +61,7 @@ views:
                   card:
                     type: tile
                     entity: lock.patio_door_lock
-                    name: "Warning: Patio Door Unlocked > 30m"
+                    name: "Warning: Patio Door Unlocked"
                     icon: mdi:lock-alert
                     color: red
                 - type: conditional
@@ -72,7 +72,7 @@ views:
                   card:
                     type: tile
                     entity: binary_sensor.patio_fence_sensor
-                    name: "Warning: Patio Fence Open > 10m"
+                    name: "Warning: Patio Fence Open"
                     icon: mdi:gate-alert
                     color: amber
                 - type: conditional
@@ -83,7 +83,7 @@ views:
                   card:
                     type: tile
                     entity: binary_sensor.door_sensor_door
-                    name: "Warning: Front Door Open > 10m"
+                    name: "Warning: Front Door Open"
                     icon: mdi:door-open
                     color: amber
                 - type: conditional
@@ -94,7 +94,7 @@ views:
                   card:
                     type: tile
                     entity: binary_sensor.patio_lock_door
-                    name: "Warning: Patio Door Open > 10m"
+                    name: "Warning: Patio Door Open"
                     icon: mdi:door-open
                     color: amber
                 - type: conditional
@@ -105,7 +105,7 @@ views:
                   card:
                     type: tile
                     entity: binary_sensor.window_sensor_door
-                    name: "Warning: Window Open > 10m"
+                    name: "Warning: Window Open"
                     icon: mdi:window-open-variant
                     color: amber
 
@@ -188,8 +188,9 @@ views:
                 cards:
                   - type: custom:button-card
                     entity: input_boolean.den_night_light_active
-                    name: "☀️ Day Preset"
+                    name: Day Preset
                     icon: mdi:white-balance-sunny
+                    layout: icon_name
                     tap_action:
                       action: call-service
                       haptic: selection
@@ -198,8 +199,8 @@ views:
                         sound: true
                     styles:
                       card:
-                        - height: 46px
-                        - padding: 4px 8px
+                        - height: 44px
+                        - padding: 0 10px
                         - border-radius: 12px
                         - background-color: >-
                             [[[
@@ -230,8 +231,9 @@ views:
 
                   - type: custom:button-card
                     entity: input_boolean.den_night_light_active
-                    name: "🌙 Night Preset"
+                    name: Night Preset
                     icon: mdi:weather-night
+                    layout: icon_name
                     tap_action:
                       action: call-service
                       haptic: selection
@@ -240,8 +242,8 @@ views:
                         sound: true
                     styles:
                       card:
-                        - height: 46px
-                        - padding: 4px 8px
+                        - height: 44px
+                        - padding: 0 10px
                         - border-radius: 12px
                         - background-color: >-
                             [[[
@@ -1143,3 +1145,125 @@ views:
               - type: tile
                 entity: sensor.window_sensor_battery
                 name: Window Sensor
+
+  # =========================================================================
+  # 6. WARNINGS & ALERTS SETTINGS PANEL
+  # =========================================================================
+  - title: Alerts
+    path: alerts
+    icon: mdi:shield-alert-outline
+    theme: ios-dark-mode
+    max_columns: 1
+    badges:
+      - type: entity
+        entity: sensor.office_presence_fp300_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_presence_fp300_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_air_purifier_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_pm2_5_level
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Section 1: Security Warning Delays ---
+          - type: heading
+            heading: Security Warning Delays
+            heading_style: subtitle
+            icon: mdi:shield-clock
+
+          - type: entities
+            entities:
+              - entity: input_number.warning_patio_door_unlocked_delay
+                name: Patio Door Unlocked
+                icon: mdi:lock-clock
+              - entity: input_number.warning_patio_fence_open_delay
+                name: Fence Gate Open
+                icon: mdi:gate-alert
+              - entity: input_number.warning_front_door_open_delay
+                name: Front Door Open
+                icon: mdi:door-open
+              - entity: input_number.warning_patio_door_open_delay
+                name: Patio Door Open
+                icon: mdi:door-open
+              - entity: input_number.warning_window_open_delay
+                name: Window Open
+                icon: mdi:window-open-variant
+
+          # --- Section 2: Audio & Screen Alerts ---
+          - type: heading
+            heading: Audio & Screen Alerts
+            heading_style: subtitle
+            icon: mdi:volume-vibrate
+
+          - type: entities
+            entities:
+              - entity: input_number.warning_alert_repeat_interval
+                name: Chime Repeat Interval
+                icon: mdi:timer-sync
+              - entity: switch.zigbee2cube_1002a32fc7_screen_state
+                name: Screen Power
+                icon: mdi:tablet-dashboard
+
+          # --- Section 3: Live Warning Status & Preview ---
+          - type: heading
+            heading: Live Status & Test
+            heading_style: subtitle
+            icon: mdi:bell-ring-outline
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: binary_sensor.active_security_warnings
+                name: Active Warnings
+                icon: mdi:shield-alert
+              - type: custom:button-card
+                name: "🔔 Test Alert Chime"
+                icon: mdi:bell-ring
+                tap_action:
+                  action: call-service
+                  haptic: selection
+                  service: script.nspanel_audio_feedback
+                  data:
+                    tone: warning
+                styles:
+                  card:
+                    - height: 56px
+                    - padding: 6px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#BA68C8"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - color: var(--primary-text-color)
+

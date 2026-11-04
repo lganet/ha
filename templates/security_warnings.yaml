@@ -1,36 +1,46 @@
 - binary_sensor:
     - name: Alert Patio Door Unlocked
       unique_id: alert_patio_door_unlocked
-      state: "{{ is_state('lock.patio_door_lock', 'unlocked') }}"
-      delay_on: "00:30:00"
+      state: >-
+        {% set t = now() %}
+        {% set dur = states('input_number.warning_patio_door_unlocked_delay') | float(30) * 60 %}
+        {{ is_state('lock.patio_door_lock', 'unlocked') and (t - states.lock.patio_door_lock.last_changed).total_seconds() >= dur }}
       device_class: problem
       icon: mdi:lock-alert
 
     - name: Alert Patio Fence Open
       unique_id: alert_patio_fence_open
-      state: "{{ is_state('binary_sensor.patio_fence_sensor', 'on') }}"
-      delay_on: "00:10:00"
+      state: >-
+        {% set t = now() %}
+        {% set dur = states('input_number.warning_patio_fence_open_delay') | float(10) * 60 %}
+        {{ is_state('binary_sensor.patio_fence_sensor', 'on') and (t - states.binary_sensor.patio_fence_sensor.last_changed).total_seconds() >= dur }}
       device_class: problem
       icon: mdi:gate-alert
 
     - name: Alert Front Door Open
       unique_id: alert_front_door_open
-      state: "{{ is_state('binary_sensor.door_sensor_door', 'on') }}"
-      delay_on: "00:10:00"
+      state: >-
+        {% set t = now() %}
+        {% set dur = states('input_number.warning_front_door_open_delay') | float(10) * 60 %}
+        {{ is_state('binary_sensor.door_sensor_door', 'on') and (t - states.binary_sensor.door_sensor_door.last_changed).total_seconds() >= dur }}
       device_class: problem
       icon: mdi:door-open
 
     - name: Alert Patio Door Open
       unique_id: alert_patio_door_open
-      state: "{{ is_state('binary_sensor.patio_lock_door', 'on') }}"
-      delay_on: "00:10:00"
+      state: >-
+        {% set t = now() %}
+        {% set dur = states('input_number.warning_patio_door_open_delay') | float(10) * 60 %}
+        {{ is_state('binary_sensor.patio_lock_door', 'on') and (t - states.binary_sensor.patio_lock_door.last_changed).total_seconds() >= dur }}
       device_class: problem
       icon: mdi:door-open
 
     - name: Alert Window Open
       unique_id: alert_window_open
-      state: "{{ is_state('binary_sensor.window_sensor_door', 'on') }}"
-      delay_on: "00:10:00"
+      state: >-
+        {% set t = now() %}
+        {% set dur = states('input_number.warning_window_open_delay') | float(10) * 60 %}
+        {{ is_state('binary_sensor.window_sensor_door', 'on') and (t - states.binary_sensor.window_sensor_door.last_changed).total_seconds() >= dur }}
       device_class: problem
       icon: mdi:window-open-variant
 
