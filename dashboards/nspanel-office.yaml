@@ -132,8 +132,8 @@ views:
                 ]]]
             styles:
               card:
-                - height: 120px
-                - padding: 16px
+                - height: 150px
+                - padding: 20px
                 - border-radius: var(--ha-card-border-radius, 16px)
                 - background-color: >
                     [[[
@@ -141,17 +141,17 @@ views:
                       return count > 0 ? 'rgba(251, 192, 45, 0.15)' : 'var(--ha-card-background, rgba(255, 255, 255, 0.05))';
                     ]]]
               icon:
-                - width: 50px
-                - height: 50px
+                - width: 58px
+                - height: 58px
                 - color: >
                     [[[
                       var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
                       return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #9E9E9E)';
                     ]]]
               name:
-                - font-size: 20px
+                - font-size: 22px
                 - font-weight: 600
-                - margin-top: 8px
+                - margin-top: 10px
                 - color: var(--primary-text-color)
               custom_fields:
                 notification:
@@ -162,11 +162,11 @@ views:
                       ]]]
                   - border-radius: 50%
                   - position: absolute
-                  - right: 20px
-                  - top: calc(50% - 16px)
-                  - height: 32px
-                  - width: 32px
-                  - font-size: 16px
+                  - right: 24px
+                  - top: calc(50% - 18px)
+                  - height: 36px
+                  - width: 36px
+                  - font-size: 18px
                   - font-weight: bold
                   - color: '#FFFFFF'
                   - display: flex
@@ -264,20 +264,34 @@ views:
                   - type: fan-preset-modes
                     style: dropdown
 
-          # --- Patio Cameras (GusHomeBase) ---
-          - type: tile
-            entity: alarm_control_panel.gushomebase
-            name: Patio Cameras
-            icon: mdi:shield-home
-            tap_action:
-              action: more-info
-              haptic: selection
-            features:
-              - type: alarm-modes
-                modes:
-                  - disarmed
-                  - armed_home
-                  - armed_away
+          # --- Security & Access Row (Patio Cameras + Door Lock) ---
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: alarm_control_panel.gushomebase
+                name: Patio Cameras
+                icon: mdi:shield-home
+                tap_action:
+                  action: more-info
+                  haptic: selection
+                features:
+                  - type: alarm-modes
+                    modes:
+                      - disarmed
+                      - armed_home
+                      - armed_away
+
+              - type: tile
+                entity: lock.patio_door_lock
+                name: Patio Lock
+                icon: mdi:lock
+                tap_action:
+                  action: toggle
+                  haptic: selection
+                features:
+                  - type: lock-commands
 
           # --- Weather Forecast Card ---
           - type: weather-forecast
