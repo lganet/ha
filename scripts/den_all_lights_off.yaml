@@ -5,7 +5,7 @@ mode: single
 sequence:
   - action: script.nspanel_audio_feedback
     data:
-      tone: "off"
+      tone: "{{ 'night_off' if is_state('input_boolean.den_night_light_active', 'on') else 'day_off' }}"
   - action: switch.turn_off
     target:
       entity_id:

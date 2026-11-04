@@ -4,18 +4,26 @@ icon: mdi:volume-high
 mode: restart
 fields:
   tone:
-    description: "Audio tone type: on, off, save"
-    default: "on"
+    description: "Audio tone type: day_on, day_off, night_on, night_off, save"
+    default: "day_on"
     selector:
       select:
         options:
+          - "day_on"
+          - "day_off"
+          - "night_on"
+          - "night_off"
+          - "save"
           - "on"
           - "off"
-          - "save"
 sequence:
   - variables:
       target_url: >-
-        {% if tone == 'off' %}
+        {% if tone in ['night_on'] %}
+          https://actions.google.com/sounds/v1/cartoon/instrument_strum.ogg
+        {% elif tone in ['night_off'] %}
+          https://actions.google.com/sounds/v1/water/air_woosh_underwater.ogg
+        {% elif tone in ['day_off', 'off'] %}
           https://actions.google.com/sounds/v1/cartoon/pop.ogg
         {% elif tone == 'save' %}
           https://actions.google.com/sounds/v1/office/button_push.ogg

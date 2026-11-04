@@ -3,6 +3,13 @@
 ## Unreleased
 
 ### Added
+- Added multi-tone sound design to NSPanel Pro audio feedback (`scripts/nspanel_audio_feedback.yaml`) with distinct sounds for room lighting actions:
+  - **Day ON**: Bright, crisp electronic chime (`alarms/beep_short.ogg`).
+  - **Day OFF**: Tactile, crisp power down pop (`cartoon/pop.ogg`).
+  - **Night ON**: Smooth, warm acoustic musical strum (`cartoon/instrument_strum.ogg`) for gentle evening transitions.
+  - **Night OFF**: Quiet, smooth underwater whoosh (`water/air_woosh_underwater.ogg`) for peaceful bedtime shutoffs.
+  - **Save Preset**: Mechanical tactile button latch (`office/button_push.ogg`).
+- Integrated dynamic tone routing in `scripts/den_all_lights_off.yaml` to automatically play `night_off` if night mode was active and `day_off` if day mode was active.
 - Added adaptive master lighting toggle script (`scripts/office_adaptive_lights_toggle.yaml`) contextually switching between Day mode (workday 09:00-18:00) and Night mode (evening/off-hours).
 - Added `scripts/office_activate_day_preset.yaml` and `scripts/office_activate_night_preset.yaml` allowing direct preview and activation of Day and Night scenes.
 - Embedded `[ ☀️ Day Preset ]` and `[ 🌙 Night Preset ]` pills directly on the master lights card in `dashboards/nspanel-office.yaml` with active state border glow and instant audio feedback.
