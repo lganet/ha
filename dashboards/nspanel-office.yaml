@@ -195,8 +195,10 @@ views:
                     styles:
                       card:
                         - height: 46px
-                        - margin: 0px 6px 10px 10px
+                        - width: auto
+                        - margin: 0px 4px 10px 10px
                         - padding: 4px 8px
+                        - box-sizing: border-box
                         - border-radius: 12px
                         - display: flex
                         - flex-direction: row
@@ -240,8 +242,10 @@ views:
                     styles:
                       card:
                         - height: 46px
-                        - margin: 0px 10px 10px 6px
+                        - width: auto
+                        - margin: 0px 10px 10px 4px
                         - padding: 4px 8px
+                        - box-sizing: border-box
                         - border-radius: 12px
                         - display: flex
                         - flex-direction: row
