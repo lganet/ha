@@ -3,6 +3,9 @@ description: Turn off all lights in the Office and restore presence automation.
 icon: mdi:lightbulb-group-off
 mode: single
 sequence:
+  - action: script.nspanel_audio_feedback
+    data:
+      tone: "off"
   - action: switch.turn_off
     target:
       entity_id:
@@ -41,6 +44,3 @@ sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_lights_snapshot_active
-  - action: script.nspanel_audio_feedback
-    data:
-      tone: "off"

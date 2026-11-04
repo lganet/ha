@@ -13,11 +13,24 @@ fields:
           - "off"
           - "save"
 sequence:
-  - choose:
-      - conditions:
-          - condition: template
-            value_template: "{{ states('button.zigbee2cube_1002a32fc7_speaker_start') not in ['unavailable', 'unknown'] }}"
-        sequence:
-          - action: button.press
-            target:
-              entity_id: button.zigbee2cube_1002a32fc7_speaker_start
+  - variables:
+      target_url: >-
+        {% if tone == 'off' %}
+          https://actions.google.com/sounds/v1/cartoon/pop.ogg
+        {% elif tone == 'save' %}
+          https://actions.google.com/sounds/v1/office/button_push.ogg
+        {% else %}
+          https://actions.google.com/sounds/v1/alarms/beep_short.ogg
+        {% endif %}
+  - if:
+      - condition: template
+        value_template: "{{ states('text.zigbee2cube_1002a32fc7_audio_address') != target_url }}"
+    then:
+      - action: text.set_value
+        target:
+          entity_id: text.zigbee2cube_1002a32fc7_audio_address
+        data:
+          value: "{{ target_url }}"
+  - action: button.press
+    target:
+      entity_id: button.zigbee2cube_1002a32fc7_speaker_start

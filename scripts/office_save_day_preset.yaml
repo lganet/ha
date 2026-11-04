@@ -3,6 +3,9 @@ description: Overwrites the Day preset scene with current office light attribute
 icon: mdi:content-save
 mode: single
 sequence:
+  - action: script.nspanel_audio_feedback
+    data:
+      tone: save
   - action: scene.create
     data:
       scene_id: office_day_preset
@@ -18,6 +21,3 @@ sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.office_day_preset_changed
-  - action: script.nspanel_audio_feedback
-    data:
-      tone: save

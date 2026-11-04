@@ -3,6 +3,9 @@ description: Overwrites the Night preset scene with current night light attribut
 icon: mdi:content-save-edit
 mode: single
 sequence:
+  - action: script.nspanel_audio_feedback
+    data:
+      tone: save
   - action: scene.create
     data:
       scene_id: office_night_preset
@@ -16,6 +19,3 @@ sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.office_night_preset_changed
-  - action: script.nspanel_audio_feedback
-    data:
-      tone: save

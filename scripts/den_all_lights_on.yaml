@@ -9,6 +9,9 @@ fields:
     selector:
       boolean: {}
 sequence:
+  - action: script.nspanel_audio_feedback
+    data:
+      tone: "on"
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_night_light_active
@@ -43,6 +46,3 @@ sequence:
   - action: input_boolean.turn_off
     target:
       entity_id: input_boolean.den_lights_snapshot_active
-  - action: script.nspanel_audio_feedback
-    data:
-      tone: "on"
