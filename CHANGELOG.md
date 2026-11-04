@@ -16,6 +16,7 @@
 - Added direct mode preview activation buttons (`Activate Day Mode` and `Activate Night Mode`) to the Presets Management section on the Lights panel to prevent daytime fixtures from contaminating night ambient presets.
 
 ### Changed
+- Expanded Night Preset snapshotting to cover all office fixtures (`scripts/office_save_night_preset.yaml`, `scripts/office_activate_night_preset.yaml`), allowing any light (such as Desk LEDs or Floor Lamp) to be included in Night Mode when saved rather than strictly hardcoded off.
 - Refactored master lights button into a unified `custom:stack-in-card` combining the large turn on/off button with dual badges (`X on` / `Y off`) and quick preset pills, maximizing touch targets and filling available display space on the NSPanel Pro.
 - Aligned friendly names for `light.den_fan_light` ("Fan Task Light") and `light.den_night_light` ("Fan Night Light") in entity registry and template definitions so dashboard tiles and more-info dialog titles match consistently.
 

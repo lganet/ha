@@ -22,11 +22,6 @@ sequence:
       - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.den_presence_override
-  - action: light.turn_off
-    target:
-      entity_id:
-        - light.office_floor_lamp
-        - light.office_desk_leds
   - action: light.turn_on
     target:
       entity_id: light.den_night_light
@@ -38,6 +33,11 @@ sequence:
         target:
           entity_id: scene.office_night_preset
     else:
+      - action: light.turn_off
+        target:
+          entity_id:
+            - light.office_floor_lamp
+            - light.office_desk_leds
       - action: light.turn_on
         target:
           entity_id:
