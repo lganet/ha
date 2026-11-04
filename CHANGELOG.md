@@ -20,6 +20,11 @@
 - Aligned friendly names for `light.den_fan_light` ("Fan Task Light") and `light.den_night_light` ("Fan Night Light") in entity registry and template definitions so dashboard tiles and more-info dialog titles match consistently.
 
 ### Fixed
+- Fixed Ceiling Fan Light not respecting Day and Night mode transitions (`templates/den_lights.yaml`, `scripts/office_activate_night_preset.yaml`, `scripts/den_all_lights_on.yaml`, `automations/den_fan_light_state_tracker.yaml`):
+  - Removed `light.den_fan_light` from `light.turn_off` in `office_activate_night_preset`, and added explicit `light.turn_on: light.den_night_light` to ensure the fan light directly transitions to Night mode.
+  - Added explicit `light.turn_on: light.den_fan_light` in `den_all_lights_on` so switching to Day mode immediately restores the day task brightness (75%) and cool color temperature (6000K–6369K).
+  - Preserved color temperature and brightness cross-talk in `templates/den_lights.yaml` so adjustments to one attribute do not wipe out the other.
+  - Prevented state tracker helper overwrite race conditions by adding a 5-second mode settling guard in `automation.den_fan_light_state_tracker` to avoid recording intermediate transitional brightness levels across modes.
 - Fixed color temperature preset crash (`Invalid value for input_number.den_fan_light_last_color_temp: 6536.0 (range 3000.0 - 6500.0)`) when selecting white (153 mireds / 6536K) or deep warm/orange (500 mireds / 2000K) presets by expanding helper bounds (2000K–7000K) and clamping values in `templates/den_lights.yaml` and `automations/den_fan_light_state_tracker.yaml`.
 
 ## 0.8.0 - 2026-11-03

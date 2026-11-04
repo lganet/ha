@@ -8,6 +8,18 @@ conditions:
   - condition: state
     entity_id: light.office_ceiling_fan_light
     state: "on"
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: input_boolean.den_night_light_active
+        state: "on"
+        for:
+          seconds: 5
+      - condition: state
+        entity_id: input_boolean.den_night_light_active
+        state: "off"
+        for:
+          seconds: 5
 actions:
   - choose:
       - conditions:
