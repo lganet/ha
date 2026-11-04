@@ -112,17 +112,22 @@ views:
           # --- Master Dynamic Master Lights Button ---
           - type: custom:button-card
             entity: sensor.den_lights_on
-            show_name: false
+            show_name: true
             show_icon: true
-            icon: >
+            name: >-
               [[[
                 var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
-                return count > 0 ? "mdi:lightbulb-group-off" : "mdi:lightbulb-group";
+                return count > 0 ? "Turn Lights Off" : "Turn Lights On";
+              ]]]
+            icon: >-
+              [[[
+                var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                return count > 0 ? "mdi:lightbulb-multiple" : "mdi:lightbulb-multiple-outline";
               ]]]
             tap_action:
               action: call-service
               haptic: selection
-              service: >
+              service: >-
                 [[[
                   var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
                   return count > 0 ? "script.den_all_lights_off" : "script.den_all_lights_on";
@@ -133,46 +138,42 @@ views:
                 - padding: 16px
                 - border-radius: var(--ha-card-border-radius, 16px)
                 - display: flex
+                - flex-direction: column
                 - align-items: center
                 - justify-content: center
-                - background-color: >
+                - position: relative
+                - background-color: >-
                     [[[
                       var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
                       return count > 0 ? 'rgba(251, 192, 45, 0.15)' : 'var(--ha-card-background, rgba(255, 255, 255, 0.05))';
                     ]]]
               icon:
-                - width: 72px
-                - height: 72px
-                - color: >
+                - width: 64px
+                - height: 64px
+                - color: >-
                     [[[
                       var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
-                      return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #9E9E9E)';
+                      return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #757575)';
                     ]]]
+              name:
+                - font-size: 16px
+                - font-weight: 600
+                - margin-top: 8px
+                - color: var(--primary-text-color)
               custom_fields:
                 notification:
-                  - background-color: >
-                      [[[
-                        var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
-                        return count > 0 ? '#4CAF50' : '#546E7A';
-                      ]]]
-                  - border-radius: 50%
                   - position: absolute
-                  - right: 20px
-                  - top: 20px
-                  - height: 32px
-                  - width: 32px
-                  - font-size: 16px
-                  - font-weight: bold
-                  - color: '#FFFFFF'
-                  - display: flex
-                  - align-items: center
-                  - justify-content: center
-                  - box-shadow: 0 2px 6px rgba(0,0,0,0.4)
+                  - right: 16px
+                  - top: 16px
             custom_fields:
-              notification: >
+              notification: >-
                 [[[
-                  var count = states['sensor.den_lights_on'] ? states['sensor.den_lights_on'].state : '0';
-                  return count;
+                  var on = states['sensor.den_lights_on'] ? states['sensor.den_lights_on'].state : '0';
+                  var off = states['sensor.den_lights_off'] ? states['sensor.den_lights_off'].state : '0';
+                  return `<div style="display: flex; gap: 6px;">
+                    <span style="background-color: #4CAF50; color: white; padding: 3px 8px; border-radius: 12px; font-weight: bold; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${on} on</span>
+                    <span style="background-color: #546E7A; color: white; padding: 3px 8px; border-radius: 12px; font-weight: bold; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${off} off</span>
+                  </div>`;
                 ]]]
 
           # --- Motion Presence Control ---
@@ -351,8 +352,15 @@ views:
             square: false
             cards:
               - type: custom:button-card
-                name: Save Day Lights
-                icon: mdi:content-save
+                entity: input_boolean.office_day_preset_changed
+                name: >-
+                  [[[
+                    return entity.state === 'on' ? 'Save Day Lights' : 'Day Lights Saved';
+                  ]]]
+                icon: >-
+                  [[[
+                    return entity.state === 'on' ? 'mdi:content-save' : 'mdi:check-circle';
+                  ]]]
                 tap_action:
                   action: call-service
                   haptic: selection
@@ -362,18 +370,47 @@ views:
                     - height: 60px
                     - padding: 8px 12px
                     - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(76, 175, 80, 0.12)
+                    - background-color: >-
+                        [[[
+                          return entity.state === 'on' ? 'rgba(76, 175, 80, 0.25)' : 'rgba(255, 255, 255, 0.04)';
+                        ]]]
+                    - opacity: >-
+                        [[[
+                          return entity.state === 'on' ? '1.0' : '0.45';
+                        ]]]
+                    - pointer-events: >-
+                        [[[
+                          return entity.state === 'on' ? 'auto' : 'none';
+                        ]]]
+                    - border: >-
+                        [[[
+                          return entity.state === 'on' ? '1px solid rgba(76, 175, 80, 0.6)' : 'none';
+                        ]]]
                   icon:
                     - width: 26px
                     - height: 26px
-                    - color: '#4CAF50'
+                    - color: >-
+                        [[[
+                          return entity.state === 'on' ? '#4CAF50' : '#888888';
+                        ]]]
                   name:
                     - font-size: 13px
                     - font-weight: 600
+                    - color: >-
+                        [[[
+                          return entity.state === 'on' ? '#FFFFFF' : '#888888';
+                        ]]]
 
               - type: custom:button-card
-                name: Save Night Lights
-                icon: mdi:content-save-edit
+                entity: input_boolean.office_night_preset_changed
+                name: >-
+                  [[[
+                    return entity.state === 'on' ? 'Save Night Lights' : 'Night Lights Saved';
+                  ]]]
+                icon: >-
+                  [[[
+                    return entity.state === 'on' ? 'mdi:content-save-edit' : 'mdi:check-circle';
+                  ]]]
                 tap_action:
                   action: call-service
                   haptic: selection
@@ -383,14 +420,36 @@ views:
                     - height: 60px
                     - padding: 8px 12px
                     - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(156, 39, 176, 0.12)
+                    - background-color: >-
+                        [[[
+                          return entity.state === 'on' ? 'rgba(156, 39, 176, 0.25)' : 'rgba(255, 255, 255, 0.04)';
+                        ]]]
+                    - opacity: >-
+                        [[[
+                          return entity.state === 'on' ? '1.0' : '0.45';
+                        ]]]
+                    - pointer-events: >-
+                        [[[
+                          return entity.state === 'on' ? 'auto' : 'none';
+                        ]]]
+                    - border: >-
+                        [[[
+                          return entity.state === 'on' ? '1px solid rgba(156, 39, 176, 0.6)' : 'none';
+                        ]]]
                   icon:
                     - width: 26px
                     - height: 26px
-                    - color: '#BA68C8'
+                    - color: >-
+                        [[[
+                          return entity.state === 'on' ? '#BA68C8' : '#888888';
+                        ]]]
                   name:
                     - font-size: 13px
                     - font-weight: 600
+                    - color: >-
+                        [[[
+                          return entity.state === 'on' ? '#FFFFFF' : '#888888';
+                        ]]]
 
           # --- Fixtures Grid ---
           - type: heading
@@ -407,9 +466,18 @@ views:
                 mode: vertical
                 cards:
                   - type: heading
-                    heading: Floor Lamp
+                    heading: Floor Lamp Corner
                     heading_style: subtitle
                     icon: mdi:floor-lamp-torchiere
+                  - type: tile
+                    entity: light.office_floor_lamp_corner
+                    name: Main Lamp
+                    icon: mdi:floor-lamp-torchiere
+                    features:
+                      - type: light-brightness
+                    tap_action:
+                      action: more-info
+                      haptic: selection
                   - type: tile
                     entity: switch.office_floor_lamp_side_light
                     name: Side Light

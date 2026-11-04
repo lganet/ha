@@ -1,0 +1,24 @@
+alias: Office Lighting Preset Dirty Tracker
+description: Flags office lighting presets as modified when fixture attributes or power states change.
+mode: single
+trigger:
+  - trigger: state
+    entity_id:
+      - light.office_floor_lamp
+      - light.office_desk_leds
+      - light.den_fan_light
+      - light.humidifier_night_light
+      - light.office_ceiling_fan_backlight
+      - light.office_floor_lamp_corner
+      - switch.office_floor_lamp_side_light
+      - switch.office_floor_lamp_bottom_light
+      - switch.office_floor_lamp_ripple_light
+condition:
+  - condition: template
+    value_template: "{{ is_state('script.den_all_lights_on', 'off') and is_state('script.den_all_lights_off', 'off') }}"
+action:
+  - action: input_boolean.turn_on
+    target:
+      entity_id:
+        - input_boolean.office_day_preset_changed
+        - input_boolean.office_night_preset_changed

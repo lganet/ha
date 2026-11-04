@@ -15,6 +15,14 @@ input_boolean:
     name: Den Presence Override
     icon: mdi:account-clock
 
+  office_day_preset_changed:
+    name: Office Day Preset Changed
+    icon: mdi:pencil
+
+  office_night_preset_changed:
+    name: Office Night Preset Changed
+    icon: mdi:pencil
+
 input_text:
   den_lights_last_state:
     name: Den Lights Last State

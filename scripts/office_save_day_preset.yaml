@@ -11,9 +11,13 @@ sequence:
         - light.office_desk_leds
         - light.den_fan_light
         - light.humidifier_night_light
+        - light.office_floor_lamp_corner
         - switch.office_floor_lamp_side_light
         - switch.office_floor_lamp_bottom_light
         - switch.office_floor_lamp_ripple_light
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.office_day_preset_changed
   - action: script.nspanel_audio_feedback
     data:
       tone: save
