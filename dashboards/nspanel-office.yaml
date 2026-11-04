@@ -132,33 +132,26 @@ views:
                 ]]]
             styles:
               card:
-                - height: 80px
-                - padding: 12px 18px
-                - border-radius: var(--ha-card-border-radius, 14px)
-                - display: flex
-                - flex-direction: row
-                - align-items: center
-                - justify-content: flex-start
+                - height: 120px
+                - padding: 16px
+                - border-radius: var(--ha-card-border-radius, 16px)
                 - background-color: >
                     [[[
                       var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
                       return count > 0 ? 'rgba(251, 192, 45, 0.15)' : 'var(--ha-card-background, rgba(255, 255, 255, 0.05))';
                     ]]]
-              grid:
-                - grid-template-areas: '"i n"'
-                - grid-template-columns: 50px 1fr
               icon:
-                - width: 42px
-                - height: 42px
+                - width: 50px
+                - height: 50px
                 - color: >
                     [[[
                       var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
                       return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #9E9E9E)';
                     ]]]
               name:
-                - font-size: 18px
+                - font-size: 20px
                 - font-weight: 600
-                - justify-self: start
+                - margin-top: 8px
                 - color: var(--primary-text-color)
               custom_fields:
                 notification:
@@ -169,17 +162,17 @@ views:
                       ]]]
                   - border-radius: 50%
                   - position: absolute
-                  - right: 18px
-                  - top: 26px
-                  - height: 28px
-                  - width: 28px
-                  - font-size: 14px
+                  - right: 20px
+                  - top: calc(50% - 16px)
+                  - height: 32px
+                  - width: 32px
+                  - font-size: 16px
                   - font-weight: bold
                   - color: '#FFFFFF'
                   - display: flex
                   - align-items: center
                   - justify-content: center
-                  - box-shadow: 0 2px 4px rgba(0,0,0,0.3)
+                  - box-shadow: 0 2px 6px rgba(0,0,0,0.4)
             custom_fields:
               notification: >
                 [[[
