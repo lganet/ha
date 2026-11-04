@@ -21,7 +21,7 @@
 - Aligned friendly names for `light.den_fan_light` ("Fan Task Light") and `light.den_night_light` ("Fan Night Light") in entity registry and template definitions so dashboard tiles and more-info dialog titles match consistently.
 
 ### Fixed
-- Fixed Day & Night Preset pills alignment on master light card in `dashboards/nspanel-office.yaml` by setting `width: auto` and `box-sizing: border-box`, preventing right-border clipping and eliminating asymmetric margin shifts.
+- Fixed Day & Night Preset pills alignment on master light card in `dashboards/nspanel-office.yaml` using balanced `calc(100% - 16px)` column widths with symmetric margins, preserving wide 50/50 touch targets without right-border clipping or shrink-wrap collapse.
 - Fixed Ceiling Fan Light not respecting Day and Night mode transitions (`templates/den_lights.yaml`, `scripts/office_activate_night_preset.yaml`, `scripts/den_all_lights_on.yaml`, `automations/den_fan_light_state_tracker.yaml`):
   - Removed `light.den_fan_light` from `light.turn_off` in `office_activate_night_preset`, and added explicit `light.turn_on: light.den_night_light` to ensure the fan light directly transitions to Night mode.
   - Added explicit `light.turn_on: light.den_fan_light` in `den_all_lights_on` so switching to Day mode immediately restores the day task brightness (75%) and cool color temperature (6000K–6369K).
