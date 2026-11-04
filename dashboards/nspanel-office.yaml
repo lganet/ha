@@ -109,72 +109,170 @@ views:
                     icon: mdi:window-open-variant
                     color: amber
 
-          # --- Master Dynamic Master Lights Button ---
-          - type: custom:button-card
-            entity: sensor.den_lights_on
-            show_name: true
-            show_icon: true
-            name: >-
-              [[[
-                var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
-                return count > 0 ? "Turn Lights Off" : "Turn Lights On";
-              ]]]
-            icon: >-
-              [[[
-                var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
-                return count > 0 ? "mdi:lightbulb-multiple" : "mdi:lightbulb-multiple-outline";
-              ]]]
-            tap_action:
-              action: call-service
-              haptic: selection
-              service: >-
-                [[[
-                  var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
-                  return count > 0 ? "script.den_all_lights_off" : "script.den_all_lights_on";
-                ]]]
+          # --- Master Dynamic Master Lights Button with Preset Pills ---
+          - type: custom:stack-in-card
+            mode: vertical
             styles:
               card:
-                - height: 180px
-                - padding: 20px
                 - border-radius: var(--ha-card-border-radius, 20px)
-                - display: flex
-                - flex-direction: column
-                - align-items: center
-                - justify-content: center
-                - position: relative
-                - background-color: >-
+                - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
+            cards:
+              - type: custom:button-card
+                entity: sensor.den_lights_on
+                show_name: true
+                show_icon: true
+                name: >-
+                  [[[
+                    var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                    return count > 0 ? "Turn Lights Off" : "Turn Lights On";
+                  ]]]
+                icon: >-
+                  [[[
+                    var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                    return count > 0 ? "mdi:lightbulb-multiple" : "mdi:lightbulb-multiple-outline";
+                  ]]]
+                tap_action:
+                  action: call-service
+                  haptic: selection
+                  service: script.office_adaptive_lights_toggle
+                styles:
+                  card:
+                    - height: 140px
+                    - padding: 16px 20px 8px 20px
+                    - border: none
+                    - box-shadow: none
+                    - background-color: >-
+                        [[[
+                          var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                          return count > 0 ? 'rgba(251, 192, 45, 0.15)' : 'transparent';
+                        ]]]
+                    - display: flex
+                    - flex-direction: column
+                    - align-items: center
+                    - justify-content: center
+                    - position: relative
+                  icon:
+                    - width: 72px
+                    - height: 72px
+                    - color: >-
+                        [[[
+                          var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                          return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #757575)';
+                        ]]]
+                  name:
+                    - font-size: 18px
+                    - font-weight: 700
+                    - margin-top: 8px
+                    - color: var(--primary-text-color)
+                  custom_fields:
+                    notification:
+                      - position: absolute
+                      - right: 16px
+                      - top: 16px
+                custom_fields:
+                  notification: >-
                     [[[
-                      var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
-                      return count > 0 ? 'rgba(251, 192, 45, 0.15)' : 'var(--ha-card-background, rgba(255, 255, 255, 0.05))';
+                      var on = states['sensor.den_lights_on'] ? states['sensor.den_lights_on'].state : '0';
+                      var off = states['sensor.den_lights_off'] ? states['sensor.den_lights_off'].state : '0';
+                      return `<div style="display: flex; gap: 6px;">
+                        <span style="background-color: #4CAF50; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${on} on</span>
+                        <span style="background-color: #546E7A; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${off} off</span>
+                      </div>`;
                     ]]]
-              icon:
-                - width: 80px
-                - height: 80px
-                - color: >-
-                    [[[
-                      var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
-                      return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #757575)';
-                    ]]]
-              name:
-                - font-size: 18px
-                - font-weight: 700
-                - margin-top: 10px
-                - color: var(--primary-text-color)
-              custom_fields:
-                notification:
-                  - position: absolute
-                  - right: 18px
-                  - top: 18px
-            custom_fields:
-              notification: >-
-                [[[
-                  var on = states['sensor.den_lights_on'] ? states['sensor.den_lights_on'].state : '0';
-                  var off = states['sensor.den_lights_off'] ? states['sensor.den_lights_off'].state : '0';
-                  return `<div style="display: flex; gap: 6px;">
-                    <span style="background-color: #4CAF50; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${on} on</span>
-                    <span style="background-color: #546E7A; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${off} off</span>
-                  </div>`;
-                ]]]
+
+              - type: grid
+                columns: 2
+                square: false
+                cards:
+                  - type: custom:button-card
+                    entity: input_boolean.den_night_light_active
+                    name: "☀️ Day Preset"
+                    icon: mdi:white-balance-sunny
+                    tap_action:
+                      action: call-service
+                      haptic: selection
+                      service: script.office_activate_day_preset
+                    styles:
+                      card:
+                        - height: 46px
+                        - margin: 0px 6px 10px 10px
+                        - padding: 4px 8px
+                        - border-radius: 12px
+                        - display: flex
+                        - flex-direction: row
+                        - align-items: center
+                        - justify-content: center
+                        - background-color: >-
+                            [[[
+                              var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                              var night = entity.state === 'on';
+                              return (count > 0 && !night) ? 'rgba(251, 192, 45, 0.25)' : 'rgba(255, 255, 255, 0.06)';
+                            ]]]
+                        - border: >-
+                            [[[
+                              var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                              var night = entity.state === 'on';
+                              return (count > 0 && !night) ? '1px solid #FBC02D' : '1px solid rgba(255, 255, 255, 0.1)';
+                            ]]]
+                      icon:
+                        - width: 18px
+                        - height: 18px
+                        - margin-right: 6px
+                        - color: >-
+                            [[[
+                              var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                              var night = entity.state === 'on';
+                              return (count > 0 && !night) ? '#FBC02D' : 'var(--secondary-text-color, #888888)';
+                            ]]]
+                      name:
+                        - font-size: 13px
+                        - font-weight: 600
+                        - color: var(--primary-text-color)
+
+                  - type: custom:button-card
+                    entity: input_boolean.den_night_light_active
+                    name: "🌙 Night Preset"
+                    icon: mdi:weather-night
+                    tap_action:
+                      action: call-service
+                      haptic: selection
+                      service: script.office_activate_night_preset
+                    styles:
+                      card:
+                        - height: 46px
+                        - margin: 0px 10px 10px 6px
+                        - padding: 4px 8px
+                        - border-radius: 12px
+                        - display: flex
+                        - flex-direction: row
+                        - align-items: center
+                        - justify-content: center
+                        - background-color: >-
+                            [[[
+                              var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                              var night = entity.state === 'on';
+                              return (count > 0 && night) ? 'rgba(186, 104, 200, 0.25)' : 'rgba(255, 255, 255, 0.06)';
+                            ]]]
+                        - border: >-
+                            [[[
+                              var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                              var night = entity.state === 'on';
+                              return (count > 0 && night) ? '1px solid #BA68C8' : '1px solid rgba(255, 255, 255, 0.1)';
+                            ]]]
+                      icon:
+                        - width: 18px
+                        - height: 18px
+                        - margin-right: 6px
+                        - color: >-
+                            [[[
+                              var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                              var night = entity.state === 'on';
+                              return (count > 0 && night) ? '#BA68C8' : 'var(--secondary-text-color, #888888)';
+                            ]]]
+                      name:
+                        - font-size: 13px
+                        - font-weight: 600
+                        - color: var(--primary-text-color)
 
           # --- Motion Presence Control ---
           - type: custom:button-card
@@ -347,10 +445,50 @@ views:
             heading_style: subtitle
             icon: mdi:bookmark-box-multiple
 
+          # Day Preset Row: Activate & Save
           - type: grid
             columns: 2
             square: false
             cards:
+              - type: custom:button-card
+                entity: input_boolean.den_night_light_active
+                name: "☀️ Activate Day Mode"
+                icon: mdi:white-balance-sunny
+                tap_action:
+                  action: call-service
+                  haptic: selection
+                  service: script.office_activate_day_preset
+                styles:
+                  card:
+                    - height: 56px
+                    - padding: 6px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: >-
+                        [[[
+                          var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                          var night = entity.state === 'on';
+                          return (count > 0 && !night) ? 'rgba(251, 192, 45, 0.25)' : 'rgba(255, 255, 255, 0.05)';
+                        ]]]
+                    - border: >-
+                        [[[
+                          var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                          var night = entity.state === 'on';
+                          return (count > 0 && !night) ? '1px solid #FBC02D' : '1px solid rgba(255, 255, 255, 0.1)';
+                        ]]]
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: >-
+                        [[[
+                          var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                          var night = entity.state === 'on';
+                          return (count > 0 && !night) ? '#FBC02D' : '#888888';
+                        ]]]
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - color: var(--primary-text-color)
+
               - type: custom:button-card
                 entity: input_boolean.office_day_preset_changed
                 name: >-
@@ -367,8 +505,8 @@ views:
                   service: script.office_save_day_preset
                 styles:
                   card:
-                    - height: 60px
-                    - padding: 8px 12px
+                    - height: 56px
+                    - padding: 6px 10px
                     - border-radius: var(--ha-card-border-radius, 12px)
                     - background-color: >-
                         [[[
@@ -387,8 +525,8 @@ views:
                           return entity.state === 'on' ? '1px solid rgba(76, 175, 80, 0.6)' : 'none';
                         ]]]
                   icon:
-                    - width: 26px
-                    - height: 26px
+                    - width: 22px
+                    - height: 22px
                     - color: >-
                         [[[
                           return entity.state === 'on' ? '#4CAF50' : '#888888';
@@ -400,6 +538,50 @@ views:
                         [[[
                           return entity.state === 'on' ? '#FFFFFF' : '#888888';
                         ]]]
+
+          # Night Preset Row: Activate & Save
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:button-card
+                entity: input_boolean.den_night_light_active
+                name: "🌙 Activate Night Mode"
+                icon: mdi:weather-night
+                tap_action:
+                  action: call-service
+                  haptic: selection
+                  service: script.office_activate_night_preset
+                styles:
+                  card:
+                    - height: 56px
+                    - padding: 6px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: >-
+                        [[[
+                          var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                          var night = entity.state === 'on';
+                          return (count > 0 && night) ? 'rgba(186, 104, 200, 0.25)' : 'rgba(255, 255, 255, 0.05)';
+                        ]]]
+                    - border: >-
+                        [[[
+                          var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                          var night = entity.state === 'on';
+                          return (count > 0 && night) ? '1px solid #BA68C8' : '1px solid rgba(255, 255, 255, 0.1)';
+                        ]]]
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: >-
+                        [[[
+                          var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
+                          var night = entity.state === 'on';
+                          return (count > 0 && night) ? '#BA68C8' : '#888888';
+                        ]]]
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - color: var(--primary-text-color)
 
               - type: custom:button-card
                 entity: input_boolean.office_night_preset_changed
@@ -417,8 +599,8 @@ views:
                   service: script.office_save_night_preset
                 styles:
                   card:
-                    - height: 60px
-                    - padding: 8px 12px
+                    - height: 56px
+                    - padding: 6px 10px
                     - border-radius: var(--ha-card-border-radius, 12px)
                     - background-color: >-
                         [[[
@@ -437,8 +619,8 @@ views:
                           return entity.state === 'on' ? '1px solid rgba(156, 39, 176, 0.6)' : 'none';
                         ]]]
                   icon:
-                    - width: 26px
-                    - height: 26px
+                    - width: 22px
+                    - height: 22px
                     - color: >-
                         [[[
                           return entity.state === 'on' ? '#BA68C8' : '#888888';

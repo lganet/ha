@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- Added adaptive master lighting toggle script (`scripts/office_adaptive_lights_toggle.yaml`) contextually switching between Day mode (workday 09:00-18:00) and Night mode (evening/off-hours).
+- Added `scripts/office_activate_day_preset.yaml` and `scripts/office_activate_night_preset.yaml` allowing direct preview and activation of Day and Night scenes.
+- Embedded `[ ☀️ Day Preset ]` and `[ 🌙 Night Preset ]` pills directly on the master lights card in `dashboards/nspanel-office.yaml` with active state border glow and instant audio feedback.
+- Added direct mode preview activation buttons (`Activate Day Mode` and `Activate Night Mode`) to the Presets Management section on the Lights panel to prevent daytime fixtures from contaminating night ambient presets.
+
+### Changed
+- Refactored master lights button into a unified `custom:stack-in-card` combining the large turn on/off button with dual badges (`X on` / `Y off`) and quick preset pills, maximizing touch targets and filling available display space on the NSPanel Pro.
+
 ## 0.8.0 - 2026-11-03
 
 ### Added
