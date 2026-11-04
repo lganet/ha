@@ -1,5 +1,5 @@
 - light:
-    - name: Den Fan Light
+    - name: Fan Task Light
       unique_id: den_fan_light
       state: "{{ is_state('light.office_ceiling_fan_light', 'on') and is_state('input_boolean.den_night_light_active', 'off') }}"
       turn_on:
@@ -35,22 +35,24 @@
           target:
             entity_id: light.office_ceiling_fan_light
       temperature_template: "{{ (1000000 / (states('input_number.den_fan_light_last_color_temp') | float(6000))) | round(0) }}"
+      min_mireds: 143
+      max_mireds: 500
       set_temperature:
         - action: input_boolean.turn_off
           target:
             entity_id: input_boolean.den_night_light_active
         - action: input_number.set_value
           data:
-            value: "{{ (1000000 / color_temp) | round(0) }}"
+            value: "{{ [ [((1000000 / color_temp) | round(0)), 2000] | max, 7000] | min }}"
           target:
             entity_id: input_number.den_fan_light_last_color_temp
         - action: light.turn_on
           data:
-            color_temp_kelvin: "{{ (1000000 / color_temp) | round(0) }}"
+            color_temp_kelvin: "{{ [ [((1000000 / color_temp) | round(0)), 2000] | max, 7000] | min }}"
           target:
             entity_id: light.office_ceiling_fan_light
 
-    - name: Den Night Light
+    - name: Fan Night Light
       unique_id: den_night_light
       state: "{{ is_state('light.office_ceiling_fan_light', 'on') and is_state('input_boolean.den_night_light_active', 'on') }}"
       turn_on:
@@ -86,17 +88,19 @@
           target:
             entity_id: light.office_ceiling_fan_light
       temperature_template: "{{ (1000000 / (states('input_number.den_night_light_last_color_temp') | float(3000))) | round(0) }}"
+      min_mireds: 143
+      max_mireds: 500
       set_temperature:
         - action: input_boolean.turn_on
           target:
             entity_id: input_boolean.den_night_light_active
         - action: input_number.set_value
           data:
-            value: "{{ (1000000 / color_temp) | round(0) }}"
+            value: "{{ [ [((1000000 / color_temp) | round(0)), 2000] | max, 7000] | min }}"
           target:
             entity_id: input_number.den_night_light_last_color_temp
         - action: light.turn_on
           data:
-            color_temp_kelvin: "{{ (1000000 / color_temp) | round(0) }}"
+            color_temp_kelvin: "{{ [ [((1000000 / color_temp) | round(0)), 2000] | max, 7000] | min }}"
           target:
             entity_id: light.office_ceiling_fan_light

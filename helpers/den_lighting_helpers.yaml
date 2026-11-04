@@ -39,8 +39,8 @@ input_number:
 
   den_fan_light_last_color_temp:
     name: Den Fan Light Last Color Temp
-    min: 3000
-    max: 6500
+    min: 2000
+    max: 7000
     step: 1
     unit_of_measurement: "K"
     mode: slider
@@ -56,8 +56,8 @@ input_number:
 
   den_night_light_last_color_temp:
     name: Den Night Light Last Color Temp
-    min: 3000
-    max: 6500
+    min: 2000
+    max: 7000
     step: 1
     unit_of_measurement: "K"
     mode: slider

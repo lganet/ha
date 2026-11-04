@@ -10,6 +10,10 @@
 
 ### Changed
 - Refactored master lights button into a unified `custom:stack-in-card` combining the large turn on/off button with dual badges (`X on` / `Y off`) and quick preset pills, maximizing touch targets and filling available display space on the NSPanel Pro.
+- Aligned friendly names for `light.den_fan_light` ("Fan Task Light") and `light.den_night_light` ("Fan Night Light") in entity registry and template definitions so dashboard tiles and more-info dialog titles match consistently.
+
+### Fixed
+- Fixed color temperature preset crash (`Invalid value for input_number.den_fan_light_last_color_temp: 6536.0 (range 3000.0 - 6500.0)`) when selecting white (153 mireds / 6536K) or deep warm/orange (500 mireds / 2000K) presets by expanding helper bounds (2000K–7000K) and clamping values in `templates/den_lights.yaml` and `automations/den_fan_light_state_tracker.yaml`.
 
 ## 0.8.0 - 2026-11-03
 
