@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.9.0 - 2026-11-03
 
 ### Added
 - Added multi-tone sound design to NSPanel Pro audio feedback (`scripts/nspanel_audio_feedback.yaml`) with distinct sounds for room lighting actions:
