@@ -18,6 +18,8 @@
 ### Changed
 - Converted perimeter security warning binary sensors (`templates/security_warnings.yaml`) from static durations to dynamic helper thresholds.
 - Updated warning alert repeat loop in `automations/nspanel_security_warning_alert.yaml` to read delay dynamically from `input_number.warning_alert_repeat_interval`.
+- Converted dashboard security warning cards (`dashboards/nspanel-office.yaml`) to dynamic `custom:button-card` format, automatically displaying the live configured delay duration (e.g., `Warning: Patio Door Unlocked > 1m`) from the delay helpers.
+- Wrapped the dashboard weather forecast card in a conditional card (`dashboards/nspanel-office.yaml`), automatically hiding it when the upstream weather integration (`weather.forecast_home`) is unavailable or unknown.
 - Redesigned Day Preset and Night Preset buttons in the main lighting card (`dashboards/nspanel-office.yaml`):
   - Implemented `layout: icon_name` for horizontal pill buttons with icon on the left and label on the right.
   - Removed duplicate emojis from button labels to eliminate text truncation and clean up visual presentation.
