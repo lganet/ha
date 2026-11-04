@@ -21,6 +21,8 @@
 - Aligned friendly names for `light.den_fan_light` ("Fan Task Light") and `light.den_night_light` ("Fan Night Light") in entity registry and template definitions so dashboard tiles and more-info dialog titles match consistently.
 
 ### Fixed
+- Fixed FP300 presence motion lighting bypassing saved Night Preset settings (`automations/den_presence_lighting.yaml`): replaced direct `label_id: den_night_lights` activation with `script.office_activate_night_preset(override: false)`, ensuring saved scene attributes (including desk LEDs and custom fixture states) and `den_night_light_active` state are properly restored when presence is detected during off-hours.
+- Added `script.office_activate_night_preset` and `script.office_activate_day_preset` to `automations/office_lighting_dirty_tracker.yaml` execution guard conditions to prevent automated preset activations from inadvertently marking scenes as modified.
 - Fixed Day & Night Preset pills alignment on master light card in `dashboards/nspanel-office.yaml` using container-level inset padding (`0px 12px 10px 12px`) on `custom:stack-in-card`, preserving wide 50/50 touch targets and full text while eliminating border clipping and clearing the outer 20px rounded corners.
 - Fixed Ceiling Fan Light not respecting Day and Night mode transitions (`templates/den_lights.yaml`, `scripts/office_activate_night_preset.yaml`, `scripts/den_all_lights_on.yaml`, `automations/den_fan_light_state_tracker.yaml`):
   - Removed `light.den_fan_light` from `light.turn_off` in `office_activate_night_preset`, and added explicit `light.turn_on: light.den_night_light` to ensure the fan light directly transitions to Night mode.

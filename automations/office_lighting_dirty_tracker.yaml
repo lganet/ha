@@ -22,6 +22,12 @@ condition:
   - condition: state
     entity_id: script.den_all_lights_off
     state: "off"
+  - condition: state
+    entity_id: script.office_activate_night_preset
+    state: "off"
+  - condition: state
+    entity_id: script.office_activate_day_preset
+    state: "off"
 action:
   - action: input_boolean.turn_on
     target:
