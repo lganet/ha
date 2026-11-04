@@ -2,10 +2,20 @@ alias: Den All Lights Off
 description: Turn off all lights in the Office and restore presence automation.
 icon: mdi:lightbulb-group-off
 mode: single
+fields:
+  sound:
+    description: "Whether to play audio feedback chime on NSPanel"
+    default: false
+    selector:
+      boolean: {}
 sequence:
-  - action: script.nspanel_audio_feedback
-    data:
-      tone: "{{ 'night_off' if is_state('input_boolean.den_night_light_active', 'on') else 'day_off' }}"
+  - if:
+      - condition: template
+        value_template: "{{ sound | default(false) }}"
+    then:
+      - action: script.nspanel_audio_feedback
+        data:
+          tone: "{{ 'night_off' if is_state('input_boolean.den_night_light_active', 'on') else 'day_off' }}"
   - action: switch.turn_off
     target:
       entity_id:

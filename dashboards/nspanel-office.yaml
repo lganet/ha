@@ -194,6 +194,8 @@ views:
                       action: call-service
                       haptic: selection
                       service: script.office_activate_day_preset
+                      data:
+                        sound: true
                     styles:
                       card:
                         - height: 46px
@@ -234,6 +236,8 @@ views:
                       action: call-service
                       haptic: selection
                       service: script.office_activate_night_preset
+                      data:
+                        sound: true
                     styles:
                       card:
                         - height: 46px
@@ -450,6 +454,8 @@ views:
                   action: call-service
                   haptic: selection
                   service: script.office_activate_day_preset
+                  data:
+                    sound: true
                 styles:
                   card:
                     - height: 56px
@@ -544,6 +550,8 @@ views:
                   action: call-service
                   haptic: selection
                   service: script.office_activate_night_preset
+                  data:
+                    sound: true
                 styles:
                   card:
                     - height: 56px

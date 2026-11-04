@@ -8,7 +8,13 @@ fields:
     default: true
     selector:
       boolean: {}
+  sound:
+    description: "Whether to play audio feedback chime on NSPanel"
+    default: false
+    selector:
+      boolean: {}
 sequence:
   - action: script.den_all_lights_on
     data:
       override: "{{ override | default(true) }}"
+      sound: "{{ sound | default(false) }}"

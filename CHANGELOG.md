@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.10.0 - 2026-11-04
+
+### Added
+- Added security warning alert automation (`automations/nspanel_security_warning_alert.yaml`):
+  - Wakes the NSPanel Pro display (`switch.zigbee2cube_1002a32fc7_screen_state`) immediately when perimeter security warnings (`binary_sensor.active_security_warnings`) become active.
+  - Plays a gentle repeating two-tone chime (`doors/doorbell_chime.ogg`) through the NSPanel Pro speaker every 30 seconds to alert occupants without blaring harsh siren alarms.
+  - Halts the sound loop immediately (`button.zigbee2cube_1002a32fc7_speaker_stop`) and turns off screen power once all security warnings are cleared.
+- Added `warning` tone and instant `stop` command to `scripts/nspanel_audio_feedback.yaml`.
+
+### Changed
+- Restricted NSPanel speaker feedback strictly to physical panel touches (`scripts/den_all_lights_on.yaml`, `scripts/den_all_lights_off.yaml`, `scripts/office_activate_day_preset.yaml`, `scripts/office_activate_night_preset.yaml`, `scripts/office_adaptive_lights_toggle.yaml`, `dashboards/nspanel-office.yaml`):
+  - Added a `sound` boolean field (default: `false`) across all lighting scripts.
+  - Configured NSPanel dashboard touch targets to explicitly pass `sound: true`, providing tactile audible feedback exclusively upon physical screen taps.
+  - Automated presence-triggered lighting (FP300 presence detected / cleared / morning transition) defaults to `sound: false`, ensuring room motion remains completely silent.
+
 ## 0.9.0 - 2026-11-03
 
 ### Added

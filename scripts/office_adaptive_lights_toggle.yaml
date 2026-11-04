@@ -2,6 +2,12 @@ alias: Office Adaptive Lights Toggle
 description: Toggles Office lights contextually. If lights are on, turns them off. If all lights are off, activates Day Preset during workday hours (09:00-18:00) or Night Preset during off-hours/evening.
 icon: mdi:theme-light-dark
 mode: single
+fields:
+  sound:
+    description: "Whether to play audio feedback chime on NSPanel"
+    default: true
+    selector:
+      boolean: {}
 sequence:
   - choose:
       - conditions:
@@ -10,6 +16,8 @@ sequence:
             above: 0
         sequence:
           - action: script.den_all_lights_off
+            data:
+              sound: "{{ sound | default(true) }}"
     default:
       - choose:
           - conditions:
@@ -21,5 +29,9 @@ sequence:
                 before: "18:00:00"
             sequence:
               - action: script.office_activate_day_preset
+                data:
+                  sound: "{{ sound | default(true) }}"
         default:
           - action: script.office_activate_night_preset
+            data:
+              sound: "{{ sound | default(true) }}"
