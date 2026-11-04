@@ -79,29 +79,38 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - height: 56px
-                        - padding: 8px 14px
-                        - border-radius: var(--ha-card-border-radius, 12px)
-                        - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
-                        - border: 1px solid rgba(244, 67, 54, 0.4)
+                        - min-height: 60px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, rgba(211, 47, 47, 0.45) 0%, rgba(183, 28, 28, 0.25) 100%)"
+                        - border: "1.5px solid #FF5252"
+                        - box-shadow: "0 0 16px rgba(244, 67, 54, 0.35)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 36px 1fr
-                        - grid-template-rows: 1fr 1fr
+                        - grid-template-columns: 42px 1fr
+                        - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 24px
-                        - height: 24px
-                        - color: "#F44336"
+                        - width: 22px
+                        - height: 22px
+                        - color: "#FFFFFF"
+                        - background-color: "#D32F2F"
+                        - border-radius: 10px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
                       name:
                         - font-size: 14px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: var(--primary-text-color)
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
                       state:
                         - font-size: 12px
+                        - font-weight: 600
                         - justify-self: start
-                        - color: var(--secondary-text-color)
+                        - color: "#FFCDD2"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
 
                 - type: conditional
                   conditions:
@@ -129,29 +138,38 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - height: 56px
-                        - padding: 8px 14px
-                        - border-radius: var(--ha-card-border-radius, 12px)
-                        - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
-                        - border: 1px solid rgba(255, 167, 38, 0.4)
+                        - min-height: 60px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, rgba(245, 124, 0, 0.45) 0%, rgba(230, 81, 0, 0.25) 100%)"
+                        - border: "1.5px solid #FFA726"
+                        - box-shadow: "0 0 16px rgba(255, 167, 38, 0.35)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 36px 1fr
-                        - grid-template-rows: 1fr 1fr
+                        - grid-template-columns: 42px 1fr
+                        - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 24px
-                        - height: 24px
-                        - color: "#FFA726"
+                        - width: 22px
+                        - height: 22px
+                        - color: "#FFFFFF"
+                        - background-color: "#F57C00"
+                        - border-radius: 10px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
                       name:
                         - font-size: 14px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: var(--primary-text-color)
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
                       state:
                         - font-size: 12px
+                        - font-weight: 600
                         - justify-self: start
-                        - color: var(--secondary-text-color)
+                        - color: "#FFE0B2"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
 
                 - type: conditional
                   conditions:
@@ -179,29 +197,38 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - height: 56px
-                        - padding: 8px 14px
-                        - border-radius: var(--ha-card-border-radius, 12px)
-                        - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
-                        - border: 1px solid rgba(255, 167, 38, 0.4)
+                        - min-height: 60px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, rgba(245, 124, 0, 0.45) 0%, rgba(230, 81, 0, 0.25) 100%)"
+                        - border: "1.5px solid #FFA726"
+                        - box-shadow: "0 0 16px rgba(255, 167, 38, 0.35)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 36px 1fr
-                        - grid-template-rows: 1fr 1fr
+                        - grid-template-columns: 42px 1fr
+                        - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 24px
-                        - height: 24px
-                        - color: "#FFA726"
+                        - width: 22px
+                        - height: 22px
+                        - color: "#FFFFFF"
+                        - background-color: "#F57C00"
+                        - border-radius: 10px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
                       name:
                         - font-size: 14px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: var(--primary-text-color)
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
                       state:
                         - font-size: 12px
+                        - font-weight: 600
                         - justify-self: start
-                        - color: var(--secondary-text-color)
+                        - color: "#FFE0B2"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
 
                 - type: conditional
                   conditions:
@@ -229,29 +256,38 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - height: 56px
-                        - padding: 8px 14px
-                        - border-radius: var(--ha-card-border-radius, 12px)
-                        - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
-                        - border: 1px solid rgba(255, 167, 38, 0.4)
+                        - min-height: 60px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, rgba(245, 124, 0, 0.45) 0%, rgba(230, 81, 0, 0.25) 100%)"
+                        - border: "1.5px solid #FFA726"
+                        - box-shadow: "0 0 16px rgba(255, 167, 38, 0.35)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 36px 1fr
-                        - grid-template-rows: 1fr 1fr
+                        - grid-template-columns: 42px 1fr
+                        - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 24px
-                        - height: 24px
-                        - color: "#FFA726"
+                        - width: 22px
+                        - height: 22px
+                        - color: "#FFFFFF"
+                        - background-color: "#F57C00"
+                        - border-radius: 10px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
                       name:
                         - font-size: 14px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: var(--primary-text-color)
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
                       state:
                         - font-size: 12px
+                        - font-weight: 600
                         - justify-self: start
-                        - color: var(--secondary-text-color)
+                        - color: "#FFE0B2"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
 
                 - type: conditional
                   conditions:
@@ -279,29 +315,38 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - height: 56px
-                        - padding: 8px 14px
-                        - border-radius: var(--ha-card-border-radius, 12px)
-                        - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
-                        - border: 1px solid rgba(255, 167, 38, 0.4)
+                        - min-height: 60px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, rgba(245, 124, 0, 0.45) 0%, rgba(230, 81, 0, 0.25) 100%)"
+                        - border: "1.5px solid #FFA726"
+                        - box-shadow: "0 0 16px rgba(255, 167, 38, 0.35)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 36px 1fr
-                        - grid-template-rows: 1fr 1fr
+                        - grid-template-columns: 42px 1fr
+                        - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 24px
-                        - height: 24px
-                        - color: "#FFA726"
+                        - width: 22px
+                        - height: 22px
+                        - color: "#FFFFFF"
+                        - background-color: "#F57C00"
+                        - border-radius: 10px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
                       name:
                         - font-size: 14px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: var(--primary-text-color)
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
                       state:
                         - font-size: 12px
+                        - font-weight: 600
                         - justify-self: start
-                        - color: var(--secondary-text-color)
+                        - color: "#FFE0B2"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
 
           # --- Master Dynamic Master Lights Button with Preset Pills ---
           - type: custom:stack-in-card
