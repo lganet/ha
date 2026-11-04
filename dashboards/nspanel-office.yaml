@@ -134,9 +134,9 @@ views:
                 ]]]
             styles:
               card:
-                - height: 140px
-                - padding: 16px
-                - border-radius: var(--ha-card-border-radius, 16px)
+                - height: 180px
+                - padding: 20px
+                - border-radius: var(--ha-card-border-radius, 20px)
                 - display: flex
                 - flex-direction: column
                 - align-items: center
@@ -148,31 +148,31 @@ views:
                       return count > 0 ? 'rgba(251, 192, 45, 0.15)' : 'var(--ha-card-background, rgba(255, 255, 255, 0.05))';
                     ]]]
               icon:
-                - width: 64px
-                - height: 64px
+                - width: 80px
+                - height: 80px
                 - color: >-
                     [[[
                       var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
                       return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #757575)';
                     ]]]
               name:
-                - font-size: 16px
-                - font-weight: 600
-                - margin-top: 8px
+                - font-size: 18px
+                - font-weight: 700
+                - margin-top: 10px
                 - color: var(--primary-text-color)
               custom_fields:
                 notification:
                   - position: absolute
-                  - right: 16px
-                  - top: 16px
+                  - right: 18px
+                  - top: 18px
             custom_fields:
               notification: >-
                 [[[
                   var on = states['sensor.den_lights_on'] ? states['sensor.den_lights_on'].state : '0';
                   var off = states['sensor.den_lights_off'] ? states['sensor.den_lights_off'].state : '0';
                   return `<div style="display: flex; gap: 6px;">
-                    <span style="background-color: #4CAF50; color: white; padding: 3px 8px; border-radius: 12px; font-weight: bold; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${on} on</span>
-                    <span style="background-color: #546E7A; color: white; padding: 3px 8px; border-radius: 12px; font-weight: bold; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${off} off</span>
+                    <span style="background-color: #4CAF50; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${on} on</span>
+                    <span style="background-color: #546E7A; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${off} off</span>
                   </div>`;
                 ]]]
 
@@ -451,11 +451,11 @@ views:
                           return entity.state === 'on' ? '#FFFFFF' : '#888888';
                         ]]]
 
-          # --- Fixtures Grid ---
+          # --- 1. Day & Task Lighting ---
           - type: heading
-            heading: Room Fixtures
+            heading: ☀️ Day & Task Lighting
             heading_style: subtitle
-            icon: mdi:lightbulb-group
+            icon: mdi:white-balance-sunny
 
           - type: grid
             columns: 2
@@ -471,17 +471,10 @@ views:
                     icon: mdi:floor-lamp-torchiere
                   - type: tile
                     entity: light.office_floor_lamp_corner
-                    name: Main Lamp
+                    name: Main Lamp (Day)
                     icon: mdi:floor-lamp-torchiere
                     features:
                       - type: light-brightness
-                    tap_action:
-                      action: more-info
-                      haptic: selection
-                  - type: tile
-                    entity: switch.office_floor_lamp_side_light
-                    name: Side Light
-                    icon: mdi:wall-sconce-flat
                     tap_action:
                       action: more-info
                       haptic: selection
@@ -507,7 +500,7 @@ views:
               # Desk LEDs
               - type: tile
                 entity: light.office_desk_leds
-                name: Desk LEDs
+                name: Desk LEDs (Day)
                 icon: mdi:led-strip-variant
                 features:
                   - type: light-brightness
@@ -518,7 +511,7 @@ views:
               # Floor Lamp Main
               - type: tile
                 entity: light.office_floor_lamp
-                name: Floor Lamp Main
+                name: Floor Lamp Main (Day)
                 icon: mdi:floor-lamp
                 features:
                   - type: light-brightness
@@ -529,7 +522,7 @@ views:
               # Fan Light
               - type: tile
                 entity: light.den_fan_light
-                name: Fan Light
+                name: Fan Task Light (Day)
                 icon: mdi:ceiling-fan-light
                 features:
                   - type: light-brightness
@@ -538,10 +531,20 @@ views:
                   action: more-info
                   haptic: selection
 
+          # --- 2. Night & Ambient Lighting ---
+          - type: heading
+            heading: 🌙 Night & Ambient Lighting
+            heading_style: subtitle
+            icon: mdi:weather-night
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
               # Fan Night Light
               - type: tile
                 entity: light.den_night_light
-                name: Fan Night Light
+                name: Fan Night Light (Night)
                 icon: mdi:weather-night
                 features:
                   - type: light-brightness
@@ -553,10 +556,19 @@ views:
               # Humidifier Light
               - type: tile
                 entity: light.humidifier_night_light
-                name: Humidifier Light
+                name: Humidifier Light (Night)
                 icon: mdi:air-humidifier
                 features:
                   - type: light-brightness
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              # Floor Lamp Side Light
+              - type: tile
+                entity: switch.office_floor_lamp_side_light
+                name: Floor Lamp Side (Night)
+                icon: mdi:wall-sconce-flat
                 tap_action:
                   action: more-info
                   haptic: selection
