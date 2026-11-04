@@ -6,14 +6,24 @@ This document captures hard-won architectural principles, hardware quirks, and U
 
 ## 1. Hardware Profile & Screen Geometry
 
-- **Display**: 480 × 480 pixels (1:1 square aspect ratio), capacitive touchscreen.
-- **Orientation**: Scoped for a single-column section layout with internal 2-column grids:
-  - Total usable card width is ~430–440px after outer margins.
-  - In a 2-column grid (`columns: 2`, `square: false`), each column width is ~205–215px.
-- **Touch Targets**:
+You are using the **Sonoff NSPanel Pro 120 Type** (US / North American vertical wall box standard):
+
+| Model | Form Factor | Display Size | Physical Resolution | Typical Webview Viewport |
+| :--- | :--- | :--- | :--- | :--- |
+| **NSPanel Pro 120** *(Yours)* | US Rectangular (120mm) | 4.7 inches (Portrait) | **750 × 1334 px** | **~375 × 667 px** (at 2x density) |
+| **NSPanel Pro 86** | EU/UK Square (86mm) | 3.95 inches (Square) | 480 × 480 px | ~360–400 px |
+| **NSPanel (Standard)** | US/EU with 2 Buttons | 3.5 inches (Landscape) | 480 × 320 px | ~480 × 320 px |
+
+### Viewport & Grid Geometry on the NSPanel Pro 120:
+- **Orientation**: Portrait (vertical).
+- **Usable Webview Width**: ~360–375px after container padding.
+- **Two-Column Grid (`columns: 2`)**:
+  - Each column is only **~165–175px wide**.
+  - This narrow width makes vertical icon-over-text stacking prone to clipping.
+- **Touch Target Heights**:
   - Primary single-action tiles: `height: 56px` to `60px`.
-  - Half-width pill buttons (e.g. Presets): `height: 44px` to `46px`.
-  - Hero master buttons (e.g. Master Lights Toggle): `height: 130px` to `140px`.
+  - Half-width pill buttons (e.g., Presets): `height: 44px` to `46px`.
+  - Hero master buttons (e.g., Master Lights Toggle): `height: 130px` to `140px`.
   - Icon sizes: `18px`–`24px` for pills/tiles, `64px`–`72px` for master hero buttons.
 
 ---
