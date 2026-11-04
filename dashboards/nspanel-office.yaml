@@ -116,6 +116,8 @@ views:
               card:
                 - border-radius: var(--ha-card-border-radius, 20px)
                 - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
+                - padding: 0px 12px 10px 12px
+                - box-sizing: border-box
             cards:
               - type: custom:button-card
                 entity: sensor.den_lights_on
@@ -138,7 +140,7 @@ views:
                 styles:
                   card:
                     - height: 140px
-                    - padding: 16px 20px 8px 20px
+                    - padding: 16px 12px 8px 12px
                     - border: none
                     - box-shadow: none
                     - background-color: >-
@@ -167,8 +169,8 @@ views:
                   custom_fields:
                     notification:
                       - position: absolute
-                      - right: 16px
-                      - top: 16px
+                      - right: 8px
+                      - top: 12px
                 custom_fields:
                   notification: >-
                     [[[
@@ -195,14 +197,8 @@ views:
                     styles:
                       card:
                         - height: 46px
-                        - width: calc(100% - 16px)
-                        - margin: 0px 6px 10px 10px
                         - padding: 4px 8px
                         - border-radius: 12px
-                        - display: flex
-                        - flex-direction: row
-                        - align-items: center
-                        - justify-content: center
                         - background-color: >-
                             [[[
                               var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
@@ -241,14 +237,8 @@ views:
                     styles:
                       card:
                         - height: 46px
-                        - width: calc(100% - 16px)
-                        - margin: 0px 10px 10px 6px
                         - padding: 4px 8px
                         - border-radius: 12px
-                        - display: flex
-                        - flex-direction: row
-                        - align-items: center
-                        - justify-content: center
                         - background-color: >-
                             [[[
                               var count = states['sensor.den_lights_on'] ? parseInt(states['sensor.den_lights_on'].state) : 0;
