@@ -17,15 +17,15 @@ actions:
           - condition: trigger
             id: warning_active
         sequence:
-          - action: switch.turn_on
-            target:
-              entity_id: switch.zigbee2cube_1002a32fc7_screen_state
           - repeat:
               while:
                 - condition: state
                   entity_id: binary_sensor.active_security_warnings
                   state: "on"
               sequence:
+                - action: switch.turn_on
+                  target:
+                    entity_id: switch.zigbee2cube_1002a32fc7_screen_state
                 - action: script.nspanel_audio_feedback
                   data:
                     tone: warning

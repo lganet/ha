@@ -1430,6 +1430,12 @@ views:
               - entity: switch.zigbee2cube_1002a32fc7_screen_state
                 name: Screen Power
                 icon: mdi:tablet-dashboard
+              - entity: number.zigbee2cube_1002a32fc7_custom_duration
+                name: Screen Sleep Timeout (Seconds)
+                icon: mdi:timer-outline
+              - entity: switch.zigbee2cube_1002a32fc7_proximity_wake
+                name: Wake on Proximity
+                icon: mdi:hand-wave
 
           # --- Section 3: Live Warning Status & Preview ---
           - type: heading
