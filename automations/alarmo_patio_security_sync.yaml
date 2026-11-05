@@ -1,6 +1,6 @@
 id: "1793855799214"
 alias: "Alarmo Patio Security & Lock Synchronization"
-description: "Synchronizes Alarmo states with Patio Cameras (GusHomeBase) and unlocks the Patio Door Lock when Alarmo is disarmed with a user code."
+description: "Synchronizes Alarmo states with Patio Cameras (GusHomeBase)."
 mode: queued
 max: 5
 trigger:
@@ -32,14 +32,6 @@ action:
                       - action: alarm_control_panel.alarm_disarm
                         target:
                           entity_id: alarm_control_panel.gushomebase
-                  - if:
-                      - condition: state
-                        entity_id: lock.patio_door_lock
-                        state: locked
-                    then:
-                      - action: lock.unlock
-                        target:
-                          entity_id: lock.patio_door_lock
               - conditions:
                   - condition: template
                     value_template: "{{ trigger.to_state.state == 'armed_home' }}"

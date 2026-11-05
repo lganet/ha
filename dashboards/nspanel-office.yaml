@@ -635,7 +635,7 @@ views:
                   service: lock.lock
                   target:
                     entity_id: lock.patio_door_lock
-                  entity: alarm_control_panel.alarmo
+                  entity: alarm_control_panel.patio_lock
                   haptic: selection
                 styles:
                   card:
@@ -672,19 +672,6 @@ views:
                         [[[
                           return entity.state === 'locked' ? '#EF5350' : '#81C784';
                         ]]]
-
-          # --- Conditional Alarmo Keypad (Visible on Main View when Armed) ---
-          - type: conditional
-            conditions:
-              - condition: state
-                entity: alarm_control_panel.alarmo
-                state_not: disarmed
-            card:
-              type: custom:alarmo-card
-              entity: alarm_control_panel.alarmo
-              name: Patio Security Keypad
-              keep_keypad_visible: true
-              button_scale: 1.1
 
           # --- Resilient Cached Weather Card (Never breaks or disappears) ---
           - type: custom:button-card

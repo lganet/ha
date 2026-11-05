@@ -1,0 +1,70 @@
+id: "1793861521794"
+alias: "Alarmo Patio Lock PIN Synchronization"
+description: "Synchronizes Alarmo Patio Lock area with the physical Patio Door Lock, requiring a PIN code via popup keypad to unlock."
+mode: queued
+max: 5
+trigger:
+  - platform: state
+    entity_id: alarm_control_panel.patio_lock
+    id: alarmo_lock_state
+  - platform: state
+    entity_id: lock.patio_door_lock
+    id: door_lock_state
+condition:
+  - condition: template
+    value_template: "{{ trigger.from_state is not none and trigger.to_state is not none and trigger.from_state.state != trigger.to_state.state }}"
+action:
+  - choose:
+      # Triggered by Alarmo Patio Lock area (e.g. user entered PIN in popup)
+      - conditions:
+          - condition: trigger
+            id: alarmo_lock_state
+        sequence:
+          - choose:
+              # When Alarmo area is disarmed (PIN entered) -> Unlock the door
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state == 'disarmed' }}"
+                sequence:
+                  - if:
+                      - condition: state
+                        entity_id: lock.patio_door_lock
+                        state: locked
+                    then:
+                      - action: lock.unlock
+                        target:
+                          entity_id: lock.patio_door_lock
+              # When Alarmo area is armed -> Lock the door
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state in ['armed_home', 'armed_away'] }}"
+                sequence:
+                  - if:
+                      - condition: state
+                        entity_id: lock.patio_door_lock
+                        state: unlocked
+                    then:
+                      - action: lock.lock
+                        target:
+                          entity_id: lock.patio_door_lock
+
+      # Triggered by physical Door Lock state changes -> sync back to Alarmo area
+      - conditions:
+          - condition: trigger
+            id: door_lock_state
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state == 'locked' and states('alarm_control_panel.patio_lock') != 'armed_home' }}"
+                sequence:
+                  - action: alarm_control_panel.alarm_arm_home
+                    target:
+                      entity_id: alarm_control_panel.patio_lock
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state == 'unlocked' and states('alarm_control_panel.patio_lock') != 'disarmed' }}"
+                sequence:
+                  - action: alarm_control_panel.alarm_disarm
+                    target:
+                      entity_id: alarm_control_panel.patio_lock

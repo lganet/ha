@@ -3,15 +3,10 @@
 ## Unreleased
 
 ### Added
-- Added Alarmo Patio Security & Door Lock Synchronization (`automations/alarmo_patio_security_sync.yaml`, `automation.alarmo_patio_security_lock_synchronization`):
+- Added Alarmo Patio Security Synchronization (`automations/alarmo_patio_security_sync.yaml`, `automation.alarmo_patio_security_lock_synchronization`):
   - Bi-directionally synchronizes security states between Alarmo (`alarm_control_panel.alarmo`) and Eufy Patio Cameras (`alarm_control_panel.gushomebase`).
-  - Automatically unlocks the Patio Door deadbolt (`lock.patio_door_lock`) when Alarmo is disarmed with a validated user PIN.
-  - Leaves the door lock untouched during arming, ensuring locking remains a deliberate one-touch action without requiring a code.
-- Added Alarmo Keypad & Secure Door Controls to NSPanel Pro dashboard (`dashboards/nspanel-office.yaml`):
-  - Upgraded View 0 Patio Security tile to target `alarm_control_panel.alarmo` with native code prompts on disarm.
-  - Replaced unauthenticated lock commands on Patio Lock with authenticated touch controls: tapping when locked routes to the Alarmo security keypad for PIN verification, while tapping when unlocked immediately locks with one touch.
-  - Added conditional on-screen `alarm-panel` touch keypad to View 0 that automatically presents digits 0–9 when the alarm is armed.
-  - Added full `alarm-panel` card to View 5 (`alerts`) for direct security management.
+- Added Alarmo Patio Lock PIN Synchronization (`automations/alarmo_patio_lock_sync.yaml`, `automation.alarmo_patio_lock_pin_synchronization`):
+  - Synchronizes a dedicated `Patio Lock` Alarmo area (`alarm_control_panel.patio_lock`) with the physical Patio Door deadbolt (`lock.patio_door_lock`), enabling secure PIN code verification via popup modal keypad without coupling door unlocking to camera disarming.
 - Added BC Hydro billing cycle synchronization and baseline tracking for smart devices:
   - Added `input_text.energy_billing_cycle_baselines` (`helpers/energy_billing_helpers.yaml`) storing snapshot energy baselines as of the active billing period start date.
   - Added `automation.energy_billing_cycle_rollover` (`automations/energy_billing_cycle_rollover.yaml`) to automatically snapshot meter readings whenever `sensor.bc_hydro_mission_billing_period_start` changes.
@@ -36,6 +31,10 @@
   - Gracefully falls back to cached data with a `(Cached)` label during upstream met.no network dropouts or rate-limiting, preventing "Entity is currently unavailable" errors.
 
 ### Changed
+- Streamlined View 0 on NSPanel Pro dashboard (`dashboards/nspanel-office.yaml`):
+  - Removed the fixed on-screen keypad card (`custom:alarmo-card`) from View 0, relying exclusively on Home Assistant's native pop-up keypad modal on tap.
+  - Restored full vertical visibility to the resilient weather card so all 6 core view elements fit cleanly without scrolling or truncation.
+- Decoupled Patio Camera security from Patio Door Lock in `automations/alarmo_patio_security_sync.yaml`: disarming the camera alarm no longer unlocks the door deadbolt.
 - Overhauled security warning card styling (`dashboards/nspanel-office.yaml`):
   - Upgraded warning banner styling to solid high-visibility gradients (crimson `#B71C1C` to `#D32F2F` for lock alerts; solid amber `#E65100` to `#F57C00` for perimeter doors/gates/windows).
   - Added crisp white icon badges, high-contrast bold white typography, and luminous alert drop-shadows so critical alerts command immediate attention even when the main lighting card is fully lit in yellow.
