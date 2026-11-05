@@ -3,6 +3,13 @@
 ## Unreleased
 
 ### Added
+- Added BC Hydro billing cycle synchronization and baseline tracking for smart devices:
+  - Added `input_text.energy_billing_cycle_baselines` (`helpers/energy_billing_helpers.yaml`) storing snapshot energy baselines as of the active billing period start date.
+  - Added `automation.energy_billing_cycle_rollover` (`automations/energy_billing_cycle_rollover.yaml`) to automatically snapshot meter readings whenever `sensor.bc_hydro_mission_billing_period_start` changes.
+  - Updated NSPanel Pro Energy view (`dashboards/nspanel-office.yaml`) to display the active billing period start date (`Since Oct 21`), and calculate cycle-to-date kWh and dollar cost for all 12 monitored plugs and relays by subtracting cycle baselines.
+- Added presence-based NSPanel Pro screen power automation (`automations/nspanel_screen_presence.yaml`):
+  - Automatically wakes the NSPanel Pro screen upon entering the office (`binary_sensor.office_presence_fp300` -> `on`).
+  - Schedules screen turn-off only when the office is vacant for 2 consecutive minutes (`binary_sensor.office_presence_fp300` -> `off` for 2m) and no security warnings are active (`binary_sensor.active_security_warnings` -> `off`).
 - Added `Homelab` view (`dashboards/nspanel-office.yaml`, path: `homelab`, icon: `mdi:server-network`):
   - Kitchen Closet Thermal Cooling Watchdog: displays YoLink closet ambient temperature, fan power draw with live calculated speed (Speed 1–4), and Proxmox PVE CPU/NVMe temperatures.
   - Proxmox Virtual Environment (PVE): node status, CPU usage %, memory %, disk usage %, and uptime.
@@ -25,6 +32,7 @@
   - Added crisp white icon badges, high-contrast bold white typography, and luminous alert drop-shadows so critical alerts command immediate attention even when the main lighting card is fully lit in yellow.
 
 ### Fixed
+- Fixed NSPanel Pro premature screen turn-off on security warning resolution (`automations/nspanel_security_warning_alert.yaml`): removed unconditional `switch.turn_off` from warning cleared action, keeping screen awake while the user is actively present in the office.
 - Fixed NSPanel Pro beeping on FP300 presence detection: deployed the `sound` conditional check to live Home Assistant script storage (`script.den_all_lights_on`, `script.den_all_lights_off`, `script.office_activate_night_preset`), ensuring audible feedback only triggers on physical panel touch (`sound: true`) and not on automated presence triggers.
 
 ## 0.11.0 - 2026-11-04

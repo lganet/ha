@@ -1813,793 +1813,863 @@ views:
     theme: ios-dark-mode
     max_columns: 1
     badges:
-      - type: entity
-        entity: sensor.office_presence_fp300_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.office_presence_fp300_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.den_light_level
-        name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.office_air_purifier_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.den_pm2_5_level
-        name: PM2.5
-        show_name: true
-        show_state: true
-        show_icon: true
-
+    - type: entity
+      entity: sensor.office_presence_fp300_temperature
+      name: Temp
+      show_name: true
+      show_state: true
+      show_icon: true
+    - type: entity
+      entity: sensor.office_presence_fp300_humidity
+      name: Humidity
+      show_name: true
+      show_state: true
+      show_icon: true
+    - type: entity
+      entity: sensor.den_light_level
+      name: Light
+      show_name: true
+      show_state: true
+      show_icon: true
+    - type: entity
+      entity: sensor.office_air_purifier_air_quality
+      name: Air
+      show_name: true
+      show_state: true
+      show_icon: true
+    - type: entity
+      entity: sensor.den_pm2_5_level
+      name: PM2.5
+      show_name: true
+      show_state: true
+      show_icon: true
     sections:
+    - type: grid
+      cards:
+      - type: heading
+        heading: Power & Grid Overview
+        heading_style: subtitle
+        icon: mdi:flash
+      - type: custom:button-card
+        name: Total Measured Power
+        icon: mdi:lightning-bolt
+        show_name: true
+        show_state: true
+        state_display: |-
+          [[[
+            var plugs = [
+              states['sensor.homelab_plug_power'],
+              states['sensor.den_pc_plug_power'],
+              states['sensor.den_fan_light_power'],
+              states['sensor.freezer_plug_power'],
+              states['sensor.kitchen_refrigerator_power'],
+              states['sensor.fan_opnsense_plug_power'],
+              states['sensor.tv_gaming_plug_power'],
+              states['sensor.living_room_samsung_oled_power'],
+              states['sensor.living_room_samsung_cu7700_43_power'],
+              states['sensor.air_purifier_plug_power'],
+              states['sensor.bedroom_bed_plug_power'],
+              states['sensor.main_bathroom_fan_power'],
+              states['sensor.light_patio_left_power']
+            ];
+            var sum = 0;
+            plugs.forEach(function(s) {
+              if (s && s.state && !isNaN(parseFloat(s.state))) {
+                sum += parseFloat(s.state);
+              }
+            });
+            return Math.round(sum) + ' W';
+          ]]]
+        tap_action:
+          action: more-info
+        styles:
+          card:
+          - min-height: 70px
+          - padding: 12px 16px
+          - border-radius: var(--ha-card-border-radius, 14px)
+          - background: linear-gradient(135deg, rgba(255, 179, 0, 0.18) 0%, rgba(255,
+              111, 0, 0.08) 100%)
+          - border: 1.5px solid rgba(255, 179, 0, 0.4)
+          - box-shadow: 0 0 14px rgba(255, 179, 0, 0.15)
+          grid:
+          - grid-template-areas: '"i n" "i s"'
+          - grid-template-columns: 44px 1fr
+          - grid-template-rows: auto auto
+          - align-items: center
+          icon:
+          - width: 28px
+          - height: 28px
+          - color: "#FFB300"
+          - background-color: rgba(255, 179, 0, 0.2)
+          - border-radius: 10px
+          - padding: 6px
+          name:
+          - font-size: 13px
+          - font-weight: 600
+          - justify-self: start
+          - color: var(--primary-text-color)
+          state:
+          - font-size: 20px
+          - font-weight: 700
+          - justify-self: start
+          - color: "#FFD54F"
       - type: grid
+        columns: 2
+        square: false
         cards:
-          # --- Section 1: Live Grid & BC Hydro Billing ---
-          - type: heading
-            heading: Power & Grid Overview
-            heading_style: subtitle
-            icon: mdi:flash
-
-          - type: custom:button-card
-            name: Total Measured Power
-            icon: mdi:lightning-bolt
-            show_name: true
-            show_state: true
-            state_display: >-
-              [[[
-                var plugs = [
-                  states['sensor.homelab_plug_power'],
-                  states['sensor.den_pc_plug_power'],
-                  states['sensor.den_fan_light_power'],
-                  states['sensor.freezer_plug_power'],
-                  states['sensor.kitchen_refrigerator_power'],
-                  states['sensor.fan_opnsense_plug_power'],
-                  states['sensor.tv_gaming_plug_power'],
-                  states['sensor.living_room_samsung_oled_power'],
-                  states['sensor.living_room_samsung_cu7700_43_power'],
-                  states['sensor.air_purifier_plug_power'],
-                  states['sensor.bedroom_bed_plug_power'],
-                  states['sensor.main_bathroom_fan_power'],
-                  states['sensor.light_patio_left_power']
-                ];
-                var sum = 0;
-                plugs.forEach(function(s) {
-                  if (s && s.state && !isNaN(parseFloat(s.state))) {
-                    sum += parseFloat(s.state);
-                  }
-                });
-                return Math.round(sum) + ' W';
-              ]]]
-            tap_action:
-              action: more-info
-            styles:
-              card:
-                - min-height: 70px
-                - padding: 12px 16px
-                - border-radius: var(--ha-card-border-radius, 14px)
-                - background: "linear-gradient(135deg, rgba(255, 179, 0, 0.18) 0%, rgba(255, 111, 0, 0.08) 100%)"
-                - border: "1.5px solid rgba(255, 179, 0, 0.4)"
-                - box-shadow: "0 0 14px rgba(255, 179, 0, 0.15)"
-              grid:
-                - grid-template-areas: '"i n" "i s"'
-                - grid-template-columns: 44px 1fr
-                - grid-template-rows: auto auto
-                - align-items: center
-              icon:
-                - width: 28px
-                - height: 28px
-                - color: "#FFB300"
-                - background-color: "rgba(255, 179, 0, 0.2)"
-                - border-radius: 10px
-                - padding: 6px
-              name:
-                - font-size: 13px
-                - font-weight: 600
-                - justify-self: start
-                - color: "var(--primary-text-color)"
-              state:
-                - font-size: 20px
-                - font-weight: 700
-                - justify-self: start
-                - color: "#FFD54F"
-
-          # --- BC Hydro Live Meter Cards ---
-          - type: grid
-            columns: 2
-            square: false
-            cards:
-              - type: custom:button-card
-                entity: sensor.bc_hydro_mission_cost_to_date
-                name: BC Hydro To Date
-                icon: mdi:transmission-tower
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var cost = states['sensor.bc_hydro_mission_cost_to_date'] ? states['sensor.bc_hydro_mission_cost_to_date'].state : '0';
-                    var kwh = states['sensor.bc_hydro_mission_consumption_to_date'] ? states['sensor.bc_hydro_mission_consumption_to_date'].state : '0';
-                    return `$${cost} • ${kwh} kWh`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(76, 175, 80, 0.3)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#4CAF50"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: "#81C784"
-
-              - type: custom:button-card
-                entity: sensor.bc_hydro_mission_yesterday_cost
-                name: Yesterday & Rate
-                icon: mdi:calendar-clock
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var y_cost = states['sensor.bc_hydro_mission_yesterday_cost'] ? states['sensor.bc_hydro_mission_yesterday_cost'].state : '0';
-                    var y_kwh = states['sensor.bc_hydro_mission_yesterday_consumption'] ? states['sensor.bc_hydro_mission_yesterday_consumption'].state : '0';
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 13.1;
-                    if (c && k && parseFloat(k.state) > 0) {
-                      rate = ((parseFloat(c.state) / parseFloat(k.state)) * 100).toFixed(1);
-                    }
-                    return `$${y_cost} • ${rate}¢/kWh`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(33, 150, 243, 0.3)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#2196F3"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: "#64B5F6"
-
-          # --- Section 2: Computing & Homelab Plugs ---
-          - type: heading
-            heading: Computing & Homelab
-            heading_style: subtitle
-            icon: mdi:desktop-tower
-
-          - type: grid
-            columns: 2
-            square: false
-            cards:
-              - type: custom:button-card
-                entity: sensor.homelab_plug_power
-                name: Homelab Plug
-                icon: mdi:server
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.homelab_plug_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#FFB300"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.den_pc_plug_power
-                name: Office PC Plug
-                icon: mdi:laptop
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.den_pc_plug_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#FFB300"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.fan_opnsense_plug_power
-                name: Closet Fan Plug
-                icon: mdi:fan
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.fan_opnsense_plug_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#FFB300"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.tv_gaming_plug_power
-                name: TV Gaming Plug
-                icon: mdi:gamepad-variant
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.tv_gaming_plug_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#FFB300"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-          # --- Section 3: Kitchen & Appliances ---
-          - type: heading
-            heading: Kitchen & Appliances
-            heading_style: subtitle
-            icon: mdi:fridge
-
-          - type: grid
-            columns: 2
-            square: false
-            cards:
-              - type: custom:button-card
-                entity: sensor.freezer_plug_power
-                name: Freezer Plug
-                icon: mdi:snowflake
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.freezer_plug_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#26C6DA"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.kitchen_refrigerator_power
-                name: Refrigerator
-                icon: mdi:fridge-outline
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.kitchen_refrigerator_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(0)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#26C6DA"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.air_purifier_plug_power
-                name: Air Purifier Plug
-                icon: mdi:air-purifier
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.air_purifier_plug_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#26C6DA"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.bedroom_bed_plug_power
-                name: Bedside Plug
-                icon: mdi:bed
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.bedroom_bed_plug_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#26C6DA"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-          # --- Section 4: Switches & Smart Relays ---
-          - type: heading
-            heading: Switches & Smart Relays
-            heading_style: subtitle
-            icon: mdi:toggle-switch
-
-          - type: grid
-            columns: 2
-            square: false
-            cards:
-              - type: custom:button-card
-                entity: sensor.den_fan_light_power
-                name: Office Fan Relay
-                icon: mdi:lightbulb
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.den_fan_light_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#AB47BC"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.light_patio_left_power
-                name: Patio Light Relay
-                icon: mdi:outdoor-lamp
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.light_patio_left_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#AB47BC"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.main_bathroom_fan_power
-                name: Bathroom Fan
-                icon: mdi:fan
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.main_bathroom_fan_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#AB47BC"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
-              - type: custom:button-card
-                entity: sensor.living_room_samsung_cu7700_43_power
-                name: Living Room TV
-                icon: mdi:television
-                show_name: true
-                show_state: true
-                state_display: >-
-                  [[[
-                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
-                    var kwh_state = states['sensor.living_room_samsung_cu7700_43_energy'];
-                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
-                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
-                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
-                    var rate = 0.1312;
-                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
-                    var cost = (kwh * rate).toFixed(2);
-                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
-                  ]]]
-                tap_action:
-                  action: more-info
-                styles:
-                  card:
-                    - min-height: 58px
-                    - padding: 8px 10px
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: rgba(255, 255, 255, 0.05)
-                    - border: 1px solid rgba(255, 255, 255, 0.1)
-                  grid:
-                    - grid-template-areas: '"i n" "i s"'
-                    - grid-template-columns: 32px 1fr
-                    - grid-template-rows: 1fr 1fr
-                    - align-items: center
-                  icon:
-                    - width: 22px
-                    - height: 22px
-                    - color: "#AB47BC"
-                  name:
-                    - font-size: 13px
-                    - font-weight: 600
-                    - justify-self: start
-                    - color: var(--primary-text-color)
-                  state:
-                    - font-size: 11px
-                    - font-weight: 500
-                    - justify-self: start
-                    - color: var(--secondary-text-color)
-
+        - type: custom:button-card
+          entity: sensor.bc_hydro_mission_cost_to_date
+          name: |-
+            [[[
+              var s = states['sensor.bc_hydro_mission_billing_period_start'];
+              var d = (s && s.state && s.state !== 'unknown') ? new Date(s.state) : new Date('2026-10-21');
+              var m = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+              return `BC Hydro (Since ${m})`;
+            ]]]
+          icon: mdi:transmission-tower
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var cost = states['sensor.bc_hydro_mission_cost_to_date'] ? states['sensor.bc_hydro_mission_cost_to_date'].state : '0';
+              var kwh = states['sensor.bc_hydro_mission_consumption_to_date'] ? states['sensor.bc_hydro_mission_consumption_to_date'].state : '0';
+              return `$${cost} • ${kwh} kWh`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(76, 175, 80, 0.3)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#4CAF50"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: "#81C784"
+        - type: custom:button-card
+          entity: sensor.bc_hydro_mission_yesterday_cost
+          name: |-
+            [[[
+              var days = states['sensor.bc_hydro_mission_days_in_billing_period'] ? states['sensor.bc_hydro_mission_days_in_billing_period'].state : '58';
+              var prog = states['sensor.bc_hydro_mission_billing_period_progress'] ? states['sensor.bc_hydro_mission_billing_period_progress'].state : '21';
+              return `Cycle: ${prog}% of ${days}d`;
+            ]]]
+          icon: mdi:calendar-clock
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var y_cost = states['sensor.bc_hydro_mission_yesterday_cost'] ? states['sensor.bc_hydro_mission_yesterday_cost'].state : '0';
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 13.1;
+              if (c && k && parseFloat(k.state) > 0) {
+                rate = ((parseFloat(c.state) / parseFloat(k.state)) * 100).toFixed(1);
+              }
+              return `Yest $${y_cost} • ${rate}¢/kWh`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(33, 150, 243, 0.3)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#2196F3"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: "#64B5F6"
+      - type: heading
+        heading: Computing & Homelab (Period)
+        heading_style: subtitle
+        icon: mdi:desktop-tower
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+        - type: custom:button-card
+          entity: sensor.homelab_plug_power
+          name: Homelab Plug
+          icon: mdi:server
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.homelab_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.93;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['homelab'] != null) base = parseFloat(b['homelab']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#FFB300"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.den_pc_plug_power
+          name: Office PC Plug
+          icon: mdi:laptop
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.den_pc_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 21.93;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['den_pc'] != null) base = parseFloat(b['den_pc']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#FFB300"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.fan_opnsense_plug_power
+          name: Closet Fan Plug
+          icon: mdi:fan
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.fan_opnsense_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.01;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['fan_opnsense'] != null) base = parseFloat(b['fan_opnsense']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#FFB300"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.tv_gaming_plug_power
+          name: TV Gaming Plug
+          icon: mdi:gamepad-variant
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.tv_gaming_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 43.18;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['tv_gaming'] != null) base = parseFloat(b['tv_gaming']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#FFB300"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+      - type: heading
+        heading: Kitchen & Appliances (Period)
+        heading_style: subtitle
+        icon: mdi:fridge
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+        - type: custom:button-card
+          entity: sensor.freezer_plug_power
+          name: Freezer Plug
+          icon: mdi:snowflake
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.freezer_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.1;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['freezer'] != null) base = parseFloat(b['freezer']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#26C6DA"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.kitchen_refrigerator_power
+          name: Refrigerator
+          icon: mdi:fridge-outline
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.kitchen_refrigerator_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 1191.47;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['refrigerator'] != null) base = parseFloat(b['refrigerator']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#26C6DA"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.air_purifier_plug_power
+          name: Air Purifier Plug
+          icon: mdi:air-purifier
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.air_purifier_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 9.71;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['air_purifier'] != null) base = parseFloat(b['air_purifier']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#26C6DA"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.bedroom_bed_plug_power
+          name: Bedside Plug
+          icon: mdi:bed
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.bedroom_bed_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.0;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['bedroom_bed'] != null) base = parseFloat(b['bedroom_bed']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#26C6DA"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+      - type: heading
+        heading: Switches & Smart Relays (Period)
+        heading_style: subtitle
+        icon: mdi:toggle-switch
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+        - type: custom:button-card
+          entity: sensor.den_fan_light_power
+          name: Office Fan Relay
+          icon: mdi:lightbulb
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.den_fan_light_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 4.1;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['den_fan_light'] != null) base = parseFloat(b['den_fan_light']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#AB47BC"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.light_patio_left_power
+          name: Patio Light Relay
+          icon: mdi:outdoor-lamp
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.light_patio_left_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.0;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['patio_light'] != null) base = parseFloat(b['patio_light']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#AB47BC"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.main_bathroom_fan_power
+          name: Bathroom Fan
+          icon: mdi:fan
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.main_bathroom_fan_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 1.24;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['bathroom_fan'] != null) base = parseFloat(b['bathroom_fan']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#AB47BC"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.living_room_samsung_cu7700_43_power
+          name: Living Room TV
+          icon: mdi:television
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.living_room_samsung_cu7700_43_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.0;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['living_room_tv'] != null) base = parseFloat(b['living_room_tv']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#AB47BC"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)

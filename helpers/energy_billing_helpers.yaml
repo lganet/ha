@@ -1,0 +1,8 @@
+# Version-controlled reference for energy billing helpers
+input_text:
+  energy_billing_cycle_baselines:
+    name: Energy Billing Cycle Baselines
+    icon: mdi:calculator
+    max: 255
+    mode: text
+    initial: '{"refrigerator":1191.47,"tv_gaming":43.18,"air_purifier":9.71,"den_fan_light":4.10,"homelab":0.93,"freezer":0.10,"fan_opnsense":0.01,"bathroom_fan":1.24,"den_pc":21.93,"patio_light":0.0,"bedroom_bed":0.0}'

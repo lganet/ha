@@ -1,0 +1,28 @@
+id: "1793854295162"
+alias: Energy Billing Cycle Rollover
+description: Automatically updates energy billing baseline readings whenever the BC Hydro billing period start date changes to begin tracking the new cycle from 0 kWh.
+mode: single
+triggers:
+  - trigger: state
+    entity_id: sensor.bc_hydro_mission_billing_period_start
+actions:
+  - action: input_text.set_value
+    target:
+      entity_id: input_text.energy_billing_cycle_baselines
+    data:
+      value: >-
+        {{
+          {
+            "refrigerator": states('sensor.kitchen_refrigerator_energy') | float(0),
+            "tv_gaming": states('sensor.tv_gaming_plug_energy') | float(0),
+            "air_purifier": states('sensor.air_purifier_plug_energy') | float(0),
+            "den_fan_light": states('sensor.den_fan_light_energy') | float(0),
+            "homelab": states('sensor.homelab_plug_energy') | float(0),
+            "freezer": states('sensor.freezer_plug_energy') | float(0),
+            "fan_opnsense": states('sensor.fan_opnsense_plug_energy') | float(0),
+            "bathroom_fan": states('sensor.main_bathroom_fan_energy') | float(0),
+            "den_pc": states('sensor.den_pc_plug_energy') | float(0),
+            "patio_light": states('sensor.light_patio_left_energy') | float(0),
+            "bedroom_bed": states('sensor.bedroom_bed_plug_energy') | float(0)
+          } | to_json
+        }}

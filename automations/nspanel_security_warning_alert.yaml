@@ -39,6 +39,3 @@ actions:
           - action: script.nspanel_audio_feedback
             data:
               tone: stop
-          - action: switch.turn_off
-            target:
-              entity_id: switch.zigbee2cube_1002a32fc7_screen_state
