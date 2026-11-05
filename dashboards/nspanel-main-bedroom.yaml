@@ -11,32 +11,8 @@ views:
     theme: ios-dark-mode
     badges:
       - type: entity
-        entity: sensor.main_bedroom_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
         entity: sensor.zigbee2cube_1002c15147_illuminance
         name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_pm2_5
-        name: PM2.5
         show_name: true
         show_state: true
         show_icon: true
@@ -676,32 +652,8 @@ views:
     theme: ios-dark-mode
     badges:
       - type: entity
-        entity: sensor.main_bedroom_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
         entity: sensor.zigbee2cube_1002c15147_illuminance
         name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_pm2_5
-        name: PM2.5
         show_name: true
         show_state: true
         show_icon: true
@@ -825,32 +777,8 @@ views:
     theme: ios-dark-mode
     badges:
       - type: entity
-        entity: sensor.main_bedroom_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
         entity: sensor.zigbee2cube_1002c15147_illuminance
         name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_pm2_5
-        name: PM2.5
         show_name: true
         show_state: true
         show_icon: true
@@ -890,32 +818,8 @@ views:
     theme: ios-dark-mode
     badges:
       - type: entity
-        entity: sensor.main_bedroom_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
         entity: sensor.zigbee2cube_1002c15147_illuminance
         name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_pm2_5
-        name: PM2.5
         show_name: true
         show_state: true
         show_icon: true
@@ -1029,32 +933,8 @@ views:
     theme: ios-dark-mode
     badges:
       - type: entity
-        entity: sensor.main_bedroom_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
         entity: sensor.zigbee2cube_1002c15147_illuminance
         name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_pm2_5
-        name: PM2.5
         show_name: true
         show_state: true
         show_icon: true
@@ -1176,32 +1056,8 @@ views:
     max_columns: 1
     badges:
       - type: entity
-        entity: sensor.main_bedroom_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
         entity: sensor.zigbee2cube_1002c15147_illuminance
         name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_pm2_5
-        name: PM2.5
         show_name: true
         show_state: true
         show_icon: true
@@ -1315,32 +1171,8 @@ views:
     max_columns: 1
     badges:
       - type: entity
-        entity: sensor.main_bedroom_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
         entity: sensor.zigbee2cube_1002c15147_illuminance
         name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_pm2_5
-        name: PM2.5
         show_name: true
         show_state: true
         show_icon: true
@@ -1527,32 +1359,8 @@ views:
     max_columns: 1
     badges:
       - type: entity
-        entity: sensor.main_bedroom_temperature
-        name: Temp
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_humidity
-        name: Humidity
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
         entity: sensor.zigbee2cube_1002c15147_illuminance
         name: Light
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_air_quality
-        name: Air
-        show_name: true
-        show_state: true
-        show_icon: true
-      - type: entity
-        entity: sensor.main_bedroom_pm2_5
-        name: PM2.5
         show_name: true
         show_state: true
         show_icon: true
