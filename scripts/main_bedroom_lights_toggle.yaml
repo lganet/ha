@@ -1,13 +1,18 @@
 alias: Main Bedroom Lights Toggle
-description: Toggles Main Bedroom lights contextually. If any bedroom lights are on, turns them all off. If all are off, turns on the primary bedroom fan light, preserving state memory. Leaves Patio Left light unaffected.
+description: Toggles Main Bedroom lights contextually. If any bedroom lights are on, turns them all off. If all are off, turns on the primary bedroom fan light (or ceiling light 1 if fan is unavailable). Leaves Patio Left light unaffected.
 icon: mdi:theme-light-dark
 mode: single
 sequence:
   - choose:
       - conditions:
-          - condition: numeric_state
-            entity_id: sensor.main_bedroom_lights_on
-            above: 0
+          - condition: template
+            value_template: >-
+              {{ is_state('light.main_bedroom_ceiling_fan_light', 'on')
+                 or is_state('light.smart_fan_backlight_2', 'on')
+                 or is_state('light.smart_fan_nightlight_2', 'on')
+                 or is_state('light.main_bedroom_light_1', 'on')
+                 or is_state('light.main_bedroom_light_2', 'on')
+                 or is_state('light.main_bedroom_closet_light', 'on') }}
         sequence:
           - action: light.turn_off
             target:
@@ -19,6 +24,15 @@ sequence:
                 - light.main_bedroom_light_2
                 - light.main_bedroom_closet_light
     default:
-      - action: light.turn_on
-        target:
-          entity_id: light.main_bedroom_ceiling_fan_light
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ states('light.main_bedroom_ceiling_fan_light') not in ['unavailable', 'unknown'] }}"
+            sequence:
+              - action: light.turn_on
+                target:
+                  entity_id: light.main_bedroom_ceiling_fan_light
+        default:
+          - action: light.turn_on
+            target:
+              entity_id: light.main_bedroom_light_1
