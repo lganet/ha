@@ -680,12 +680,11 @@ views:
                 entity: alarm_control_panel.alarmo
                 state_not: disarmed
             card:
-              type: alarm-panel
+              type: custom:alarmo-card
               entity: alarm_control_panel.alarmo
               name: Patio Security Keypad
-              states:
-                - arm_home
-                - arm_away
+              keep_keypad_visible: true
+              button_scale: 1.1
 
           # --- Resilient Cached Weather Card (Never breaks or disappears) ---
           - type: custom:button-card
@@ -1576,12 +1575,10 @@ views:
             heading_style: subtitle
             icon: mdi:shield-key
 
-          - type: alarm-panel
+          - type: custom:alarmo-card
             entity: alarm_control_panel.alarmo
             name: Patio Security
-            states:
-              - arm_home
-              - arm_away
+            keep_keypad_visible: true
 
           # --- Section 1: Security Warning Delays ---
           - type: heading
