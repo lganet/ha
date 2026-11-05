@@ -136,6 +136,21 @@
 - Updated `scripts/den_all_lights_on.yaml` and `scripts/den_all_lights_off.yaml` to trigger audio chime feedback and activate day presets.
 - Added tactile haptic vibration feedback (`haptic: selection`) across all touch tiles and buttons.
 
+## 0.8.0 - 2026-10-31
+
+### Added
+- Created `automation.closet_homelab_fan_thermal_watchdog` (`automations/fan_thermal_cooling_watchdog.yaml`) providing automated 4-speed closed-loop thermal cooling and blackout recovery for the OPNsense/Proxmox homelab equipment.
+- Implemented self-healing closed-loop power watchdog using `sensor.fan_opnsense_plug_power`:
+  - Triggers on plug power-on, Home Assistant startup, 2-minute periodic watchdog, temperature changes, and Proxmox CPU/node status changes.
+  - Closed-loop standby verification: if fan power is $< 3.0\text{ W}$ while cooling is needed, pulses IR Turn On (`switch.kitchen_ir_remote_switch_1`), waits 2 seconds, and automatically applies the appropriate thermal target speed.
+  - Speed change pre-check: verifies fan is actively running ($> 10\text{ W}$) before sending Speed Up or Speed Down IR pulses, automatically recovering from electronic standby if trapped below $3.0\text{ W}$.
+  - Handled stateless IR power transmitter quirk: treats `switch.kitchen_ir_remote_switch_1` as a momentary push-button (`turn_on` -> 1s delay -> `turn_off`) to prevent HA from dropping subsequent power pulses as no-ops.
+  - Handled stale boot power metric quirk: on HA reboot or plug power restoration, waits 15 seconds for Zigbee telemetry and guarantees the IR power pulse is transmitted regardless of cached pre-outage wattage.
+- Integrated Third Reality Zigbee smart plug (`switch.fan_opnsense_plug`) with hardware `power_on_behavior: on` and real-time power metering feedback (`sensor.fan_opnsense_plug_power`) across 5 discrete operational states (Standby: 0.8W, Speed 1: 14W, Speed 2: 19.5W, Speed 3: 24.8W, Speed 4: 28.2W).
+- Integrated Zigbee IR blaster (`switch.kitchen_ir_remote_switch_1`, `switch.ir_remoto_switch2`, `switch.ir_remoto_switch3`) for discrete power control and stepped speed pulse adjustments.
+- Built-in fail-safe protection: forces cooling fan ON whenever Proxmox state is uncertain or thermal sensors (YoLink climate sensor / battery) drop offline.
+- Documented implementation plan and live power benchmarks in `doc/2026-10-31-power-restored-fan-recovery-plan.md`.
+
 ## 0.7.0 - 2026-10-26
 
 ### Added
