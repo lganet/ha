@@ -595,14 +595,14 @@ views:
                   - type: fan-preset-modes
                     style: dropdown
 
-          # --- Security & Access Row (Patio Cameras + Door Lock) ---
+          # --- Security & Access Row (Patio Security + Door Lock) ---
           - type: grid
             columns: 2
             square: false
             cards:
               - type: tile
-                entity: alarm_control_panel.gushomebase
-                name: Patio Cameras
+                entity: alarm_control_panel.alarmo
+                name: Patio Security
                 icon: mdi:shield-home
                 tap_action:
                   action: more-info
@@ -614,15 +614,78 @@ views:
                       - armed_home
                       - armed_away
 
-              - type: tile
+              - type: custom:button-card
                 entity: lock.patio_door_lock
                 name: Patio Lock
-                icon: mdi:lock
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    return entity.state === 'locked' ? 'Locked (PIN Req)' : 'Unlocked (Tap Lock)';
+                  ]]]
+                icon: >-
+                  [[[
+                    return entity.state === 'locked' ? 'mdi:lock' : 'mdi:lock-open-variant';
+                  ]]]
                 tap_action:
-                  action: toggle
+                  action: >-
+                    [[[
+                      return entity.state === 'unlocked' ? 'call-service' : 'more-info';
+                    ]]]
+                  service: lock.lock
+                  target:
+                    entity_id: lock.patio_door_lock
+                  entity: alarm_control_panel.alarmo
                   haptic: selection
-                features:
-                  - type: lock-commands
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: >-
+                        [[[
+                          return entity.state === 'locked' ? '1px solid rgba(244, 67, 54, 0.3)' : '1px solid rgba(76, 175, 80, 0.3)';
+                        ]]]
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: >-
+                        [[[
+                          return entity.state === 'locked' ? '#EF5350' : '#4CAF50';
+                        ]]]
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: >-
+                        [[[
+                          return entity.state === 'locked' ? '#EF5350' : '#81C784';
+                        ]]]
+
+          # --- Conditional Alarmo Keypad (Visible on Main View when Armed) ---
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: alarm_control_panel.alarmo
+                state_not: disarmed
+            card:
+              type: alarm-panel
+              entity: alarm_control_panel.alarmo
+              name: Patio Security Keypad
+              states:
+                - arm_home
+                - arm_away
 
           # --- Resilient Cached Weather Card (Never breaks or disappears) ---
           - type: custom:button-card
@@ -1507,6 +1570,19 @@ views:
     sections:
       - type: grid
         cards:
+          # --- Section 0: Patio Security & Alarm Panel ---
+          - type: heading
+            heading: Patio Security & Alarm
+            heading_style: subtitle
+            icon: mdi:shield-key
+
+          - type: alarm-panel
+            entity: alarm_control_panel.alarmo
+            name: Patio Security
+            states:
+              - arm_home
+              - arm_away
+
           # --- Section 1: Security Warning Delays ---
           - type: heading
             heading: Security Warning Delays

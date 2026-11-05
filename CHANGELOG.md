@@ -3,6 +3,15 @@
 ## Unreleased
 
 ### Added
+- Added Alarmo Patio Security & Door Lock Synchronization (`automations/alarmo_patio_security_sync.yaml`, `automation.alarmo_patio_security_lock_synchronization`):
+  - Bi-directionally synchronizes security states between Alarmo (`alarm_control_panel.alarmo`) and Eufy Patio Cameras (`alarm_control_panel.gushomebase`).
+  - Automatically unlocks the Patio Door deadbolt (`lock.patio_door_lock`) when Alarmo is disarmed with a validated user PIN.
+  - Leaves the door lock untouched during arming, ensuring locking remains a deliberate one-touch action without requiring a code.
+- Added Alarmo Keypad & Secure Door Controls to NSPanel Pro dashboard (`dashboards/nspanel-office.yaml`):
+  - Upgraded View 0 Patio Security tile to target `alarm_control_panel.alarmo` with native code prompts on disarm.
+  - Replaced unauthenticated lock commands on Patio Lock with authenticated touch controls: tapping when locked routes to the Alarmo security keypad for PIN verification, while tapping when unlocked immediately locks with one touch.
+  - Added conditional on-screen `alarm-panel` touch keypad to View 0 that automatically presents digits 0–9 when the alarm is armed.
+  - Added full `alarm-panel` card to View 5 (`alerts`) for direct security management.
 - Added BC Hydro billing cycle synchronization and baseline tracking for smart devices:
   - Added `input_text.energy_billing_cycle_baselines` (`helpers/energy_billing_helpers.yaml`) storing snapshot energy baselines as of the active billing period start date.
   - Added `automation.energy_billing_cycle_rollover` (`automations/energy_billing_cycle_rollover.yaml`) to automatically snapshot meter readings whenever `sensor.bc_hydro_mission_billing_period_start` changes.
