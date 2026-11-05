@@ -27,20 +27,23 @@
       unique_id: den_lights_on
       unit_of_measurement: "on"
       state: >-
-        {% set den_lights = label_entities('den_controlled_lights') %}
-        {% set dfl_on = 1 if (den_lights | select('match', 'switch.office_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
-        {% set other_on = den_lights | reject('match', 'switch.office_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
-        {{ dfl_on + other_on }}
+        {% set dfl_on = 1 if (is_state('light.office_floor_lamp_corner', 'on') or is_state('switch.office_floor_lamp_side_light', 'on') or is_state('switch.office_floor_lamp_bottom_light', 'on') or is_state('switch.office_floor_lamp_ripple_light', 'on')) else 0 %}
+        {% set fan_on = 1 if (is_state('light.den_fan_light', 'on') or is_state('light.den_night_light', 'on') or is_state('light.office_ceiling_fan_backlight', 'on')) else 0 %}
+        {% set ofl_on = 1 if is_state('light.office_floor_lamp', 'on') else 0 %}
+        {% set leds_on = 1 if is_state('light.office_desk_leds', 'on') else 0 %}
+        {% set hum_on = 1 if is_state('light.humidifier_night_light', 'on') else 0 %}
+        {{ dfl_on + fan_on + ofl_on + leds_on + hum_on }}
 
     - name: Den Lights Off
       unique_id: den_lights_off
       unit_of_measurement: "off"
       state: >-
-        {% set den_lights = label_entities('den_controlled_lights') %}
-        {% set dfl_on = 1 if (den_lights | select('match', 'switch.office_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count > 0) else 0 %}
-        {% set other_on = den_lights | reject('match', 'switch.office_floor_lamp_') | expand | selectattr('state', 'eq', 'on') | list | count %}
-        {% set total_fixtures = (1 if (den_lights | select('match', 'switch.office_floor_lamp_') | list | count > 0) else 0) + (den_lights | reject('match', 'switch.office_floor_lamp_') | list | count) %}
-        {{ total_fixtures - (dfl_on + other_on) }}
+        {% set dfl_on = 1 if (is_state('light.office_floor_lamp_corner', 'on') or is_state('switch.office_floor_lamp_side_light', 'on') or is_state('switch.office_floor_lamp_bottom_light', 'on') or is_state('switch.office_floor_lamp_ripple_light', 'on')) else 0 %}
+        {% set fan_on = 1 if (is_state('light.den_fan_light', 'on') or is_state('light.den_night_light', 'on') or is_state('light.office_ceiling_fan_backlight', 'on')) else 0 %}
+        {% set ofl_on = 1 if is_state('light.office_floor_lamp', 'on') else 0 %}
+        {% set leds_on = 1 if is_state('light.office_desk_leds', 'on') else 0 %}
+        {% set hum_on = 1 if is_state('light.humidifier_night_light', 'on') else 0 %}
+        {{ 5 - (dfl_on + fan_on + ofl_on + leds_on + hum_on) }}
 
     - name: Den Presence Status
       unique_id: den_presence_status

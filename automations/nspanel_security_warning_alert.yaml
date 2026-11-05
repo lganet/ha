@@ -1,0 +1,41 @@
+id: nspanel_security_warning_alert
+alias: NSPanel Security Warning Alert
+description: Wakes the NSPanel display and plays a gentle repeating chime when perimeter security warnings are active, stopping immediately when warnings clear.
+mode: restart
+triggers:
+  - trigger: state
+    entity_id: binary_sensor.active_security_warnings
+    to: "on"
+    id: warning_active
+  - trigger: state
+    entity_id: binary_sensor.active_security_warnings
+    to: "off"
+    id: warning_cleared
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: warning_active
+        sequence:
+          - repeat:
+              while:
+                - condition: state
+                  entity_id: binary_sensor.active_security_warnings
+                  state: "on"
+              sequence:
+                - action: switch.turn_on
+                  target:
+                    entity_id: switch.zigbee2cube_1002a32fc7_screen_state
+                - action: script.nspanel_audio_feedback
+                  data:
+                    tone: warning
+                - delay:
+                    seconds: "{{ states('input_number.warning_alert_repeat_interval') | int(30) }}"
+
+      - conditions:
+          - condition: trigger
+            id: warning_cleared
+        sequence:
+          - action: script.nspanel_audio_feedback
+            data:
+              tone: stop

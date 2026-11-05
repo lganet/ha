@@ -1,0 +1,20 @@
+alias: Office Activate Day Preset
+description: Engages the office Day preset scene, restoring task lighting and resetting night ambient mode.
+icon: mdi:white-balance-sunny
+mode: single
+fields:
+  override:
+    description: "Whether to pause presence automation for the rest of the day"
+    default: true
+    selector:
+      boolean: {}
+  sound:
+    description: "Whether to play audio feedback chime on NSPanel"
+    default: false
+    selector:
+      boolean: {}
+sequence:
+  - action: script.den_all_lights_on
+    data:
+      override: "{{ override | default(true) }}"
+      sound: "{{ sound | default(false) }}"

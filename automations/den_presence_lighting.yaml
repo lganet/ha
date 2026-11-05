@@ -47,9 +47,6 @@ actions:
             entity_id: input_boolean.den_presence_override
             state: "off"
         sequence:
-          - action: homeassistant.turn_off
-            target:
-              label_id: den_night_lights
           - action: script.den_all_lights_on
             data:
               override: false
@@ -77,9 +74,9 @@ actions:
                     data:
                       override: false
             default:
-              - action: homeassistant.turn_on
-                target:
-                  label_id: den_night_lights
+              - action: script.office_activate_night_preset
+                data:
+                  override: false
 
       - conditions:
           - condition: trigger
@@ -91,7 +88,4 @@ actions:
             entity_id: input_boolean.den_presence_override
             state: "off"
         sequence:
-          - action: homeassistant.turn_off
-            target:
-              label_id: den_night_lights
           - action: script.den_all_lights_off

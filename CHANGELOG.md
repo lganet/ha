@@ -1,5 +1,141 @@
 # Changelog
 
+## Unreleased
+
+## 0.12.0 - 2026-11-05
+
+### Added
+- Added Alarmo Patio Security Synchronization (`automations/alarmo_patio_security_sync.yaml`, `automation.alarmo_patio_security_lock_synchronization`):
+  - Bi-directionally synchronizes security states between Alarmo (`alarm_control_panel.alarmo`) and Eufy Patio Cameras (`alarm_control_panel.gushomebase`).
+- Added Alarmo Patio Lock PIN Synchronization (`automations/alarmo_patio_lock_sync.yaml`, `automation.alarmo_patio_lock_pin_synchronization`):
+  - Synchronizes a dedicated `Patio Lock` Alarmo area (`alarm_control_panel.patio_lock`) with the physical Patio Door deadbolt (`lock.patio_door_lock`), enabling secure PIN code verification via popup modal keypad without coupling door unlocking to camera disarming.
+- Added BC Hydro billing cycle synchronization and baseline tracking for smart devices:
+  - Added `input_text.energy_billing_cycle_baselines` (`helpers/energy_billing_helpers.yaml`) storing snapshot energy baselines as of the active billing period start date.
+  - Added `automation.energy_billing_cycle_rollover` (`automations/energy_billing_cycle_rollover.yaml`) to automatically snapshot meter readings whenever `sensor.bc_hydro_mission_billing_period_start` changes.
+  - Updated NSPanel Pro Energy view (`dashboards/nspanel-office.yaml`) to display the active billing period start date (`Since Oct 21`), and calculate cycle-to-date kWh and dollar cost for all 12 monitored plugs and relays by subtracting cycle baselines.
+- Added presence-based NSPanel Pro screen power automation (`automations/nspanel_screen_presence.yaml`):
+  - Automatically wakes the NSPanel Pro screen upon entering the office (`binary_sensor.office_presence_fp300` -> `on`).
+  - Schedules screen turn-off only when the office is vacant for 2 consecutive minutes (`binary_sensor.office_presence_fp300` -> `off` for 2m) and no security warnings are active (`binary_sensor.active_security_warnings` -> `off`).
+- Added `Homelab` view (`dashboards/nspanel-office.yaml`, path: `homelab`, icon: `mdi:server-network`):
+  - Kitchen Closet Thermal Cooling Watchdog: displays YoLink closet ambient temperature, fan power draw with live calculated speed (Speed 1–4), and Proxmox PVE CPU/NVMe temperatures.
+  - Proxmox Virtual Environment (PVE): node status, CPU usage %, memory %, disk usage %, and uptime.
+  - VMs & Container Instances: OPNsense firewall (status, CPU, RAM), Docker host (status, RAM), Tailscale mesh VPN (status, CPU, RAM).
+- Added `Energy` view (`dashboards/nspanel-office.yaml`, path: `energy`, icon: `mdi:lightning-bolt-circle`):
+  - Live total real-time measured home load card (summed live Watts across all smart plugs and relays).
+  - BC Hydro live billing overview (`sensor.bc_hydro_mission_cost_to_date` and `sensor.bc_hydro_mission_consumption_to_date`).
+  - Yesterday's consumption and dynamic effective blended rate (`13.1¢/kWh` calculated on the fly).
+  - Real-time electricity cost estimation (`$`) for every individual smart plug and relay based on live BC Hydro billing rates.
+  - Computing & Homelab power meters (Homelab plug, PC plug, Closet fan plug, TV gaming console).
+  - Kitchen & major appliances (Freezer plug, Refrigerator, Air purifier plug, Bedside plug).
+  - Measured smart relays (Bathroom fan, Patio left light, Office fan light, Living room TV).
+- Added resilient cached weather card (`dashboards/nspanel-office.yaml`):
+  - Caches current weather conditions, temperature, humidity, and wind into local storage and memory.
+  - Gracefully falls back to cached data with a `(Cached)` label during upstream met.no network dropouts or rate-limiting, preventing "Entity is currently unavailable" errors.
+
+### Changed
+- Streamlined View 0 on NSPanel Pro dashboard (`dashboards/nspanel-office.yaml`):
+  - Removed the fixed on-screen keypad card (`custom:alarmo-card`) from View 0, relying exclusively on Home Assistant's native pop-up keypad modal on tap.
+  - Restored full vertical visibility to the resilient weather card so all 6 core view elements fit cleanly without scrolling or truncation.
+- Decoupled Patio Camera security from Patio Door Lock in `automations/alarmo_patio_security_sync.yaml`: disarming the camera alarm no longer unlocks the door deadbolt.
+- Overhauled security warning card styling (`dashboards/nspanel-office.yaml`):
+  - Upgraded warning banner styling to solid high-visibility gradients (crimson `#B71C1C` to `#D32F2F` for lock alerts; solid amber `#E65100` to `#F57C00` for perimeter doors/gates/windows).
+  - Added crisp white icon badges, high-contrast bold white typography, and luminous alert drop-shadows so critical alerts command immediate attention even when the main lighting card is fully lit in yellow.
+
+### Fixed
+- Fixed NSPanel Pro premature screen turn-off on security warning resolution (`automations/nspanel_security_warning_alert.yaml`): removed unconditional `switch.turn_off` from warning cleared action, keeping screen awake while the user is actively present in the office.
+- Fixed NSPanel Pro beeping on FP300 presence detection: deployed the `sound` conditional check to live Home Assistant script storage (`script.den_all_lights_on`, `script.den_all_lights_off`, `script.office_activate_night_preset`), ensuring audible feedback only triggers on physical panel touch (`sound: true`) and not on automated presence triggers.
+
+## 0.11.0 - 2026-11-04
+
+### Added
+- Added a dedicated 6th view `Alerts` (`dashboards/nspanel-office.yaml`, path: `alerts`, icon: `mdi:shield-alert-outline`) to NSPanel Pro dashboard:
+  - Sliders for all security warning delay thresholds (patio door unlocked, patio fence open, front door open, patio door open, window open).
+  - Audio and screen alert controls (chime repeat interval slider, screen power toggle).
+  - Live security warning status badge and a one-touch "Test Alert Chime" button.
+- Added input number helpers for user-configurable warning delay thresholds (`helpers/security_warning_helpers.yaml`):
+  - `input_number.warning_patio_door_unlocked_delay` (1–60 min, currently set to 1 min for live testing).
+  - `input_number.warning_patio_fence_open_delay` (1–60 min, default 10 min).
+  - `input_number.warning_front_door_open_delay` (1–60 min, default 10 min).
+  - `input_number.warning_patio_door_open_delay` (1–60 min, default 10 min).
+  - `input_number.warning_window_open_delay` (1–60 min, default 10 min).
+  - `input_number.warning_alert_repeat_interval` (10–120 sec, default 30 sec).
+
+### Changed
+- Converted perimeter security warning binary sensors (`templates/security_warnings.yaml`) from static durations to dynamic helper thresholds.
+- Updated warning alert repeat loop in `automations/nspanel_security_warning_alert.yaml` to read delay dynamically from `input_number.warning_alert_repeat_interval`.
+- Converted dashboard security warning cards (`dashboards/nspanel-office.yaml`) to dynamic `custom:button-card` format, automatically displaying the live configured delay duration (e.g., `Warning: Patio Door Unlocked > 1m`) from the delay helpers.
+- Wrapped the dashboard weather forecast card in a conditional card (`dashboards/nspanel-office.yaml`), automatically hiding it when the upstream weather integration (`weather.forecast_home`) is unavailable or unknown.
+- Redesigned Day Preset and Night Preset buttons in the main lighting card (`dashboards/nspanel-office.yaml`):
+  - Implemented `layout: icon_name` for horizontal pill buttons with icon on the left and label on the right.
+  - Removed duplicate emojis from button labels to eliminate text truncation and clean up visual presentation.
+
+## 0.10.0 - 2026-11-04
+
+### Added
+- Added security warning alert automation (`automations/nspanel_security_warning_alert.yaml`):
+  - Wakes the NSPanel Pro display (`switch.zigbee2cube_1002a32fc7_screen_state`) immediately when perimeter security warnings (`binary_sensor.active_security_warnings`) become active.
+  - Plays a gentle repeating two-tone chime (`doors/doorbell_chime.ogg`) through the NSPanel Pro speaker every 30 seconds to alert occupants without blaring harsh siren alarms.
+  - Halts the sound loop immediately (`button.zigbee2cube_1002a32fc7_speaker_stop`) and turns off screen power once all security warnings are cleared.
+- Added `warning` tone and instant `stop` command to `scripts/nspanel_audio_feedback.yaml`.
+
+### Changed
+- Restricted NSPanel speaker feedback strictly to physical panel touches (`scripts/den_all_lights_on.yaml`, `scripts/den_all_lights_off.yaml`, `scripts/office_activate_day_preset.yaml`, `scripts/office_activate_night_preset.yaml`, `scripts/office_adaptive_lights_toggle.yaml`, `dashboards/nspanel-office.yaml`):
+  - Added a `sound` boolean field (default: `false`) across all lighting scripts.
+  - Configured NSPanel dashboard touch targets to explicitly pass `sound: true`, providing tactile audible feedback exclusively upon physical screen taps.
+  - Automated presence-triggered lighting (FP300 presence detected / cleared / morning transition) defaults to `sound: false`, ensuring room motion remains completely silent.
+
+## 0.9.0 - 2026-11-03
+
+### Added
+- Added multi-tone sound design to NSPanel Pro audio feedback (`scripts/nspanel_audio_feedback.yaml`) with distinct sounds for room lighting actions:
+  - **Day ON**: Bright, crisp electronic chime (`alarms/beep_short.ogg`).
+  - **Day OFF**: Tactile, crisp power down pop (`cartoon/pop.ogg`).
+  - **Night ON**: Smooth, warm acoustic musical strum (`cartoon/instrument_strum.ogg`) for gentle evening transitions.
+  - **Night OFF**: Quiet, smooth underwater whoosh (`water/air_woosh_underwater.ogg`) for peaceful bedtime shutoffs.
+  - **Save Preset**: Mechanical tactile button latch (`office/button_push.ogg`).
+- Integrated dynamic tone routing in `scripts/den_all_lights_off.yaml` to automatically play `night_off` if night mode was active and `day_off` if day mode was active.
+- Added adaptive master lighting toggle script (`scripts/office_adaptive_lights_toggle.yaml`) contextually switching between Day mode (workday 09:00-18:00) and Night mode (evening/off-hours).
+- Added `scripts/office_activate_day_preset.yaml` and `scripts/office_activate_night_preset.yaml` allowing direct preview and activation of Day and Night scenes.
+- Embedded `[ ☀️ Day Preset ]` and `[ 🌙 Night Preset ]` pills directly on the master lights card in `dashboards/nspanel-office.yaml` with active state border glow and instant audio feedback.
+- Added direct mode preview activation buttons (`Activate Day Mode` and `Activate Night Mode`) to the Presets Management section on the Lights panel to prevent daytime fixtures from contaminating night ambient presets.
+
+### Changed
+- Expanded Night Preset snapshotting to cover all office fixtures (`scripts/office_save_night_preset.yaml`, `scripts/office_activate_night_preset.yaml`), allowing any light (such as Desk LEDs or Floor Lamp) to be included in Night Mode when saved rather than strictly hardcoded off.
+- Refactored master lights button into a unified `custom:stack-in-card` combining the large turn on/off button with dual badges (`X on` / `Y off`) and quick preset pills, maximizing touch targets and filling available display space on the NSPanel Pro.
+- Aligned friendly names for `light.den_fan_light` ("Fan Task Light") and `light.den_night_light` ("Fan Night Light") in entity registry and template definitions so dashboard tiles and more-info dialog titles match consistently.
+
+### Fixed
+- Fixed FP300 presence motion lighting bypassing saved Night Preset settings (`automations/den_presence_lighting.yaml`): replaced direct `label_id: den_night_lights` activation with `script.office_activate_night_preset(override: false)`, ensuring saved scene attributes (including desk LEDs and custom fixture states) and `den_night_light_active` state are properly restored when presence is detected during off-hours.
+- Added `script.office_activate_night_preset` and `script.office_activate_day_preset` to `automations/office_lighting_dirty_tracker.yaml` execution guard conditions to prevent automated preset activations from inadvertently marking scenes as modified.
+- Fixed Day & Night Preset pills alignment on master light card in `dashboards/nspanel-office.yaml` using container-level inset padding (`0px 12px 10px 12px`) on `custom:stack-in-card`, preserving wide 50/50 touch targets and full text while eliminating border clipping and clearing the outer 20px rounded corners.
+- Fixed Ceiling Fan Light not respecting Day and Night mode transitions (`templates/den_lights.yaml`, `scripts/office_activate_night_preset.yaml`, `scripts/den_all_lights_on.yaml`, `automations/den_fan_light_state_tracker.yaml`):
+  - Removed `light.den_fan_light` from `light.turn_off` in `office_activate_night_preset`, and added explicit `light.turn_on: light.den_night_light` to ensure the fan light directly transitions to Night mode.
+  - Added explicit `light.turn_on: light.den_fan_light` in `den_all_lights_on` so switching to Day mode immediately restores the day task brightness (75%) and cool color temperature (6000K–6369K).
+  - Preserved color temperature and brightness cross-talk in `templates/den_lights.yaml` so adjustments to one attribute do not wipe out the other.
+  - Prevented state tracker helper overwrite race conditions by adding a 5-second mode settling guard in `automation.den_fan_light_state_tracker` to avoid recording intermediate transitional brightness levels across modes.
+- Fixed color temperature preset crash (`Invalid value for input_number.den_fan_light_last_color_temp: 6536.0 (range 3000.0 - 6500.0)`) when selecting white (153 mireds / 6536K) or deep warm/orange (500 mireds / 2000K) presets by expanding helper bounds (2000K–7000K) and clamping values in `templates/den_lights.yaml` and `automations/den_fan_light_state_tracker.yaml`.
+
+## 0.8.0 - 2026-11-03
+
+### Added
+- Redesigned Sonoff NSPanel 120 Pro dashboard into a modular multi-panel architecture (`dashboards/nspanel-office.yaml`):
+  - **Office (Main)**: Instant room summary, dynamic master light button, presence control, compact fan and air purifier tiles, Patio Cameras (`alarm_control_panel.gushomebase`) mode selector, daily weather forecast (`weather.forecast_home`), and conditional security warning banners.
+  - **Lights**: Room fixture tiles (Floor Lamp with sub-lights, Desk LEDs, Fan Light, Fan Night Light, Fan Backlight/Scene, and Humidifier Light) alongside one-tap preset overwrite buttons.
+  - **Climate**: Dedicated controls for Ceiling Fan (speed slider, direction), Air Purifier (preset modes), and Humidifier.
+  - **Sensors**: Comprehensive security monitoring covering locks (`lock.patio_door_lock`), perimeter doors (`binary_sensor.door_sensor_door`, `binary_sensor.patio_lock_door`), fence gate (`binary_sensor.patio_fence_sensor`), windows (`binary_sensor.window_sensor_door`), and motion/vibration sensors.
+  - **Battery**: Complete battery monitoring surfacing low-battery devices (< 60%) first, followed by area groupings (Patio, Kitchen, Office, Other Rooms).
+- Created global template security warnings in `templates/security_warnings.yaml` (`binary_sensor.alert_patio_door_unlocked`, `binary_sensor.alert_patio_fence_open`, `binary_sensor.alert_front_door_open`, `binary_sensor.alert_patio_door_open`, `binary_sensor.alert_window_open`, `binary_sensor.active_security_warnings`) that trigger warning banners when entry points remain unsecured past safety thresholds (10m / 30m).
+- Added `script.office_save_day_preset` and `script.office_save_night_preset` (`scripts/office_save_day_preset.yaml`, `scripts/office_save_night_preset.yaml`) to enable manual snapshotting and overwriting of Day and Night scenes directly from the NSPanel UI.
+- Added `script.nspanel_audio_feedback` (`scripts/nspanel_audio_feedback.yaml`) to play audio/chime feedback through the NSPanel Pro speaker on state changes.
+- Registered new dashboard URL `nspanel-office` in Home Assistant while synchronizing `nspanel-den` for seamless backward compatibility.
+
+### Changed
+- Renamed dashboard from Den to Office (`dashboards/nspanel-office.yaml`, title: "Office Panel").
+- Consolidated header badges from 2 rows down to 1 single horizontal row across all panels by removing the redundant Presence badge (leaving Temp, Humidity, Light, Air, and PM2.5).
+- Replaced dual 2-button "All Lights On" / "All Lights Off" row with a single large, contextual button that dynamically flips state, icon, color, active count badge, and service call.
+- Updated `scripts/den_all_lights_on.yaml` and `scripts/den_all_lights_off.yaml` to trigger audio chime feedback and activate day presets.
+- Added tactile haptic vibration feedback (`haptic: selection`) across all touch tiles and buttons.
+
 ## 0.8.0 - 2026-10-31
 
 ### Added

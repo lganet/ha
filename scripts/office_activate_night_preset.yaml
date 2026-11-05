@@ -1,0 +1,62 @@
+alias: Office Activate Night Preset
+description: Engages the office Night preset scene, turning off daytime fixtures and restoring ambient lights.
+icon: mdi:weather-night
+mode: single
+fields:
+  override:
+    description: "Whether to pause presence automation for the rest of the day"
+    default: true
+    selector:
+      boolean: {}
+  sound:
+    description: "Whether to play audio feedback chime on NSPanel"
+    default: false
+    selector:
+      boolean: {}
+sequence:
+  - if:
+      - condition: template
+        value_template: "{{ sound | default(false) }}"
+    then:
+      - action: script.nspanel_audio_feedback
+        data:
+          tone: "night_on"
+  - action: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.den_night_light_active
+  - if:
+      - condition: template
+        value_template: "{{ override | default(true) }}"
+    then:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.den_presence_override
+  - action: light.turn_on
+    target:
+      entity_id: light.den_night_light
+  - if:
+      - condition: template
+        value_template: "{{ states['scene.office_night_preset'] is not none and states['scene.office_night_preset'].state != 'unavailable' }}"
+    then:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.office_night_preset
+    else:
+      - action: light.turn_off
+        target:
+          entity_id:
+            - light.office_floor_lamp
+            - light.office_desk_leds
+      - action: light.turn_on
+        target:
+          entity_id:
+            - light.den_night_light
+            - light.humidifier_night_light
+            - light.office_floor_lamp_corner
+      - action: switch.turn_on
+        target:
+          entity_id:
+            - switch.office_floor_lamp_side_light
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.den_lights_snapshot_active

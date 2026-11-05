@@ -1,0 +1,55 @@
+# Version-controlled reference for security warning helpers
+input_number:
+  warning_patio_door_unlocked_delay:
+    name: Warning Patio Door Unlocked Delay
+    icon: mdi:lock-clock
+    min: 1
+    max: 60
+    step: 1
+    unit_of_measurement: min
+    mode: slider
+
+  warning_patio_fence_open_delay:
+    name: Warning Patio Fence Open Delay
+    icon: mdi:gate-alert
+    min: 1
+    max: 60
+    step: 1
+    unit_of_measurement: min
+    mode: slider
+
+  warning_front_door_open_delay:
+    name: Warning Front Door Open Delay
+    icon: mdi:door-open
+    min: 1
+    max: 60
+    step: 1
+    unit_of_measurement: min
+    mode: slider
+
+  warning_patio_door_open_delay:
+    name: Warning Patio Door Open Delay
+    icon: mdi:door-open
+    min: 1
+    max: 60
+    step: 1
+    unit_of_measurement: min
+    mode: slider
+
+  warning_window_open_delay:
+    name: Warning Window Open Delay
+    icon: mdi:window-open-variant
+    min: 1
+    max: 60
+    step: 1
+    unit_of_measurement: min
+    mode: slider
+
+  warning_alert_repeat_interval:
+    name: Warning Alert Repeat Interval
+    icon: mdi:timer-sync
+    min: 10
+    max: 120
+    step: 5
+    unit_of_measurement: sec
+    mode: slider
