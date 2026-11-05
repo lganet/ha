@@ -9,14 +9,23 @@
   - VMs & Container Instances: OPNsense firewall (status, CPU, RAM), Docker host (status, RAM), Tailscale mesh VPN (status, CPU, RAM).
 - Added `Energy` view (`dashboards/nspanel-office.yaml`, path: `energy`, icon: `mdi:lightning-bolt-circle`):
   - Live total real-time measured home load card (summed live Watts across all smart plugs and relays).
-  - BC Hydro electricity integration status card and credentials placeholder.
+  - BC Hydro live billing overview (`sensor.bc_hydro_mission_cost_to_date` and `sensor.bc_hydro_mission_consumption_to_date`).
+  - Yesterday's consumption and dynamic effective blended rate (`13.1¢/kWh` calculated on the fly).
+  - Real-time electricity cost estimation (`$`) for every individual smart plug and relay based on live BC Hydro billing rates.
   - Computing & Homelab power meters (Homelab plug, PC plug, Closet fan plug, TV gaming console).
   - Kitchen & major appliances (Freezer plug, Refrigerator, Air purifier plug, Bedside plug).
   - Measured smart relays (Bathroom fan, Patio left light, Office fan light, Living room TV).
+- Added resilient cached weather card (`dashboards/nspanel-office.yaml`):
+  - Caches current weather conditions, temperature, humidity, and wind into local storage and memory.
+  - Gracefully falls back to cached data with a `(Cached)` label during upstream met.no network dropouts or rate-limiting, preventing "Entity is currently unavailable" errors.
+
+### Changed
+- Overhauled security warning card styling (`dashboards/nspanel-office.yaml`):
+  - Upgraded warning banner styling to solid high-visibility gradients (crimson `#B71C1C` to `#D32F2F` for lock alerts; solid amber `#E65100` to `#F57C00` for perimeter doors/gates/windows).
+  - Added crisp white icon badges, high-contrast bold white typography, and luminous alert drop-shadows so critical alerts command immediate attention even when the main lighting card is fully lit in yellow.
 
 ### Fixed
 - Fixed NSPanel Pro beeping on FP300 presence detection: deployed the `sound` conditional check to live Home Assistant script storage (`script.den_all_lights_on`, `script.den_all_lights_off`, `script.office_activate_night_preset`), ensuring audible feedback only triggers on physical panel touch (`sound: true`) and not on automated presence triggers.
-- Enhanced security warning card styling with crimson/amber gradients, borders, and luminous glow.
 
 ## 0.11.0 - 2026-11-04
 

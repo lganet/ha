@@ -79,36 +79,36 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - min-height: 60px
+                        - min-height: 64px
                         - padding: 10px 14px
                         - border-radius: var(--ha-card-border-radius, 14px)
-                        - background: "linear-gradient(135deg, rgba(211, 47, 47, 0.45) 0%, rgba(183, 28, 28, 0.25) 100%)"
-                        - border: "1.5px solid #FF5252"
-                        - box-shadow: "0 0 16px rgba(244, 67, 54, 0.35)"
+                        - background: "linear-gradient(135deg, #B71C1C 0%, #D32F2F 100%)"
+                        - border: "2px solid #FF8A80"
+                        - box-shadow: "0 4px 18px rgba(244, 67, 54, 0.6)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 42px 1fr
+                        - grid-template-columns: 44px 1fr
                         - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 22px
-                        - height: 22px
-                        - color: "#FFFFFF"
-                        - background-color: "#D32F2F"
-                        - border-radius: 10px
+                        - width: 24px
+                        - height: 24px
+                        - color: "#D32F2F"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
                         - padding: 6px
-                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                       name:
                         - font-size: 14px
                         - font-weight: 700
                         - justify-self: start
                         - color: "#FFFFFF"
-                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
                       state:
                         - font-size: 12px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: "#FFCDD2"
+                        - color: "#FFEBEE"
                         - text-transform: uppercase
                         - letter-spacing: "0.5px"
 
@@ -138,36 +138,36 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - min-height: 60px
+                        - min-height: 64px
                         - padding: 10px 14px
                         - border-radius: var(--ha-card-border-radius, 14px)
-                        - background: "linear-gradient(135deg, rgba(245, 124, 0, 0.45) 0%, rgba(230, 81, 0, 0.25) 100%)"
-                        - border: "1.5px solid #FFA726"
-                        - box-shadow: "0 0 16px rgba(255, 167, 38, 0.35)"
+                        - background: "linear-gradient(135deg, #E65100 0%, #F57C00 100%)"
+                        - border: "2px solid #FFE082"
+                        - box-shadow: "0 4px 18px rgba(255, 152, 0, 0.6)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 42px 1fr
+                        - grid-template-columns: 44px 1fr
                         - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 22px
-                        - height: 22px
-                        - color: "#FFFFFF"
-                        - background-color: "#F57C00"
-                        - border-radius: 10px
+                        - width: 24px
+                        - height: 24px
+                        - color: "#E65100"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
                         - padding: 6px
-                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                       name:
                         - font-size: 14px
                         - font-weight: 700
                         - justify-self: start
                         - color: "#FFFFFF"
-                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
                       state:
                         - font-size: 12px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: "#FFE0B2"
+                        - color: "#FFF3E0"
                         - text-transform: uppercase
                         - letter-spacing: "0.5px"
 
@@ -197,36 +197,36 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - min-height: 60px
+                        - min-height: 64px
                         - padding: 10px 14px
                         - border-radius: var(--ha-card-border-radius, 14px)
-                        - background: "linear-gradient(135deg, rgba(245, 124, 0, 0.45) 0%, rgba(230, 81, 0, 0.25) 100%)"
-                        - border: "1.5px solid #FFA726"
-                        - box-shadow: "0 0 16px rgba(255, 167, 38, 0.35)"
+                        - background: "linear-gradient(135deg, #E65100 0%, #F57C00 100%)"
+                        - border: "2px solid #FFE082"
+                        - box-shadow: "0 4px 18px rgba(255, 152, 0, 0.6)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 42px 1fr
+                        - grid-template-columns: 44px 1fr
                         - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 22px
-                        - height: 22px
-                        - color: "#FFFFFF"
-                        - background-color: "#F57C00"
-                        - border-radius: 10px
+                        - width: 24px
+                        - height: 24px
+                        - color: "#E65100"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
                         - padding: 6px
-                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                       name:
                         - font-size: 14px
                         - font-weight: 700
                         - justify-self: start
                         - color: "#FFFFFF"
-                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
                       state:
                         - font-size: 12px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: "#FFE0B2"
+                        - color: "#FFF3E0"
                         - text-transform: uppercase
                         - letter-spacing: "0.5px"
 
@@ -256,36 +256,36 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - min-height: 60px
+                        - min-height: 64px
                         - padding: 10px 14px
                         - border-radius: var(--ha-card-border-radius, 14px)
-                        - background: "linear-gradient(135deg, rgba(245, 124, 0, 0.45) 0%, rgba(230, 81, 0, 0.25) 100%)"
-                        - border: "1.5px solid #FFA726"
-                        - box-shadow: "0 0 16px rgba(255, 167, 38, 0.35)"
+                        - background: "linear-gradient(135deg, #E65100 0%, #F57C00 100%)"
+                        - border: "2px solid #FFE082"
+                        - box-shadow: "0 4px 18px rgba(255, 152, 0, 0.6)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 42px 1fr
+                        - grid-template-columns: 44px 1fr
                         - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 22px
-                        - height: 22px
-                        - color: "#FFFFFF"
-                        - background-color: "#F57C00"
-                        - border-radius: 10px
+                        - width: 24px
+                        - height: 24px
+                        - color: "#E65100"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
                         - padding: 6px
-                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                       name:
                         - font-size: 14px
                         - font-weight: 700
                         - justify-self: start
                         - color: "#FFFFFF"
-                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
                       state:
                         - font-size: 12px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: "#FFE0B2"
+                        - color: "#FFF3E0"
                         - text-transform: uppercase
                         - letter-spacing: "0.5px"
 
@@ -315,36 +315,36 @@ views:
                       haptic: selection
                     styles:
                       card:
-                        - min-height: 60px
+                        - min-height: 64px
                         - padding: 10px 14px
                         - border-radius: var(--ha-card-border-radius, 14px)
-                        - background: "linear-gradient(135deg, rgba(245, 124, 0, 0.45) 0%, rgba(230, 81, 0, 0.25) 100%)"
-                        - border: "1.5px solid #FFA726"
-                        - box-shadow: "0 0 16px rgba(255, 167, 38, 0.35)"
+                        - background: "linear-gradient(135deg, #E65100 0%, #F57C00 100%)"
+                        - border: "2px solid #FFE082"
+                        - box-shadow: "0 4px 18px rgba(255, 152, 0, 0.6)"
                       grid:
                         - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 42px 1fr
+                        - grid-template-columns: 44px 1fr
                         - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 22px
-                        - height: 22px
-                        - color: "#FFFFFF"
-                        - background-color: "#F57C00"
-                        - border-radius: 10px
+                        - width: 24px
+                        - height: 24px
+                        - color: "#E65100"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
                         - padding: 6px
-                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.4)"
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
                       name:
                         - font-size: 14px
                         - font-weight: 700
                         - justify-self: start
                         - color: "#FFFFFF"
-                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.6)"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
                       state:
                         - font-size: 12px
-                        - font-weight: 600
+                        - font-weight: 700
                         - justify-self: start
-                        - color: "#FFE0B2"
+                        - color: "#FFF3E0"
                         - text-transform: uppercase
                         - letter-spacing: "0.5px"
 
@@ -624,22 +624,92 @@ views:
                 features:
                   - type: lock-commands
 
-          # --- Weather Forecast Card (Hides automatically if unavailable) ---
-          - type: conditional
-            conditions:
-              - condition: state
-                entity: weather.forecast_home
-                state_not: unavailable
-              - condition: state
-                entity: weather.forecast_home
-                state_not: unknown
-            card:
-              type: weather-forecast
-              entity: weather.forecast_home
-              name: Weather
-              show_current: true
-              show_forecast: true
-              forecast_type: daily
+          # --- Resilient Cached Weather Card (Never breaks or disappears) ---
+          - type: custom:button-card
+            entity: weather.forecast_home
+            name: >-
+              [[[
+                var w = entity;
+                var cached = window._nspanel_cached_weather || {};
+                if (w && w.state && w.state !== 'unavailable' && w.state !== 'unknown') {
+                  cached.state = w.state;
+                  cached.temp = w.attributes.temperature;
+                  cached.humidity = w.attributes.humidity;
+                  cached.wind = w.attributes.wind_speed;
+                  cached.time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  window._nspanel_cached_weather = cached;
+                  try { localStorage.setItem('nspanel_cached_weather', JSON.stringify(cached)); } catch(e){}
+                } else if (!cached.state) {
+                  try {
+                    var s = localStorage.getItem('nspanel_cached_weather');
+                    if (s) { cached = JSON.parse(s); window._nspanel_cached_weather = cached; }
+                  } catch(e){}
+                }
+                var cond = (w && w.state && w.state !== 'unavailable' && w.state !== 'unknown') ? w.state : (cached.state || 'Cloudy');
+                cond = cond.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                var isCached = (!w || w.state === 'unavailable' || w.state === 'unknown');
+                return cond + (isCached ? ' (Cached)' : '');
+              ]]]
+            state_display: >-
+              [[[
+                var cached = window._nspanel_cached_weather || {};
+                var w = entity;
+                var temp = (w && w.attributes && w.attributes.temperature != null && w.state !== 'unavailable') ? w.attributes.temperature : (cached.temp != null ? cached.temp : '--');
+                var hum = (w && w.attributes && w.attributes.humidity != null && w.state !== 'unavailable') ? w.attributes.humidity : (cached.humidity != null ? cached.humidity : '--');
+                var wind = (w && w.attributes && w.attributes.wind_speed != null && w.state !== 'unavailable') ? w.attributes.wind_speed : (cached.wind != null ? cached.wind : '--');
+                return `${temp}°C • Humidity ${hum}% • Wind ${wind} km/h`;
+              ]]]
+            show_name: true
+            show_state: true
+            show_icon: true
+            icon: >-
+              [[[
+                var w = entity;
+                var cached = window._nspanel_cached_weather || {};
+                var cond = (w && w.state && w.state !== 'unavailable') ? w.state : (cached.state || 'cloudy');
+                cond = cond.toLowerCase();
+                if (cond.includes('rain') || cond.includes('pour')) return 'mdi:weather-rainy';
+                if (cond.includes('snow')) return 'mdi:weather-snowy';
+                if (cond.includes('clear') || cond.includes('sunny')) return 'mdi:weather-sunny';
+                if (cond.includes('partly')) return 'mdi:weather-partly-cloudy';
+                if (cond.includes('wind')) return 'mdi:weather-windy';
+                if (cond.includes('fog')) return 'mdi:weather-fog';
+                if (cond.includes('lightning') || cond.includes('storm')) return 'mdi:weather-lightning';
+                return 'mdi:weather-cloudy';
+              ]]]
+            tap_action:
+              action: more-info
+              haptic: selection
+            styles:
+              card:
+                - min-height: 64px
+                - padding: 10px 14px
+                - border-radius: var(--ha-card-border-radius, 14px)
+                - background: "linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(13, 71, 161, 0.08) 100%)"
+                - border: "1px solid rgba(33, 150, 243, 0.25)"
+                - box-shadow: "0 2px 8px rgba(0, 0, 0, 0.2)"
+              grid:
+                - grid-template-areas: '"i n" "i s"'
+                - grid-template-columns: 42px 1fr
+                - grid-template-rows: auto auto
+                - align-items: center
+              icon:
+                - width: 26px
+                - height: 26px
+                - color: "#42A5F5"
+                - background-color: "rgba(33, 150, 243, 0.15)"
+                - border-radius: 10px
+                - padding: 6px
+              name:
+                - font-size: 14px
+                - font-weight: 700
+                - justify-self: start
+                - color: "var(--primary-text-color)"
+              state:
+                - font-size: 12px
+                - font-weight: 500
+                - justify-self: start
+                - color: "var(--secondary-text-color)"
 
   # =========================================================================
   # 2. LIGHTS PANEL
@@ -1734,6 +1804,7 @@ views:
                   action: more-info
 
   # =========================================================================
+  # =========================================================================
   # VIEW 8: ENERGY & REAL-TIME POWER MONITORING
   # =========================================================================
   - title: Energy
@@ -1776,7 +1847,7 @@ views:
     sections:
       - type: grid
         cards:
-          # --- Section 1: Live Grid & Summary ---
+          # --- Section 1: Live Grid & BC Hydro Billing ---
           - type: heading
             heading: Power & Grid Overview
             heading_style: subtitle
@@ -1845,48 +1916,98 @@ views:
                 - justify-self: start
                 - color: "#FFD54F"
 
-          # --- BC Hydro Integration Status / Connection Card ---
-          - type: custom:button-card
-            name: BC Hydro Electricity Meter
-            icon: mdi:transmission-tower
-            show_name: true
-            show_state: true
-            state_display: >-
-              [[[
-                var bc = states['sensor.bc_hydro_consumption'] || states['sensor.bc_hydro_rate'];
-                if (bc && bc.state && bc.state !== 'unavailable') {
-                  return bc.state + ' ' + (bc.attributes.unit_of_measurement || 'kWh');
-                }
-                return 'Integration Pending Credentials';
-              ]]]
-            tap_action:
-              action: more-info
-            styles:
-              card:
-                - height: 56px
-                - padding: 8px 12px
-                - border-radius: var(--ha-card-border-radius, 12px)
-                - background-color: rgba(255, 255, 255, 0.05)
-                - border: 1px solid rgba(255, 255, 255, 0.1)
-              grid:
-                - grid-template-areas: '"i n" "i s"'
-                - grid-template-columns: 36px 1fr
-                - grid-template-rows: 1fr 1fr
-                - align-items: center
-              icon:
-                - width: 22px
-                - height: 22px
-                - color: "#4CAF50"
-              name:
-                - font-size: 13px
-                - font-weight: 600
-                - justify-self: start
-                - color: var(--primary-text-color)
-              state:
-                - font-size: 11px
-                - font-weight: 500
-                - justify-self: start
-                - color: var(--secondary-text-color)
+          # --- BC Hydro Live Meter Cards ---
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:button-card
+                entity: sensor.bc_hydro_mission_cost_to_date
+                name: BC Hydro To Date
+                icon: mdi:transmission-tower
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var cost = states['sensor.bc_hydro_mission_cost_to_date'] ? states['sensor.bc_hydro_mission_cost_to_date'].state : '0';
+                    var kwh = states['sensor.bc_hydro_mission_consumption_to_date'] ? states['sensor.bc_hydro_mission_consumption_to_date'].state : '0';
+                    return `$${cost} • ${kwh} kWh`;
+                  ]]]
+                tap_action:
+                  action: more-info
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(76, 175, 80, 0.3)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#4CAF50"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: "#81C784"
+
+              - type: custom:button-card
+                entity: sensor.bc_hydro_mission_yesterday_cost
+                name: Yesterday & Rate
+                icon: mdi:calendar-clock
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var y_cost = states['sensor.bc_hydro_mission_yesterday_cost'] ? states['sensor.bc_hydro_mission_yesterday_cost'].state : '0';
+                    var y_kwh = states['sensor.bc_hydro_mission_yesterday_consumption'] ? states['sensor.bc_hydro_mission_yesterday_consumption'].state : '0';
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 13.1;
+                    if (c && k && parseFloat(k.state) > 0) {
+                      rate = ((parseFloat(c.state) / parseFloat(k.state)) * 100).toFixed(1);
+                    }
+                    return `$${y_cost} • ${rate}¢/kWh`;
+                  ]]]
+                tap_action:
+                  action: more-info
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(33, 150, 243, 0.3)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#2196F3"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: "#64B5F6"
 
           # --- Section 2: Computing & Homelab Plugs ---
           - type: heading
@@ -1898,30 +2019,193 @@ views:
             columns: 2
             square: false
             cards:
-              - type: tile
+              - type: custom:button-card
                 entity: sensor.homelab_plug_power
                 name: Homelab Plug
                 icon: mdi:server
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.homelab_plug_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#FFB300"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.den_pc_plug_power
                 name: Office PC Plug
                 icon: mdi:laptop
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.den_pc_plug_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#FFB300"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.fan_opnsense_plug_power
                 name: Closet Fan Plug
                 icon: mdi:fan
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.fan_opnsense_plug_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#FFB300"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.tv_gaming_plug_power
                 name: TV Gaming Plug
                 icon: mdi:gamepad-variant
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.tv_gaming_plug_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#FFB300"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
 
           # --- Section 3: Kitchen & Appliances ---
           - type: heading
@@ -1933,30 +2217,193 @@ views:
             columns: 2
             square: false
             cards:
-              - type: tile
+              - type: custom:button-card
                 entity: sensor.freezer_plug_power
                 name: Freezer Plug
                 icon: mdi:snowflake
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.freezer_plug_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#26C6DA"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.kitchen_refrigerator_power
                 name: Refrigerator
                 icon: mdi:fridge-outline
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.kitchen_refrigerator_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(0)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#26C6DA"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.air_purifier_plug_power
                 name: Air Purifier Plug
                 icon: mdi:air-purifier
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.air_purifier_plug_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#26C6DA"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.bedroom_bed_plug_power
                 name: Bedside Plug
                 icon: mdi:bed
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.bedroom_bed_plug_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#26C6DA"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
 
           # --- Section 4: Switches & Smart Relays ---
           - type: heading
@@ -1968,27 +2415,191 @@ views:
             columns: 2
             square: false
             cards:
-              - type: tile
+              - type: custom:button-card
                 entity: sensor.den_fan_light_power
                 name: Office Fan Relay
                 icon: mdi:lightbulb
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.den_fan_light_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#AB47BC"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.light_patio_left_power
                 name: Patio Light Relay
                 icon: mdi:outdoor-lamp
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.light_patio_left_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#AB47BC"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.main_bathroom_fan_power
                 name: Bathroom Fan
                 icon: mdi:fan
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.main_bathroom_fan_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
-              - type: tile
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#AB47BC"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
+              - type: custom:button-card
                 entity: sensor.living_room_samsung_cu7700_43_power
                 name: Living Room TV
                 icon: mdi:television
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+                    var kwh_state = states['sensor.living_room_samsung_cu7700_43_energy'];
+                    var kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+                    var c = states['sensor.bc_hydro_mission_cost_to_date'];
+                    var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+                    var rate = 0.1312;
+                    if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+                    var cost = (kwh * rate).toFixed(2);
+                    return `${w}W • ${kwh.toFixed(1)}kWh ($${cost})`;
+                  ]]]
                 tap_action:
                   action: more-info
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#AB47BC"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: var(--secondary-text-color)
+
