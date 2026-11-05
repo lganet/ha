@@ -403,13 +403,11 @@ views:
             square: false
             cards:
               - type: tile
-                entity: light.patio_left_light
+                entity: switch.patio_left_light_switch
                 name: Patio Left Light
                 icon: mdi:balcony
                 tap_action:
                   action: toggle
-                features:
-                  - type: light-brightness
 
               - type: tile
                 entity: light.main_bedroom_closet_light
@@ -758,13 +756,11 @@ views:
             icon: mdi:balcony
 
           - type: tile
-            entity: light.patio_left_light
+            entity: switch.patio_left_light_switch
             name: Patio Left Light
             icon: mdi:balcony
-            features:
-              - type: light-brightness
             tap_action:
-              action: more-info
+              action: toggle
 
   # =========================================================================
   # 3. CLIMATE PANEL
