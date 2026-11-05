@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- Added `Homelab` view (`dashboards/nspanel-office.yaml`, path: `homelab`, icon: `mdi:server-network`):
+  - Kitchen Closet Thermal Cooling Watchdog: displays YoLink closet ambient temperature, fan power draw with live calculated speed (Speed 1–4), and Proxmox PVE CPU/NVMe temperatures.
+  - Proxmox Virtual Environment (PVE): node status, CPU usage %, memory %, disk usage %, and uptime.
+  - VMs & Container Instances: OPNsense firewall (status, CPU, RAM), Docker host (status, RAM), Tailscale mesh VPN (status, CPU, RAM).
+- Added `Energy` view (`dashboards/nspanel-office.yaml`, path: `energy`, icon: `mdi:lightning-bolt-circle`):
+  - Live total real-time measured home load card (summed live Watts across all smart plugs and relays).
+  - BC Hydro electricity integration status card and credentials placeholder.
+  - Computing & Homelab power meters (Homelab plug, PC plug, Closet fan plug, TV gaming console).
+  - Kitchen & major appliances (Freezer plug, Refrigerator, Air purifier plug, Bedside plug).
+  - Measured smart relays (Bathroom fan, Patio left light, Office fan light, Living room TV).
+
+### Fixed
+- Fixed NSPanel Pro beeping on FP300 presence detection: deployed the `sound` conditional check to live Home Assistant script storage (`script.den_all_lights_on`, `script.den_all_lights_off`, `script.office_activate_night_preset`), ensuring audible feedback only triggers on physical panel touch (`sound: true`) and not on automated presence triggers.
+- Enhanced security warning card styling with crimson/amber gradients, borders, and luminous glow.
+
 ## 0.11.0 - 2026-11-04
 
 ### Added

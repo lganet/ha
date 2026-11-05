@@ -1521,3 +1521,474 @@ views:
                     - font-weight: 600
                     - color: var(--primary-text-color)
 
+
+  # =========================================================================
+  # VIEW 7: HOMELAB & CLOSET THERMAL COOLING
+  # =========================================================================
+  - title: Homelab
+    path: homelab
+    icon: mdi:server-network
+    theme: ios-dark-mode
+    max_columns: 1
+    badges:
+      - type: entity
+        entity: sensor.office_presence_fp300_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_presence_fp300_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_air_purifier_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_pm2_5_level
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Section 1: Kitchen Closet Thermal Cooling Watchdog ---
+          - type: heading
+            heading: Kitchen Closet Thermal Watchdog
+            heading_style: subtitle
+            icon: mdi:fan-alert
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.temperature_sensor_temperature
+                name: Closet Ambient
+                icon: mdi:thermometer
+                tap_action:
+                  action: more-info
+
+              - type: custom:button-card
+                entity: sensor.fan_opnsense_plug_power
+                name: Cooling Fan
+                icon: mdi:fan
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state) : 0;
+                    if (w < 3) return 'Off (0W)';
+                    if (w < 10) return `Speed 1 (${w}W)`;
+                    if (w < 17) return `Speed 2 (${w}W)`;
+                    if (w < 24) return `Speed 3 (${w}W)`;
+                    return `Speed 4 (${w}W)`;
+                  ]]]
+                tap_action:
+                  action: more-info
+                styles:
+                  card:
+                    - height: 56px
+                    - padding: 6px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: >-
+                        [[[
+                          var w = entity.state ? parseFloat(entity.state) : 0;
+                          return w >= 3 ? '#29B6F6' : 'var(--secondary-text-color)';
+                        ]]]
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: >-
+                        [[[
+                          var w = entity.state ? parseFloat(entity.state) : 0;
+                          return w >= 3 ? '#29B6F6' : 'var(--secondary-text-color)';
+                        ]]]
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.proxmox_host_pve_pve_cpu_package_temperature
+                name: PVE CPU Temp
+                icon: mdi:cpu-64-bit
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.proxmox_host_pve_pve_nvme_storage_temperature
+                name: NVMe Temp
+                icon: mdi:harddisk
+                tap_action:
+                  action: more-info
+
+          # --- Section 2: Proxmox Host (PVE) ---
+          - type: heading
+            heading: Proxmox Host (pve)
+            heading_style: subtitle
+            icon: mdi:server
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: binary_sensor.pve_status
+                name: Node Status
+                icon: mdi:server
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.pve_cpu_usage
+                name: Host CPU
+                icon: mdi:chart-donut
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.pve_memory_usage_percentage
+                name: Host RAM
+                icon: mdi:memory
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.pve_disk_usage
+                name: Host Disk
+                icon: mdi:database
+                tap_action:
+                  action: more-info
+
+          # --- Section 3: Instances & Mesh Network ---
+          - type: heading
+            heading: Instances & Network
+            heading_style: subtitle
+            icon: mdi:lan
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.opnsense_status
+                name: OPNsense
+                icon: mdi:shield-lock-outline
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.opnsense_cpu_usage
+                name: OPNsense CPU
+                icon: mdi:chart-line
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.docker_status
+                name: Docker Host
+                icon: mdi:docker
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.docker_memory_usage_percentage
+                name: Docker RAM
+                icon: mdi:memory
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.tailscale_status
+                name: Tailscale VPN
+                icon: mdi:vpn
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.tailscale_cpu_usage
+                name: Tailscale CPU
+                icon: mdi:chart-bell-curve
+                tap_action:
+                  action: more-info
+
+  # =========================================================================
+  # VIEW 8: ENERGY & REAL-TIME POWER MONITORING
+  # =========================================================================
+  - title: Energy
+    path: energy
+    icon: mdi:lightning-bolt-circle
+    theme: ios-dark-mode
+    max_columns: 1
+    badges:
+      - type: entity
+        entity: sensor.office_presence_fp300_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_presence_fp300_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_light_level
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.office_air_purifier_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.den_pm2_5_level
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Section 1: Live Grid & Summary ---
+          - type: heading
+            heading: Power & Grid Overview
+            heading_style: subtitle
+            icon: mdi:flash
+
+          - type: custom:button-card
+            name: Total Measured Power
+            icon: mdi:lightning-bolt
+            show_name: true
+            show_state: true
+            state_display: >-
+              [[[
+                var plugs = [
+                  states['sensor.homelab_plug_power'],
+                  states['sensor.den_pc_plug_power'],
+                  states['sensor.den_fan_light_power'],
+                  states['sensor.freezer_plug_power'],
+                  states['sensor.kitchen_refrigerator_power'],
+                  states['sensor.fan_opnsense_plug_power'],
+                  states['sensor.tv_gaming_plug_power'],
+                  states['sensor.living_room_samsung_oled_power'],
+                  states['sensor.living_room_samsung_cu7700_43_power'],
+                  states['sensor.air_purifier_plug_power'],
+                  states['sensor.bedroom_bed_plug_power'],
+                  states['sensor.main_bathroom_fan_power'],
+                  states['sensor.light_patio_left_power']
+                ];
+                var sum = 0;
+                plugs.forEach(function(s) {
+                  if (s && s.state && !isNaN(parseFloat(s.state))) {
+                    sum += parseFloat(s.state);
+                  }
+                });
+                return Math.round(sum) + ' W';
+              ]]]
+            tap_action:
+              action: more-info
+            styles:
+              card:
+                - min-height: 70px
+                - padding: 12px 16px
+                - border-radius: var(--ha-card-border-radius, 14px)
+                - background: "linear-gradient(135deg, rgba(255, 179, 0, 0.18) 0%, rgba(255, 111, 0, 0.08) 100%)"
+                - border: "1.5px solid rgba(255, 179, 0, 0.4)"
+                - box-shadow: "0 0 14px rgba(255, 179, 0, 0.15)"
+              grid:
+                - grid-template-areas: '"i n" "i s"'
+                - grid-template-columns: 44px 1fr
+                - grid-template-rows: auto auto
+                - align-items: center
+              icon:
+                - width: 28px
+                - height: 28px
+                - color: "#FFB300"
+                - background-color: "rgba(255, 179, 0, 0.2)"
+                - border-radius: 10px
+                - padding: 6px
+              name:
+                - font-size: 13px
+                - font-weight: 600
+                - justify-self: start
+                - color: "var(--primary-text-color)"
+              state:
+                - font-size: 20px
+                - font-weight: 700
+                - justify-self: start
+                - color: "#FFD54F"
+
+          # --- BC Hydro Integration Status / Connection Card ---
+          - type: custom:button-card
+            name: BC Hydro Electricity Meter
+            icon: mdi:transmission-tower
+            show_name: true
+            show_state: true
+            state_display: >-
+              [[[
+                var bc = states['sensor.bc_hydro_consumption'] || states['sensor.bc_hydro_rate'];
+                if (bc && bc.state && bc.state !== 'unavailable') {
+                  return bc.state + ' ' + (bc.attributes.unit_of_measurement || 'kWh');
+                }
+                return 'Integration Pending Credentials';
+              ]]]
+            tap_action:
+              action: more-info
+            styles:
+              card:
+                - height: 56px
+                - padding: 8px 12px
+                - border-radius: var(--ha-card-border-radius, 12px)
+                - background-color: rgba(255, 255, 255, 0.05)
+                - border: 1px solid rgba(255, 255, 255, 0.1)
+              grid:
+                - grid-template-areas: '"i n" "i s"'
+                - grid-template-columns: 36px 1fr
+                - grid-template-rows: 1fr 1fr
+                - align-items: center
+              icon:
+                - width: 22px
+                - height: 22px
+                - color: "#4CAF50"
+              name:
+                - font-size: 13px
+                - font-weight: 600
+                - justify-self: start
+                - color: var(--primary-text-color)
+              state:
+                - font-size: 11px
+                - font-weight: 500
+                - justify-self: start
+                - color: var(--secondary-text-color)
+
+          # --- Section 2: Computing & Homelab Plugs ---
+          - type: heading
+            heading: Computing & Homelab
+            heading_style: subtitle
+            icon: mdi:desktop-tower
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.homelab_plug_power
+                name: Homelab Plug
+                icon: mdi:server
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.den_pc_plug_power
+                name: Office PC Plug
+                icon: mdi:laptop
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.fan_opnsense_plug_power
+                name: Closet Fan Plug
+                icon: mdi:fan
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.tv_gaming_plug_power
+                name: TV Gaming Plug
+                icon: mdi:gamepad-variant
+                tap_action:
+                  action: more-info
+
+          # --- Section 3: Kitchen & Appliances ---
+          - type: heading
+            heading: Kitchen & Appliances
+            heading_style: subtitle
+            icon: mdi:fridge
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.freezer_plug_power
+                name: Freezer Plug
+                icon: mdi:snowflake
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.kitchen_refrigerator_power
+                name: Refrigerator
+                icon: mdi:fridge-outline
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.air_purifier_plug_power
+                name: Air Purifier Plug
+                icon: mdi:air-purifier
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.bedroom_bed_plug_power
+                name: Bedside Plug
+                icon: mdi:bed
+                tap_action:
+                  action: more-info
+
+          # --- Section 4: Switches & Smart Relays ---
+          - type: heading
+            heading: Switches & Smart Relays
+            heading_style: subtitle
+            icon: mdi:toggle-switch
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.den_fan_light_power
+                name: Office Fan Relay
+                icon: mdi:lightbulb
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.light_patio_left_power
+                name: Patio Light Relay
+                icon: mdi:outdoor-lamp
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.main_bathroom_fan_power
+                name: Bathroom Fan
+                icon: mdi:fan
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.living_room_samsung_cu7700_43_power
+                name: Living Room TV
+                icon: mdi:television
+                tap_action:
+                  action: more-info
