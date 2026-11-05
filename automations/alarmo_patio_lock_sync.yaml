@@ -10,6 +10,12 @@ trigger:
   - platform: state
     entity_id: lock.patio_door_lock
     id: door_lock_state
+  - platform: state
+    entity_id: alarm_control_panel.patio_lock
+    from:
+      - unavailable
+      - unknown
+    id: alarmo_initialized
 condition:
   - condition: template
     value_template: "{{ trigger.from_state is not none and trigger.to_state is not none and trigger.from_state.state != trigger.to_state.state }}"
@@ -48,6 +54,23 @@ action:
                         target:
                           entity_id: lock.patio_door_lock
 
+      # Triggered when Alarmo area first comes online or restarts
+      - conditions:
+          - condition: trigger
+            id: alarmo_initialized
+        sequence:
+          - if:
+              - condition: state
+                entity_id: lock.patio_door_lock
+                state: locked
+            then:
+              - action: alarm_control_panel.alarm_arm_home
+                target:
+                  entity_id: alarm_control_panel.patio_lock
+            else:
+              - action: alarm_control_panel.alarm_disarm
+                target:
+                  entity_id: alarm_control_panel.patio_lock
       # Triggered by physical Door Lock state changes -> sync back to Alarmo area
       - conditions:
           - condition: trigger
