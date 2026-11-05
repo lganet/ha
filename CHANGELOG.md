@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.13.0 - 2026-11-05
+
+### Added
+- Created Main Bedroom NSPanel Pro dashboard (`dashboards/nspanel-main-bedroom.yaml`, live Lovelace dashboard `nspanel-main-bedroom`) styled with `ios-dark-mode` matching the Office panel:
+  - **Main View (`bedroom`)**: Header badges (illuminance, and temperature/humidity/air quality/pm2.5 placeholders for upcoming monitor), quick-action cards for bedroom fan light, ceiling lights 1 & 2, closet light, ceiling fan speed control, independent Patio Left light switch card, cached weather summary, and modal PIN-protected Alarmo Patio security and Patio Door deadbolt control.
+  - **Shared Views**: Deployed matching sub-panels for `Lights` (room lights plus independent patio light), `Climate` (bedroom fan speed and presets), `Sensors` (all whole-home presence, contact, and environmental sensors), `Battery` (device battery levels and statuses), `Alerts` (active alarms and warning notifications), `Homelab` (server metrics and closet cooling watchdog), and `Energy` (BC Hydro billing and live real-time plug/relay power monitors).
+- Added Main Bedroom template sensors (`templates/main_bedroom_sensors.yaml`):
+  - `sensor.main_bedroom_light_level` derived from NSPanel Pro illuminance sensor (`sensor.zigbee2cube_1002c15147_illuminance`).
+  - `sensor.main_bedroom_lights_on` and `sensor.main_bedroom_lights_off` tracking active fixtures while strictly excluding `light.patio_left_light`.
+  - Environmental fallbacks (`sensor.main_bedroom_temperature`, `sensor.main_bedroom_humidity`, `sensor.main_bedroom_air_quality`, `sensor.main_bedroom_pm2_5`) that smoothly transition to upcoming dedicated air quality hardware without dashboard reconfiguration.
+- Added Main Bedroom Lights Toggle script (`scripts/main_bedroom_lights_toggle.yaml`):
+  - Smart room toggle that checks `sensor.main_bedroom_lights_on` and either powers off all active bedroom fixtures or turns on the primary fan light with preserved state memory, keeping `light.patio_left_light` unaffected.
+- Enabled hardware proximity wake sensor (`switch.zigbee2cube_1002c15147_proximity_wake`) on Main Bedroom NSPanel Pro for automatic screen wake upon physical approach.
+
 ## 0.12.0 - 2026-11-05
 
 ### Added

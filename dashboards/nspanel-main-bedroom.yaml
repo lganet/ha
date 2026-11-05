@@ -1,0 +1,2389 @@
+title: Main Bedroom Panel
+views:
+  # =========================================================================
+  # 1. MAIN PANEL (MAIN BEDROOM)
+  # =========================================================================
+  - title: Main Bedroom
+    path: bedroom
+    icon: mdi:bed-king
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.main_bedroom_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.zigbee2cube_1002c15147_illuminance
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Active Security Warnings (Conditional) ---
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: binary_sensor.active_security_warnings
+                state: "on"
+            card:
+              type: vertical-stack
+              cards:
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_patio_door_unlocked
+                      state: "on"
+                  card:
+                    type: custom:button-card
+                    entity: lock.patio_door_lock
+                    name: >-
+                      [[[
+                        var min = states['input_number.warning_patio_door_unlocked_delay'] ? Math.round(states['input_number.warning_patio_door_unlocked_delay'].state) : 30;
+                        return `Warning: Patio Door Unlocked > ${min}m`;
+                      ]]]
+                    state_display: >-
+                      [[[
+                        return entity.state.charAt(0).toUpperCase() + entity.state.slice(1);
+                      ]]]
+                    show_name: true
+                    show_state: true
+                    show_icon: true
+                    icon: mdi:lock-alert
+                    tap_action:
+                      action: more-info
+                      haptic: selection
+                    styles:
+                      card:
+                        - min-height: 64px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, #B71C1C 0%, #D32F2F 100%)"
+                        - border: "2px solid #FF8A80"
+                        - box-shadow: "0 4px 18px rgba(244, 67, 54, 0.6)"
+                      grid:
+                        - grid-template-areas: '"i n" "i s"'
+                        - grid-template-columns: 44px 1fr
+                        - grid-template-rows: auto auto
+                        - align-items: center
+                      icon:
+                        - width: 24px
+                        - height: 24px
+                        - color: "#D32F2F"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
+                      name:
+                        - font-size: 14px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
+                      state:
+                        - font-size: 12px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFEBEE"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
+
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_patio_fence_open
+                      state: "on"
+                  card:
+                    type: custom:button-card
+                    entity: binary_sensor.patio_fence_sensor
+                    name: >-
+                      [[[
+                        var min = states['input_number.warning_patio_fence_open_delay'] ? Math.round(states['input_number.warning_patio_fence_open_delay'].state) : 10;
+                        return `Warning: Patio Fence Open > ${min}m`;
+                      ]]]
+                    state_display: >-
+                      [[[
+                        return entity.state === 'on' ? 'Open' : 'Closed';
+                      ]]]
+                    show_name: true
+                    show_state: true
+                    show_icon: true
+                    icon: mdi:gate-alert
+                    tap_action:
+                      action: more-info
+                      haptic: selection
+                    styles:
+                      card:
+                        - min-height: 64px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, #E65100 0%, #F57C00 100%)"
+                        - border: "2px solid #FFE082"
+                        - box-shadow: "0 4px 18px rgba(255, 152, 0, 0.6)"
+                      grid:
+                        - grid-template-areas: '"i n" "i s"'
+                        - grid-template-columns: 44px 1fr
+                        - grid-template-rows: auto auto
+                        - align-items: center
+                      icon:
+                        - width: 24px
+                        - height: 24px
+                        - color: "#E65100"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
+                      name:
+                        - font-size: 14px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
+                      state:
+                        - font-size: 12px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFF3E0"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
+
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_front_door_open
+                      state: "on"
+                  card:
+                    type: custom:button-card
+                    entity: binary_sensor.door_sensor_door
+                    name: >-
+                      [[[
+                        var min = states['input_number.warning_front_door_open_delay'] ? Math.round(states['input_number.warning_front_door_open_delay'].state) : 10;
+                        return `Warning: Front Door Open > ${min}m`;
+                      ]]]
+                    state_display: >-
+                      [[[
+                        return entity.state === 'on' ? 'Open' : 'Closed';
+                      ]]]
+                    show_name: true
+                    show_state: true
+                    show_icon: true
+                    icon: mdi:door-open
+                    tap_action:
+                      action: more-info
+                      haptic: selection
+                    styles:
+                      card:
+                        - min-height: 64px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, #E65100 0%, #F57C00 100%)"
+                        - border: "2px solid #FFE082"
+                        - box-shadow: "0 4px 18px rgba(255, 152, 0, 0.6)"
+                      grid:
+                        - grid-template-areas: '"i n" "i s"'
+                        - grid-template-columns: 44px 1fr
+                        - grid-template-rows: auto auto
+                        - align-items: center
+                      icon:
+                        - width: 24px
+                        - height: 24px
+                        - color: "#E65100"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
+                      name:
+                        - font-size: 14px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
+                      state:
+                        - font-size: 12px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFF3E0"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
+
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_patio_door_open
+                      state: "on"
+                  card:
+                    type: custom:button-card
+                    entity: binary_sensor.patio_lock_door
+                    name: >-
+                      [[[
+                        var min = states['input_number.warning_patio_door_open_delay'] ? Math.round(states['input_number.warning_patio_door_open_delay'].state) : 10;
+                        return `Warning: Patio Door Open > ${min}m`;
+                      ]]]
+                    state_display: >-
+                      [[[
+                        return entity.state === 'on' ? 'Open' : 'Closed';
+                      ]]]
+                    show_name: true
+                    show_state: true
+                    show_icon: true
+                    icon: mdi:door-open
+                    tap_action:
+                      action: more-info
+                      haptic: selection
+                    styles:
+                      card:
+                        - min-height: 64px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, #E65100 0%, #F57C00 100%)"
+                        - border: "2px solid #FFE082"
+                        - box-shadow: "0 4px 18px rgba(255, 152, 0, 0.6)"
+                      grid:
+                        - grid-template-areas: '"i n" "i s"'
+                        - grid-template-columns: 44px 1fr
+                        - grid-template-rows: auto auto
+                        - align-items: center
+                      icon:
+                        - width: 24px
+                        - height: 24px
+                        - color: "#E65100"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
+                      name:
+                        - font-size: 14px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
+                      state:
+                        - font-size: 12px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFF3E0"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
+
+                - type: conditional
+                  conditions:
+                    - condition: state
+                      entity: binary_sensor.alert_window_open
+                      state: "on"
+                  card:
+                    type: custom:button-card
+                    entity: binary_sensor.window_sensor_door
+                    name: >-
+                      [[[
+                        var min = states['input_number.warning_window_open_delay'] ? Math.round(states['input_number.warning_window_open_delay'].state) : 10;
+                        return `Warning: Window Open > ${min}m`;
+                      ]]]
+                    state_display: >-
+                      [[[
+                        return entity.state === 'on' ? 'Open' : 'Closed';
+                      ]]]
+                    show_name: true
+                    show_state: true
+                    show_icon: true
+                    icon: mdi:window-open-variant
+                    tap_action:
+                      action: more-info
+                      haptic: selection
+                    styles:
+                      card:
+                        - min-height: 64px
+                        - padding: 10px 14px
+                        - border-radius: var(--ha-card-border-radius, 14px)
+                        - background: "linear-gradient(135deg, #E65100 0%, #F57C00 100%)"
+                        - border: "2px solid #FFE082"
+                        - box-shadow: "0 4px 18px rgba(255, 152, 0, 0.6)"
+                      grid:
+                        - grid-template-areas: '"i n" "i s"'
+                        - grid-template-columns: 44px 1fr
+                        - grid-template-rows: auto auto
+                        - align-items: center
+                      icon:
+                        - width: 24px
+                        - height: 24px
+                        - color: "#E65100"
+                        - background-color: "#FFFFFF"
+                        - border-radius: 12px
+                        - padding: 6px
+                        - box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)"
+                      name:
+                        - font-size: 14px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFFFFF"
+                        - text-shadow: "0 1px 2px rgba(0, 0, 0, 0.4)"
+                      state:
+                        - font-size: 12px
+                        - font-weight: 700
+                        - justify-self: start
+                        - color: "#FFF3E0"
+                        - text-transform: uppercase
+                        - letter-spacing: "0.5px"
+
+          # --- Master Bedroom Dynamic Lights Button ---
+          - type: custom:stack-in-card
+            mode: vertical
+            styles:
+              card:
+                - border-radius: var(--ha-card-border-radius, 20px)
+                - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
+                - padding: 0px 12px 10px 12px
+                - box-sizing: border-box
+            cards:
+              - type: custom:button-card
+                entity: sensor.main_bedroom_lights_on
+                show_name: true
+                show_icon: true
+                name: >-
+                  [[[
+                    var count = states['sensor.main_bedroom_lights_on'] ? parseInt(states['sensor.main_bedroom_lights_on'].state) : 0;
+                    return count > 0 ? "Turn Lights Off" : "Turn Lights On";
+                  ]]]
+                icon: >-
+                  [[[
+                    var count = states['sensor.main_bedroom_lights_on'] ? parseInt(states['sensor.main_bedroom_lights_on'].state) : 0;
+                    return count > 0 ? "mdi:lightbulb-multiple" : "mdi:lightbulb-multiple-outline";
+                  ]]]
+                tap_action:
+                  action: call-service
+                  haptic: selection
+                  service: script.main_bedroom_lights_toggle
+                styles:
+                  card:
+                    - height: 130px
+                    - padding: 16px 12px 8px 12px
+                    - border: none
+                    - box-shadow: none
+                    - background-color: >-
+                        [[[
+                          var count = states['sensor.main_bedroom_lights_on'] ? parseInt(states['sensor.main_bedroom_lights_on'].state) : 0;
+                          return count > 0 ? 'rgba(251, 192, 45, 0.15)' : 'transparent';
+                        ]]]
+                    - display: flex
+                    - flex-direction: column
+                    - align-items: center
+                    - justify-content: center
+                    - position: relative
+                  icon:
+                    - width: 72px
+                    - height: 72px
+                    - color: >-
+                        [[[
+                          var count = states['sensor.main_bedroom_lights_on'] ? parseInt(states['sensor.main_bedroom_lights_on'].state) : 0;
+                          return count > 0 ? '#FBC02D' : 'var(--secondary-text-color, #757575)';
+                        ]]]
+                  name:
+                    - font-size: 18px
+                    - font-weight: 700
+                    - margin-top: 8px
+                    - color: var(--primary-text-color)
+                  custom_fields:
+                    notification:
+                      - position: absolute
+                      - right: 8px
+                      - top: 12px
+                custom_fields:
+                  notification: >-
+                    [[[
+                      var on = states['sensor.main_bedroom_lights_on'] ? states['sensor.main_bedroom_lights_on'].state : '0';
+                      var off = states['sensor.main_bedroom_lights_off'] ? states['sensor.main_bedroom_lights_off'].state : '0';
+                      return `<div style="display: flex; gap: 6px;">
+                        <span style="background-color: #4CAF50; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${on} on</span>
+                        <span style="background-color: #546E7A; color: white; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${off} off</span>
+                      </div>`;
+                    ]]]
+
+          # --- Independent Patio Left & Closet Lights Row ---
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: light.patio_left_light
+                name: Patio Left Light
+                icon: mdi:balcony
+                tap_action:
+                  action: toggle
+                features:
+                  - type: light-brightness
+
+              - type: tile
+                entity: light.main_bedroom_closet_light
+                name: Closet Light
+                icon: mdi:wardrobe
+                tap_action:
+                  action: toggle
+                features:
+                  - type: light-brightness
+
+          # --- Bedroom Ceiling Lights Row ---
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: light.main_bedroom_ceiling_fan_light
+                name: Ceiling Fan Light
+                icon: mdi:ceiling-fan-light
+                tap_action:
+                  action: toggle
+                features:
+                  - type: light-brightness
+                  - type: light-color-temp
+
+              - type: tile
+                entity: light.main_bedroom_light_2
+                name: Ceiling Light 2
+                icon: mdi:ceiling-light
+                tap_action:
+                  action: toggle
+                features:
+                  - type: light-brightness
+
+          # --- Additional Light & Ceiling Fan Row ---
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: light.main_bedroom_light_1
+                name: Ceiling Light 1
+                icon: mdi:ceiling-light-outline
+                tap_action:
+                  action: toggle
+                features:
+                  - type: light-brightness
+
+              - type: tile
+                entity: fan.main_bedroom_ceiling_fan
+                name: Ceiling Fan
+                icon: mdi:fan
+                tap_action:
+                  action: toggle
+                features:
+                  - type: fan-speed
+
+          # --- Security & Access Row (Patio Security + Door Lock) ---
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: alarm_control_panel.alarmo
+                name: Patio Security
+                icon: mdi:shield-home
+                tap_action:
+                  action: more-info
+                features:
+                  - type: alarm-modes
+                    modes:
+                      - disarmed
+                      - armed_home
+                      - armed_away
+
+              - type: custom:button-card
+                entity: lock.patio_door_lock
+                name: Patio Lock
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var al = states['alarm_control_panel.patio_lock'];
+                    var hasPin = al && al.state && al.state !== 'unavailable' && al.state !== 'unknown';
+                    if (entity.state === 'locked') {
+                      return hasPin ? 'Locked (PIN Req)' : 'Locked';
+                    }
+                    return 'Unlocked (Tap Lock)';
+                  ]]]
+                icon: >-
+                  [[[
+                    return entity.state === 'locked' ? 'mdi:lock' : 'mdi:lock-open-variant';
+                  ]]]
+                tap_action:
+                  action: >-
+                    [[[
+                      if (entity.state === 'unlocked') return 'call-service';
+                      var al = states['alarm_control_panel.patio_lock'];
+                      if (!al || al.state === 'unavailable' || al.state === 'unknown') {
+                        return 'toggle';
+                      }
+                      return 'more-info';
+                    ]]]
+                  service: lock.lock
+                  target:
+                    entity_id: lock.patio_door_lock
+                  entity: alarm_control_panel.patio_lock
+                  haptic: selection
+                styles:
+                  card:
+                    - min-height: 58px
+                    - padding: 8px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: >-
+                        [[[
+                          return entity.state === 'locked' ? '1px solid rgba(244, 67, 54, 0.3)' : '1px solid rgba(76, 175, 80, 0.3)';
+                        ]]]
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: >-
+                        [[[
+                          return entity.state === 'locked' ? '#EF5350' : '#4CAF50';
+                        ]]]
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: >-
+                        [[[
+                          return entity.state === 'locked' ? '#EF5350' : '#81C784';
+                        ]]]
+
+          # --- Resilient Cached Weather Card (Never breaks or disappears) ---
+          - type: custom:button-card
+            entity: weather.forecast_home
+            name: >-
+              [[[
+                var w = entity;
+                var cached = window._nspanel_cached_weather || {};
+                if (w && w.state && w.state !== 'unavailable' && w.state !== 'unknown') {
+                  cached.state = w.state;
+                  cached.temp = w.attributes.temperature;
+                  cached.humidity = w.attributes.humidity;
+                  cached.wind = w.attributes.wind_speed;
+                  cached.time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  window._nspanel_cached_weather = cached;
+                  try { localStorage.setItem('nspanel_cached_weather', JSON.stringify(cached)); } catch(e){}
+                } else if (!cached.state) {
+                  try {
+                    var s = localStorage.getItem('nspanel_cached_weather');
+                    if (s) { cached = JSON.parse(s); window._nspanel_cached_weather = cached; }
+                  } catch(e){}
+                }
+                var cond = (w && w.state && w.state !== 'unavailable' && w.state !== 'unknown') ? w.state : (cached.state || 'Cloudy');
+                cond = cond.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                var isCached = (!w || w.state === 'unavailable' || w.state === 'unknown');
+                return cond + (isCached ? ' (Cached)' : '');
+              ]]]
+            state_display: >-
+              [[[
+                var cached = window._nspanel_cached_weather || {};
+                var w = entity;
+                var temp = (w && w.attributes && w.attributes.temperature != null && w.state !== 'unavailable') ? w.attributes.temperature : (cached.temp != null ? cached.temp : '--');
+                var hum = (w && w.attributes && w.attributes.humidity != null && w.state !== 'unavailable') ? w.attributes.humidity : (cached.humidity != null ? cached.humidity : '--');
+                var wind = (w && w.attributes && w.attributes.wind_speed != null && w.state !== 'unavailable') ? w.attributes.wind_speed : (cached.wind != null ? cached.wind : '--');
+                return `${temp}°C • Humidity ${hum}% • Wind ${wind} km/h`;
+              ]]]
+            show_name: true
+            show_state: true
+            show_icon: true
+            icon: >-
+              [[[
+                var w = entity;
+                var cached = window._nspanel_cached_weather || {};
+                var cond = (w && w.state && w.state !== 'unavailable') ? w.state : (cached.state || 'cloudy');
+                cond = cond.toLowerCase();
+                if (cond.includes('rain') || cond.includes('pour')) return 'mdi:weather-rainy';
+                if (cond.includes('snow')) return 'mdi:weather-snowy';
+                if (cond.includes('clear') || cond.includes('sunny')) return 'mdi:weather-sunny';
+                if (cond.includes('partly')) return 'mdi:weather-partly-cloudy';
+                if (cond.includes('wind')) return 'mdi:weather-windy';
+                if (cond.includes('fog')) return 'mdi:weather-fog';
+                if (cond.includes('lightning') || cond.includes('storm')) return 'mdi:weather-lightning';
+                return 'mdi:weather-cloudy';
+              ]]]
+            tap_action:
+              action: more-info
+              haptic: selection
+            styles:
+              card:
+                - min-height: 64px
+                - padding: 10px 14px
+                - border-radius: var(--ha-card-border-radius, 14px)
+                - background: "linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(13, 71, 161, 0.08) 100%)"
+                - border: "1px solid rgba(33, 150, 243, 0.25)"
+                - box-shadow: "0 2px 8px rgba(0, 0, 0, 0.2)"
+              grid:
+                - grid-template-areas: '"i n" "i s"'
+                - grid-template-columns: 42px 1fr
+                - grid-template-rows: auto auto
+                - align-items: center
+              icon:
+                - width: 26px
+                - height: 26px
+                - color: "#42A5F5"
+                - background-color: "rgba(33, 150, 243, 0.15)"
+                - border-radius: 10px
+                - padding: 6px
+              name:
+                - font-size: 14px
+                - font-weight: 700
+                - justify-self: start
+                - color: "var(--primary-text-color)"
+              state:
+                - font-size: 12px
+                - font-weight: 500
+                - justify-self: start
+                - color: "var(--secondary-text-color)"
+
+  # =========================================================================
+  # 2. LIGHTS PANEL
+  # =========================================================================
+  - title: Lights
+    path: lights
+    icon: mdi:lightbulb-multiple
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.main_bedroom_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.zigbee2cube_1002c15147_illuminance
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- 1. Main Bedroom Task & Ceiling Lighting ---
+          - type: heading
+            heading: 🛏️ Main Bedroom Lighting
+            heading_style: subtitle
+            icon: mdi:lightbulb-group
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              # Ceiling Fan Light
+              - type: tile
+                entity: light.main_bedroom_ceiling_fan_light
+                name: Fan Light
+                icon: mdi:ceiling-fan-light
+                features:
+                  - type: light-brightness
+                  - type: light-color-temp
+                tap_action:
+                  action: more-info
+
+              # Ceiling Light 2
+              - type: tile
+                entity: light.main_bedroom_light_2
+                name: Ceiling Light 2
+                icon: mdi:ceiling-light
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+
+              # Ceiling Light 1
+              - type: tile
+                entity: light.main_bedroom_light_1
+                name: Ceiling Light 1
+                icon: mdi:ceiling-light-outline
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+
+              # Closet Light
+              - type: tile
+                entity: light.main_bedroom_closet_light
+                name: Closet Light
+                icon: mdi:wardrobe
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+
+          # --- 2. Fan Accents & Ambience ---
+          - type: heading
+            heading: 🎨 Fan Accents & Modes
+            heading_style: subtitle
+            icon: mdi:palette-outline
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              # Fan Backlight & Scene Stack
+              - type: custom:stack-in-card
+                mode: vertical
+                cards:
+                  - type: tile
+                    entity: light.smart_fan_backlight_2
+                    name: Fan Backlight
+                    icon: mdi:palette-outline
+                    features:
+                      - type: light-brightness
+                    tap_action:
+                      action: more-info
+                  - type: tile
+                    entity: select.smart_fan_scene_2
+                    name: Fan Scene
+                    icon: mdi:palette
+                    features:
+                      - type: select-options
+                    tap_action:
+                      action: more-info
+
+              # Fan Nightlight
+              - type: tile
+                entity: light.smart_fan_nightlight_2
+                name: Fan Nightlight
+                icon: mdi:weather-night
+                tap_action:
+                  action: toggle
+
+          # --- 3. Independent Patio Fixture (Switch Location) ---
+          - type: heading
+            heading: 🌿 Patio (Independent Fixture)
+            heading_style: subtitle
+            icon: mdi:balcony
+
+          - type: tile
+            entity: light.patio_left_light
+            name: Patio Left Light
+            icon: mdi:balcony
+            features:
+              - type: light-brightness
+            tap_action:
+              action: more-info
+
+  # =========================================================================
+  # 3. CLIMATE PANEL
+  # =========================================================================
+  - title: Climate
+    path: climate
+    icon: mdi:fan
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.main_bedroom_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.zigbee2cube_1002c15147_illuminance
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Climate Controls
+            heading_style: subtitle
+            icon: mdi:thermostat
+
+          - type: tile
+            entity: fan.main_bedroom_ceiling_fan
+            name: Ceiling Fan
+            icon: mdi:fan
+            tap_action:
+              action: more-info
+            features:
+              - type: fan-speed
+              - type: fan-direction
+
+          - type: tile
+            entity: humidifier.humidifier
+            name: Humidifier
+            icon: mdi:air-humidifier
+            tap_action:
+              action: more-info
+
+  # 4. SENSORS PANEL
+  # =========================================================================
+  - title: Sensors
+    path: sensors
+    icon: mdi:shield-check
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.main_bedroom_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.zigbee2cube_1002c15147_illuminance
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Security & Locks
+            heading_style: subtitle
+            icon: mdi:lock
+
+          - type: tile
+            entity: lock.patio_door_lock
+            name: Patio Door Lock
+            icon: mdi:lock
+            tap_action:
+              action: more-info
+              haptic: selection
+
+          - type: heading
+            heading: Perimeter & Doors
+            heading_style: subtitle
+            icon: mdi:door
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: binary_sensor.door_sensor_door
+                name: Kitchen Door
+                icon: mdi:door
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.patio_lock_door
+                name: Patio Door
+                icon: mdi:door
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.patio_fence_sensor
+                name: Patio Fence Gate
+                icon: mdi:gate
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.window_sensor_door
+                name: Window Sensor
+                icon: mdi:window-closed-variant
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+          - type: heading
+            heading: Motion & Presence
+            heading_style: subtitle
+            icon: mdi:motion-sensor
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: binary_sensor.office_presence_fp300
+                name: Office FP300
+                icon: mdi:motion-sensor
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.patio_motion_right
+                name: Patio Motion
+                icon: mdi:motion-sensor
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.guest_bedroom_motion
+                name: Guest Bedroom Motion
+                icon: mdi:motion-sensor
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: binary_sensor.vibration_sensor_vibration
+                name: Vibration Sensor
+                icon: mdi:vibrate
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+  # =========================================================================
+  # 5. BATTERY PANEL
+  # =========================================================================
+  - title: Battery
+    path: battery
+    icon: mdi:battery-high
+    type: sections
+    max_columns: 1
+    theme: ios-dark-mode
+    badges:
+      - type: entity
+        entity: sensor.main_bedroom_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.zigbee2cube_1002c15147_illuminance
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Low Batteries Priority Section ---
+          - type: heading
+            heading: Low Battery Attention (< 60%)
+            heading_style: subtitle
+            icon: mdi:battery-alert
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.motion_sensor_right_battery
+                name: Patio Motion
+                icon: mdi:battery-20
+                color: red
+              - type: tile
+                entity: sensor.vibration_sensor_battery
+                name: Vibration Sensor
+                icon: mdi:battery-50
+                color: amber
+
+          # --- Batteries by Area ---
+          - type: heading
+            heading: Patio
+            heading_style: subtitle
+            icon: mdi:balcony
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.motion_sensor_right_battery
+                name: Motion Right
+              - type: tile
+                entity: sensor.patio_lock_battery
+                name: Door Lock
+              - type: tile
+                entity: sensor.fence_sensor_battery
+                name: Fence Sensor
+
+          - type: heading
+            heading: Kitchen
+            heading_style: subtitle
+            icon: mdi:countertop
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.door_sensor_battery
+                name: Door Sensor
+              - type: tile
+                entity: sensor.botao_ikea_1_battery
+                name: Ikea Button
+              - type: tile
+                entity: sensor.ir_remoto_battery
+                name: IR Remote
+              - type: tile
+                entity: sensor.roborock_dyad_pro_combo_battery
+                name: Roborock Vacuum
+
+          - type: heading
+            heading: Office
+            heading_style: subtitle
+            icon: mdi:desktop-tower
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.fp300_den_battery
+                name: Presence FP300
+              - type: tile
+                entity: sensor.plant_pot_soil_moisture_3_battery
+                name: Plant Pot
+              - type: tile
+                entity: sensor.nspanel_den_battery_level
+                name: NSPanel Screen
+
+          - type: heading
+            heading: Other Rooms
+            heading_style: subtitle
+            icon: mdi:home-outline
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.presence_2_battery
+                name: Guest Bedroom Motion
+              - type: tile
+                entity: sensor.plant_pot_soil_moisture_1_battery
+                name: Dining Plant Pot
+              - type: tile
+                entity: sensor.plant_pot_soil_moisture_2_battery
+                name: Bath Plant Pot
+              - type: tile
+                entity: sensor.window_sensor_battery
+                name: Window Sensor
+
+  # =========================================================================
+  # 6. WARNINGS & ALERTS SETTINGS PANEL
+  # =========================================================================
+  - title: Alerts
+    path: alerts
+    icon: mdi:shield-alert-outline
+    theme: ios-dark-mode
+    max_columns: 1
+    badges:
+      - type: entity
+        entity: sensor.main_bedroom_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.zigbee2cube_1002c15147_illuminance
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Section 0: Patio Security & Alarm Panel ---
+          - type: heading
+            heading: Patio Security & Alarm
+            heading_style: subtitle
+            icon: mdi:shield-key
+
+          - type: custom:alarmo-card
+            entity: alarm_control_panel.alarmo
+            name: Patio Security
+            keep_keypad_visible: true
+
+          # --- Section 1: Security Warning Delays ---
+          - type: heading
+            heading: Security Warning Delays
+            heading_style: subtitle
+            icon: mdi:shield-clock
+
+          - type: entities
+            entities:
+              - entity: input_number.warning_patio_door_unlocked_delay
+                name: Patio Door Unlocked
+                icon: mdi:lock-clock
+              - entity: input_number.warning_patio_fence_open_delay
+                name: Fence Gate Open
+                icon: mdi:gate-alert
+              - entity: input_number.warning_front_door_open_delay
+                name: Front Door Open
+                icon: mdi:door-open
+              - entity: input_number.warning_patio_door_open_delay
+                name: Patio Door Open
+                icon: mdi:door-open
+              - entity: input_number.warning_window_open_delay
+                name: Window Open
+                icon: mdi:window-open-variant
+
+          # --- Section 2: Audio & Screen Alerts ---
+          - type: heading
+            heading: Audio & Screen Alerts
+            heading_style: subtitle
+            icon: mdi:volume-vibrate
+
+          - type: entities
+            entities:
+              - entity: input_number.warning_alert_repeat_interval
+                name: Chime Repeat Interval
+                icon: mdi:timer-sync
+              - entity: switch.zigbee2cube_1002c15147_screen_state
+                name: Screen Power
+                icon: mdi:tablet-dashboard
+              - entity: number.zigbee2cube_1002c15147_custom_duration
+                name: Screen Sleep Timeout (Seconds)
+                icon: mdi:timer-outline
+              - entity: switch.zigbee2cube_1002c15147_proximity_wake
+                name: Wake on Proximity
+                icon: mdi:hand-wave
+
+          # --- Section 3: Live Warning Status & Preview ---
+          - type: heading
+            heading: Live Status & Test
+            heading_style: subtitle
+            icon: mdi:bell-ring-outline
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: binary_sensor.active_security_warnings
+                name: Active Warnings
+                icon: mdi:shield-alert
+              - type: custom:button-card
+                name: "🔔 Test Alert Chime"
+                icon: mdi:bell-ring
+                tap_action:
+                  action: call-service
+                  haptic: selection
+                  service: script.nspanel_audio_feedback
+                  data:
+                    tone: warning
+                styles:
+                  card:
+                    - height: 56px
+                    - padding: 6px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: "#BA68C8"
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - color: var(--primary-text-color)
+
+
+  # =========================================================================
+  # VIEW 7: HOMELAB & CLOSET THERMAL COOLING
+  # =========================================================================
+  - title: Homelab
+    path: homelab
+    icon: mdi:server-network
+    theme: ios-dark-mode
+    max_columns: 1
+    badges:
+      - type: entity
+        entity: sensor.main_bedroom_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.zigbee2cube_1002c15147_illuminance
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+
+    sections:
+      - type: grid
+        cards:
+          # --- Section 1: Kitchen Closet Thermal Cooling Watchdog ---
+          - type: heading
+            heading: Kitchen Closet Thermal Watchdog
+            heading_style: subtitle
+            icon: mdi:fan-alert
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.temperature_sensor_temperature
+                name: Closet Ambient
+                icon: mdi:thermometer
+                tap_action:
+                  action: more-info
+
+              - type: custom:button-card
+                entity: sensor.fan_opnsense_plug_power
+                name: Cooling Fan
+                icon: mdi:fan
+                show_name: true
+                show_state: true
+                state_display: >-
+                  [[[
+                    var w = entity.state ? parseFloat(entity.state) : 0;
+                    if (w < 3) return 'Off (0W)';
+                    if (w < 10) return `Speed 1 (${w}W)`;
+                    if (w < 17) return `Speed 2 (${w}W)`;
+                    if (w < 24) return `Speed 3 (${w}W)`;
+                    return `Speed 4 (${w}W)`;
+                  ]]]
+                tap_action:
+                  action: more-info
+                styles:
+                  card:
+                    - height: 56px
+                    - padding: 6px 10px
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: rgba(255, 255, 255, 0.05)
+                    - border: 1px solid rgba(255, 255, 255, 0.1)
+                  grid:
+                    - grid-template-areas: '"i n" "i s"'
+                    - grid-template-columns: 32px 1fr
+                    - grid-template-rows: 1fr 1fr
+                    - align-items: center
+                  icon:
+                    - width: 22px
+                    - height: 22px
+                    - color: >-
+                        [[[
+                          var w = entity.state ? parseFloat(entity.state) : 0;
+                          return w >= 3 ? '#29B6F6' : 'var(--secondary-text-color)';
+                        ]]]
+                  name:
+                    - font-size: 13px
+                    - font-weight: 600
+                    - justify-self: start
+                    - color: var(--primary-text-color)
+                  state:
+                    - font-size: 11px
+                    - font-weight: 500
+                    - justify-self: start
+                    - color: >-
+                        [[[
+                          var w = entity.state ? parseFloat(entity.state) : 0;
+                          return w >= 3 ? '#29B6F6' : 'var(--secondary-text-color)';
+                        ]]]
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.proxmox_host_pve_pve_cpu_package_temperature
+                name: PVE CPU Temp
+                icon: mdi:cpu-64-bit
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.proxmox_host_pve_pve_nvme_storage_temperature
+                name: NVMe Temp
+                icon: mdi:harddisk
+                tap_action:
+                  action: more-info
+
+          # --- Section 2: Proxmox Host (PVE) ---
+          - type: heading
+            heading: Proxmox Host (pve)
+            heading_style: subtitle
+            icon: mdi:server
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: binary_sensor.pve_status
+                name: Node Status
+                icon: mdi:server
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.pve_cpu_usage
+                name: Host CPU
+                icon: mdi:chart-donut
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.pve_memory_usage_percentage
+                name: Host RAM
+                icon: mdi:memory
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.pve_disk_usage
+                name: Host Disk
+                icon: mdi:database
+                tap_action:
+                  action: more-info
+
+          # --- Section 3: Instances & Mesh Network ---
+          - type: heading
+            heading: Instances & Network
+            heading_style: subtitle
+            icon: mdi:lan
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.opnsense_status
+                name: OPNsense
+                icon: mdi:shield-lock-outline
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.opnsense_cpu_usage
+                name: OPNsense CPU
+                icon: mdi:chart-line
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.docker_status
+                name: Docker Host
+                icon: mdi:docker
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.docker_memory_usage_percentage
+                name: Docker RAM
+                icon: mdi:memory
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.tailscale_status
+                name: Tailscale VPN
+                icon: mdi:vpn
+                tap_action:
+                  action: more-info
+              - type: tile
+                entity: sensor.tailscale_cpu_usage
+                name: Tailscale CPU
+                icon: mdi:chart-bell-curve
+                tap_action:
+                  action: more-info
+
+  # =========================================================================
+  # =========================================================================
+  # VIEW 8: ENERGY & REAL-TIME POWER MONITORING
+  # =========================================================================
+  - title: Energy
+    path: energy
+    icon: mdi:lightning-bolt-circle
+    theme: ios-dark-mode
+    max_columns: 1
+    badges:
+      - type: entity
+        entity: sensor.main_bedroom_temperature
+        name: Temp
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_humidity
+        name: Humidity
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.zigbee2cube_1002c15147_illuminance
+        name: Light
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_air_quality
+        name: Air
+        show_name: true
+        show_state: true
+        show_icon: true
+      - type: entity
+        entity: sensor.main_bedroom_pm2_5
+        name: PM2.5
+        show_name: true
+        show_state: true
+        show_icon: true
+    sections:
+    - type: grid
+      cards:
+      - type: heading
+        heading: Power & Grid Overview
+        heading_style: subtitle
+        icon: mdi:flash
+      - type: custom:button-card
+        name: Total Measured Power
+        icon: mdi:lightning-bolt
+        show_name: true
+        show_state: true
+        state_display: |-
+          [[[
+            var plugs = [
+              states['sensor.homelab_plug_power'],
+              states['sensor.den_pc_plug_power'],
+              states['sensor.den_fan_light_power'],
+              states['sensor.freezer_plug_power'],
+              states['sensor.kitchen_refrigerator_power'],
+              states['sensor.fan_opnsense_plug_power'],
+              states['sensor.tv_gaming_plug_power'],
+              states['sensor.living_room_samsung_oled_power'],
+              states['sensor.living_room_samsung_cu7700_43_power'],
+              states['sensor.air_purifier_plug_power'],
+              states['sensor.bedroom_bed_plug_power'],
+              states['sensor.main_bathroom_fan_power'],
+              states['sensor.light_patio_left_power']
+            ];
+            var sum = 0;
+            plugs.forEach(function(s) {
+              if (s && s.state && !isNaN(parseFloat(s.state))) {
+                sum += parseFloat(s.state);
+              }
+            });
+            return Math.round(sum) + ' W';
+          ]]]
+        tap_action:
+          action: more-info
+        styles:
+          card:
+          - min-height: 70px
+          - padding: 12px 16px
+          - border-radius: var(--ha-card-border-radius, 14px)
+          - background: linear-gradient(135deg, rgba(255, 179, 0, 0.18) 0%, rgba(255,
+              111, 0, 0.08) 100%)
+          - border: 1.5px solid rgba(255, 179, 0, 0.4)
+          - box-shadow: 0 0 14px rgba(255, 179, 0, 0.15)
+          grid:
+          - grid-template-areas: '"i n" "i s"'
+          - grid-template-columns: 44px 1fr
+          - grid-template-rows: auto auto
+          - align-items: center
+          icon:
+          - width: 28px
+          - height: 28px
+          - color: "#FFB300"
+          - background-color: rgba(255, 179, 0, 0.2)
+          - border-radius: 10px
+          - padding: 6px
+          name:
+          - font-size: 13px
+          - font-weight: 600
+          - justify-self: start
+          - color: var(--primary-text-color)
+          state:
+          - font-size: 20px
+          - font-weight: 700
+          - justify-self: start
+          - color: "#FFD54F"
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+        - type: custom:button-card
+          entity: sensor.bc_hydro_mission_cost_to_date
+          name: |-
+            [[[
+              var s = states['sensor.bc_hydro_mission_billing_period_start'];
+              var d = (s && s.state && s.state !== 'unknown') ? new Date(s.state) : new Date('2026-10-21');
+              var m = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+              return `BC Hydro (Since ${m})`;
+            ]]]
+          icon: mdi:transmission-tower
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var cost = states['sensor.bc_hydro_mission_cost_to_date'] ? states['sensor.bc_hydro_mission_cost_to_date'].state : '0';
+              var kwh = states['sensor.bc_hydro_mission_consumption_to_date'] ? states['sensor.bc_hydro_mission_consumption_to_date'].state : '0';
+              return `$${cost} • ${kwh} kWh`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(76, 175, 80, 0.3)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#4CAF50"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: "#81C784"
+        - type: custom:button-card
+          entity: sensor.bc_hydro_mission_yesterday_cost
+          name: |-
+            [[[
+              var days = states['sensor.bc_hydro_mission_days_in_billing_period'] ? states['sensor.bc_hydro_mission_days_in_billing_period'].state : '58';
+              var prog = states['sensor.bc_hydro_mission_billing_period_progress'] ? states['sensor.bc_hydro_mission_billing_period_progress'].state : '21';
+              return `Cycle: ${prog}% of ${days}d`;
+            ]]]
+          icon: mdi:calendar-clock
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var y_cost = states['sensor.bc_hydro_mission_yesterday_cost'] ? states['sensor.bc_hydro_mission_yesterday_cost'].state : '0';
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 13.1;
+              if (c && k && parseFloat(k.state) > 0) {
+                rate = ((parseFloat(c.state) / parseFloat(k.state)) * 100).toFixed(1);
+              }
+              return `Yest $${y_cost} • ${rate}¢/kWh`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(33, 150, 243, 0.3)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#2196F3"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: "#64B5F6"
+      - type: heading
+        heading: Computing & Homelab (Period)
+        heading_style: subtitle
+        icon: mdi:desktop-tower
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+        - type: custom:button-card
+          entity: sensor.homelab_plug_power
+          name: Homelab Plug
+          icon: mdi:server
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.homelab_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.93;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['homelab'] != null) base = parseFloat(b['homelab']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#FFB300"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.den_pc_plug_power
+          name: Office PC Plug
+          icon: mdi:laptop
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.den_pc_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 21.93;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['den_pc'] != null) base = parseFloat(b['den_pc']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#FFB300"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.fan_opnsense_plug_power
+          name: Closet Fan Plug
+          icon: mdi:fan
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.fan_opnsense_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.01;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['fan_opnsense'] != null) base = parseFloat(b['fan_opnsense']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#FFB300"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.tv_gaming_plug_power
+          name: TV Gaming Plug
+          icon: mdi:gamepad-variant
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.tv_gaming_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 43.18;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['tv_gaming'] != null) base = parseFloat(b['tv_gaming']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#FFB300"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+      - type: heading
+        heading: Kitchen & Appliances (Period)
+        heading_style: subtitle
+        icon: mdi:fridge
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+        - type: custom:button-card
+          entity: sensor.freezer_plug_power
+          name: Freezer Plug
+          icon: mdi:snowflake
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.freezer_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.1;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['freezer'] != null) base = parseFloat(b['freezer']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#26C6DA"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.kitchen_refrigerator_power
+          name: Refrigerator
+          icon: mdi:fridge-outline
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.kitchen_refrigerator_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 1191.47;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['refrigerator'] != null) base = parseFloat(b['refrigerator']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#26C6DA"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.air_purifier_plug_power
+          name: Air Purifier Plug
+          icon: mdi:air-purifier
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.air_purifier_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 9.71;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['air_purifier'] != null) base = parseFloat(b['air_purifier']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#26C6DA"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.bedroom_bed_plug_power
+          name: Bedside Plug
+          icon: mdi:bed
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.bedroom_bed_plug_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.0;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['bedroom_bed'] != null) base = parseFloat(b['bedroom_bed']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#26C6DA"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+      - type: heading
+        heading: Switches & Smart Relays (Period)
+        heading_style: subtitle
+        icon: mdi:toggle-switch
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+        - type: custom:button-card
+          entity: sensor.den_fan_light_power
+          name: Office Fan Relay
+          icon: mdi:lightbulb
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.den_fan_light_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 4.1;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['den_fan_light'] != null) base = parseFloat(b['den_fan_light']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#AB47BC"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.light_patio_left_power
+          name: Patio Light Relay
+          icon: mdi:outdoor-lamp
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.light_patio_left_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.0;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['patio_light'] != null) base = parseFloat(b['patio_light']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#AB47BC"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.main_bathroom_fan_power
+          name: Bathroom Fan
+          icon: mdi:fan
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.main_bathroom_fan_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 1.24;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['bathroom_fan'] != null) base = parseFloat(b['bathroom_fan']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#AB47BC"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+        - type: custom:button-card
+          entity: sensor.living_room_samsung_cu7700_43_power
+          name: Living Room TV
+          icon: mdi:television
+          show_name: true
+          show_state: true
+          state_display: |-
+            [[[
+              var w = entity.state ? parseFloat(entity.state).toFixed(0) : '0';
+              var kwh_state = states['sensor.living_room_samsung_cu7700_43_energy'];
+              var raw_kwh = (kwh_state && kwh_state.state) ? parseFloat(kwh_state.state) : 0;
+              var baselines_str = states['input_text.energy_billing_cycle_baselines'] ? states['input_text.energy_billing_cycle_baselines'].state : '';
+              var base = 0.0;
+              try {
+                var b = JSON.parse(baselines_str);
+                if (b && b['living_room_tv'] != null) base = parseFloat(b['living_room_tv']);
+              } catch(e){}
+              var period_kwh = Math.max(0, raw_kwh - base);
+              var c = states['sensor.bc_hydro_mission_cost_to_date'];
+              var k = states['sensor.bc_hydro_mission_consumption_to_date'];
+              var rate = 0.1312;
+              if (c && k && parseFloat(k.state) > 0) rate = parseFloat(c.state) / parseFloat(k.state);
+              var cost = (period_kwh * rate).toFixed(2);
+              return `${w}W • ${period_kwh.toFixed(1)}kWh ($${cost})`;
+            ]]]
+          tap_action:
+            action: more-info
+          styles:
+            card:
+            - min-height: 58px
+            - padding: 8px 10px
+            - border-radius: var(--ha-card-border-radius, 12px)
+            - background-color: rgba(255, 255, 255, 0.05)
+            - border: 1px solid rgba(255, 255, 255, 0.1)
+            grid:
+            - grid-template-areas: '"i n" "i s"'
+            - grid-template-columns: 32px 1fr
+            - grid-template-rows: 1fr 1fr
+            - align-items: center
+            icon:
+            - width: 22px
+            - height: 22px
+            - color: "#AB47BC"
+            name:
+            - font-size: 13px
+            - font-weight: 600
+            - justify-self: start
+            - color: var(--primary-text-color)
+            state:
+            - font-size: 11px
+            - font-weight: 500
+            - justify-self: start
+            - color: var(--secondary-text-color)
+

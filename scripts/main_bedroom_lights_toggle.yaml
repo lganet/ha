@@ -1,0 +1,24 @@
+alias: Main Bedroom Lights Toggle
+description: Toggles Main Bedroom lights contextually. If any bedroom lights are on, turns them all off. If all are off, turns on the primary bedroom fan light, preserving state memory. Leaves Patio Left light unaffected.
+icon: mdi:theme-light-dark
+mode: single
+sequence:
+  - choose:
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.main_bedroom_lights_on
+            above: 0
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id:
+                - light.main_bedroom_ceiling_fan_light
+                - light.smart_fan_backlight_2
+                - light.smart_fan_nightlight_2
+                - light.main_bedroom_light_1
+                - light.main_bedroom_light_2
+                - light.main_bedroom_closet_light
+    default:
+      - action: light.turn_on
+        target:
+          entity_id: light.main_bedroom_ceiling_fan_light
