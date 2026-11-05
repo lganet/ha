@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.12.0 - 2026-11-05
+
 ### Added
 - Added Alarmo Patio Security Synchronization (`automations/alarmo_patio_security_sync.yaml`, `automation.alarmo_patio_security_lock_synchronization`):
   - Bi-directionally synchronizes security states between Alarmo (`alarm_control_panel.alarmo`) and Eufy Patio Cameras (`alarm_control_panel.gushomebase`).
