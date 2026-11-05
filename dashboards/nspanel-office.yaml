@@ -621,7 +621,12 @@ views:
                 show_state: true
                 state_display: >-
                   [[[
-                    return entity.state === 'locked' ? 'Locked (PIN Req)' : 'Unlocked (Tap Lock)';
+                    var al = states['alarm_control_panel.patio_lock'];
+                    var hasPin = al && al.state && al.state !== 'unavailable' && al.state !== 'unknown';
+                    if (entity.state === 'locked') {
+                      return hasPin ? 'Locked (PIN Req)' : 'Locked';
+                    }
+                    return 'Unlocked (Tap Lock)';
                   ]]]
                 icon: >-
                   [[[
@@ -630,7 +635,12 @@ views:
                 tap_action:
                   action: >-
                     [[[
-                      return entity.state === 'unlocked' ? 'call-service' : 'more-info';
+                      if (entity.state === 'unlocked') return 'call-service';
+                      var al = states['alarm_control_panel.patio_lock'];
+                      if (!al || al.state === 'unavailable' || al.state === 'unknown') {
+                        return 'toggle';
+                      }
+                      return 'more-info';
                     ]]]
                   service: lock.lock
                   target:
