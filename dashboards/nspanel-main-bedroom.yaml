@@ -1070,16 +1070,6 @@ views:
                 tap_action:
                   action: more-info
 
-              # Ceiling Light 1 (Always-On Fan Power)
-              - type: tile
-                entity: light.main_bedroom_light_1
-                name: Ceiling Light 1 (Always-On)
-                icon: mdi:power-plug
-                features:
-                  - type: light-brightness
-                tap_action:
-                  action: more-info
-
               # Closet Light
               - type: tile
                 entity: light.main_bedroom_closet_light
@@ -1090,7 +1080,37 @@ views:
                 tap_action:
                   action: more-info
 
-          # --- 2. Fan Accents & Ambience ---
+          # --- 2. Main Bathroom Lighting ---
+          - type: heading
+            heading: 🛁 Main Bathroom Lighting
+            heading_style: subtitle
+            icon: mdi:shower-head
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              # Vanity Light
+              - type: tile
+                entity: light.main_bathroom_vanity_light
+                name: Vanity Light
+                icon: mdi:mirror
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+
+              # Shower Light
+              - type: tile
+                entity: light.main_bathroom_shower_light
+                name: Shower Light
+                icon: mdi:shower
+                features:
+                  - type: light-brightness
+                tap_action:
+                  action: more-info
+
+          # --- 3. Fan Accents & Ambience ---
           - type: heading
             heading: 🎨 Fan Accents & Modes
             heading_style: subtitle
@@ -1570,12 +1590,29 @@ views:
                               return (entity.state === 'on' && spd === 6) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
                             ]]]
 
-          - type: tile
-            entity: humidifier.humidifier
-            name: Humidifier
-            icon: mdi:air-humidifier
-            tap_action:
-              action: more-info
+          # --- 2. Ventilation & Humidity ---
+          - type: heading
+            heading: 💨 Ventilation & Humidity
+            heading_style: subtitle
+            icon: mdi:fan-auto
+
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: switch.main_bathroom_fan
+                name: Bathroom Fan
+                icon: mdi:fan
+                tap_action:
+                  action: toggle
+
+              - type: tile
+                entity: humidifier.humidifier
+                name: Humidifier
+                icon: mdi:air-humidifier
+                tap_action:
+                  action: more-info
 
   # 4. SENSORS PANEL
   # =========================================================================

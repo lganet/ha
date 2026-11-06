@@ -18,6 +18,10 @@
 - Enabled hardware proximity wake sensor (`switch.zigbee2cube_1002c15147_proximity_wake`) on Main Bedroom NSPanel Pro for automatic screen wake upon physical approach.
 
 ### Changed
+- Refactored Main Bedroom NSPanel Pro dashboard (`dashboards/nspanel-main-bedroom.yaml`):
+  - Removed always-on power relay `light.main_bedroom_light_1` (`Ceiling Light 1`) from the Lights view (`path: lights`) to protect constant line voltage to the smart ceiling fan and prevent accidental disconnection.
+  - Added dedicated `Main Bathroom Lighting` section to the Lights view with dimmable controls for Vanity Light (`light.main_bathroom_vanity_light`) and Shower Light (`light.main_bathroom_shower_light`).
+  - Added `Ventilation & Humidity` section to the Climate/Fan view (`path: climate`) with one-tap toggle for the Main Bathroom Exhaust Fan (`switch.main_bathroom_fan`) paired side-by-side with the Humidifier in a balanced 2-column grid.
 - Refactored Ceiling Fan control cards across both Main Bedroom (`dashboards/nspanel-main-bedroom.yaml`) and Office (`dashboards/nspanel-office.yaml`) NSPanel dashboards:
   - Spanned Ceiling Fan card across full width (2 spaces in the 2-column layout) on the Main Bedroom panel where no secondary fan device is present.
   - Refactored Office Ceiling Fan and Air Purifier into matching twin cards (~100px height) side-by-side in the 2-column grid:
