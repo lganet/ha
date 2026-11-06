@@ -24,9 +24,9 @@
   - Added `Ventilation & Humidity` section to the Climate/Fan view (`path: climate`) with one-tap toggle for the Main Bathroom Exhaust Fan (`switch.main_bathroom_fan`) paired side-by-side with the Humidifier in a balanced 2-column grid.
 - Refactored Ceiling Fan control cards across both Main Bedroom (`dashboards/nspanel-main-bedroom.yaml`) and Office (`dashboards/nspanel-office.yaml`) NSPanel dashboards:
   - Spanned Ceiling Fan card across full width (2 spaces in the 2-column layout) on the Main Bedroom panel where no secondary fan device is present.
-  - Refactored Office Ceiling Fan and Air Purifier into matching twin cards (~100px height) side-by-side in the 2-column grid:
-    - **Ceiling Fan Card**: Replaced discrete speed buttons with an elegant 38px combo dropdown selector pill with dynamic speed icons (`mdi:fan-speed-1..6`), current speed label, and native touch picker; enlarged the header Direction button (`[ ↻ Fwd ]` / `[ ↺ Rev ]`) with tactile borders and state coloring; preserved speed- and direction-responsive spinning fan animation.
-    - **Air Purifier Card**: Upgraded into a matching twin card featuring a 38px preset modes dropdown selector pill (`Sleep`, `Smart`, `Low`, `Medium`, `High`, `Strong`) and a dynamic cyan breathing pulse animation (`@keyframes purifier-pulse`) on the turbine icon when active (`on`).
+  - Refactored Office Ceiling Fan and Air Purifier row (~104px height) side-by-side in the 2-column grid:
+    - **Air Purifier Card**: Restored to native Home Assistant Tile card (`fan.office_air_purifier`) with `fan-preset-modes` dropdown, ensuring full-width layout and rock-solid native touch popover without touch dismiss glitches.
+    - **Ceiling Fan Card**: Preserved fluid speed- and direction-responsive spinning fan animation, enlarged the header Direction toggle button (`[ ↻ Fwd ]` / `[ ↺ Rev ]`) with tactile borders, and embedded a full-width 36px segmented speed pill (`1` to `6`) with single-tap speed setting and active speed highlighting, maintaining exact 104px height symmetry alongside the Air Purifier.
     - **Motion Presence Control**: Added a fancy neon green pulsing beacon animation (`@keyframes presence-pulse`) on the radar icon whenever presence is actively detected (`binary_sensor.office_presence_fp300`).
   - Applied discrete speed and direction controls to main views and climate sub-panels across both dashboards.
 

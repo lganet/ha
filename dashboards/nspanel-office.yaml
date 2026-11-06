@@ -596,7 +596,7 @@ views:
             columns: 2
             square: false
             cards:
-              # Card 1: Ceiling Fan (Twin Card)
+              # Card 1: Ceiling Fan (Matching Height & Layout)
               - type: custom:stack-in-card
                 mode: vertical
                 styles:
@@ -604,7 +604,7 @@ views:
                     - border-radius: var(--ha-card-border-radius, 12px)
                     - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
                     - border: 1px solid var(--ha-card-border-color, rgba(255, 255, 255, 0.1))
-                    - padding: 10px
+                    - padding: 10px 10px 12px 10px
                     - box-sizing: border-box
                 cards:
                   - type: custom:button-card
@@ -741,212 +741,289 @@ views:
                         100% { transform: rotate(0deg); }
                       }
 
-                  - type: custom:button-card
-                    entity: fan.office_ceiling_fan
-                    show_name: false
-                    show_icon: false
+                  # Full-Width Unified Speed Segmented Pill
+                  - type: grid
+                    columns: 6
+                    square: false
                     styles:
                       card:
-                        - height: 38px
-                        - padding: 0
                         - margin-top: 8px
-                        - border-radius: 8px
-                        - background: transparent
-                        - border: none
-                    custom_fields:
-                      combo: >-
-                        [[[
-                          var pct = entity.attributes.percentage || 0;
-                          var curSpd = (entity.state === 'on') ? (Math.round(pct / 16.6667) || 1) : 0;
-                          var spdIcons = {
-                            0: 'mdi:fan-off',
-                            1: 'mdi:fan-speed-1',
-                            2: 'mdi:fan-speed-2',
-                            3: 'mdi:fan-speed-3',
-                            4: 'mdi:fan-speed-4',
-                            5: 'mdi:fan-speed-5',
-                            6: 'mdi:fan-speed-6'
-                          };
-                          var icon = spdIcons[curSpd] || 'mdi:fan';
-                          var label = curSpd > 0 ? ('Speed ' + curSpd) : 'Off';
-                          var activeColor = (curSpd > 0) ? '#29B6F6' : 'var(--secondary-text-color, #888888)';
-                          
-                          return `
-                            <div style="position: relative; width: 100%; height: 38px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; box-sizing: border-box;">
-                              <div style="display: flex; align-items: center; gap: 8px;">
-                                <ha-icon icon="${icon}" style="--mdc-icon-size: 20px; color: ${activeColor};"></ha-icon>
-                                <span style="font-size: 13px; font-weight: 600; color: var(--primary-text-color);">${label}</span>
-                              </div>
-                              <ha-icon icon="mdi:chevron-down" style="--mdc-icon-size: 18px; color: var(--secondary-text-color);"></ha-icon>
-                              <select style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;"
-                                      onchange="
-                                        var val = parseInt(this.value);
-                                        var ha = document.querySelector('home-assistant');
-                                        if (!ha && window.parent) ha = window.parent.document.querySelector('home-assistant');
-                                        if (ha && ha.hass) {
-                                          if (val === 0) {
-                                            ha.hass.callService('fan', 'turn_off', {entity_id: 'fan.office_ceiling_fan'});
-                                          } else {
-                                            ha.hass.callService('fan', 'set_percentage', {entity_id: 'fan.office_ceiling_fan', percentage: val});
-                                          }
-                                        }
-                                      ">
-                                <option value="0" ${curSpd === 0 ? 'selected' : ''}>Off</option>
-                                <option value="17" ${curSpd === 1 ? 'selected' : ''}>Speed 1</option>
-                                <option value="33" ${curSpd === 2 ? 'selected' : ''}>Speed 2</option>
-                                <option value="50" ${curSpd === 3 ? 'selected' : ''}>Speed 3</option>
-                                <option value="67" ${curSpd === 4 ? 'selected' : ''}>Speed 4</option>
-                                <option value="83" ${curSpd === 5 ? 'selected' : ''}>Speed 5</option>
-                                <option value="100" ${curSpd === 6 ? 'selected' : ''}>Speed 6</option>
-                              </select>
-                            </div>
-                          `;
-                        ]]]
+                    cards:
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "1"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 17
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 36px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 1) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 1) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 1) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 1) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
 
-              # Card 2: Air Purifier (Twin Card)
-              - type: custom:stack-in-card
-                mode: vertical
-                styles:
-                  card:
-                    - border-radius: var(--ha-card-border-radius, 12px)
-                    - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
-                    - border: 1px solid var(--ha-card-border-color, rgba(255, 255, 255, 0.1))
-                    - padding: 10px
-                    - box-sizing: border-box
-                cards:
-                  - type: custom:button-card
-                    entity: fan.office_air_purifier
-                    name: Air Purifier
-                    show_name: true
-                    show_state: true
-                    show_icon: true
-                    icon: mdi:air-purifier
-                    state_display: >-
-                      [[[
-                        return entity.state === 'on' ? 'On' : 'Off';
-                      ]]]
-                    tap_action:
-                      action: toggle
-                      haptic: selection
-                    styles:
-                      card:
-                        - height: 44px
-                        - padding: 0
-                        - background: transparent
-                        - border: none
-                      grid:
-                        - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 40px 1fr
-                        - grid-template-rows: auto auto
-                        - align-items: center
-                      img_cell:
-                        - width: 36px
-                        - height: 36px
-                        - border-radius: 50%
-                        - background-color: >-
-                            [[[
-                              return entity.state === 'on' ? 'rgba(0, 188, 212, 0.18)' : 'rgba(255, 255, 255, 0.06)';
-                            ]]]
-                        - display: flex
-                        - align-items: center
-                        - justify-content: center
-                      icon:
-                        - width: 22px
-                        - height: 22px
-                        - color: >-
-                            [[[
-                              return entity.state === 'on' ? '#00BCD4' : 'var(--secondary-text-color, #888888)';
-                            ]]]
-                        - animation: >-
-                            [[[
-                              if (entity.state === 'on') return 'purifier-pulse 2.2s ease-in-out infinite';
-                              return 'none';
-                            ]]]
-                      name:
-                        - font-size: 13px
-                        - font-weight: 600
-                        - justify-self: start
-                        - margin-left: 6px
-                        - color: var(--primary-text-color)
-                      state:
-                        - font-size: 11px
-                        - font-weight: 500
-                        - justify-self: start
-                        - margin-left: 6px
-                        - color: >-
-                            [[[
-                              return entity.state === 'on' ? '#00BCD4' : 'var(--secondary-text-color)';
-                            ]]]
-                    extra_styles: |
-                      @keyframes purifier-pulse {
-                        0% {
-                          transform: scale(1);
-                          filter: drop-shadow(0 0 2px rgba(0, 188, 212, 0.4));
-                        }
-                        50% {
-                          transform: scale(1.12);
-                          filter: drop-shadow(0 0 8px rgba(0, 188, 212, 0.85));
-                        }
-                        100% {
-                          transform: scale(1);
-                          filter: drop-shadow(0 0 2px rgba(0, 188, 212, 0.4));
-                        }
-                      }
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "2"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 33
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 36px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 2) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 2) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 2) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 2) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
 
-                  - type: custom:button-card
-                    entity: fan.office_air_purifier
-                    show_name: false
-                    show_icon: false
-                    styles:
-                      card:
-                        - height: 38px
-                        - padding: 0
-                        - margin-top: 8px
-                        - border-radius: 8px
-                        - background: transparent
-                        - border: none
-                    custom_fields:
-                      combo: >-
-                        [[[
-                          var curPreset = (entity.attributes && entity.attributes.preset_mode) ? entity.attributes.preset_mode.toLowerCase() : 'sleep';
-                          var presetIcons = {
-                            sleep: 'mdi:weather-night',
-                            smart: 'mdi:auto-fix',
-                            low: 'mdi:speedometer-slow',
-                            medium: 'mdi:speedometer-medium',
-                            high: 'mdi:speedometer',
-                            strong: 'mdi:weather-windy'
-                          };
-                          var icon = presetIcons[curPreset] || 'mdi:fan';
-                          var label = curPreset.charAt(0).toUpperCase() + curPreset.slice(1);
-                          var activeColor = (entity.state === 'on') ? '#00BCD4' : 'var(--secondary-text-color, #888888)';
-                          
-                          return `
-                            <div style="position: relative; width: 100%; height: 38px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; box-sizing: border-box;">
-                              <div style="display: flex; align-items: center; gap: 8px;">
-                                <ha-icon icon="${icon}" style="--mdc-icon-size: 20px; color: ${activeColor};"></ha-icon>
-                                <span style="font-size: 13px; font-weight: 600; color: var(--primary-text-color);">${label}</span>
-                              </div>
-                              <ha-icon icon="mdi:chevron-down" style="--mdc-icon-size: 18px; color: var(--secondary-text-color);"></ha-icon>
-                              <select style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;"
-                                      onchange="
-                                        var val = this.value;
-                                        var ha = document.querySelector('home-assistant');
-                                        if (!ha && window.parent) ha = window.parent.document.querySelector('home-assistant');
-                                        if (ha && ha.hass) {
-                                          ha.hass.callService('fan', 'set_preset_mode', {entity_id: 'fan.office_air_purifier', preset_mode: val});
-                                        }
-                                      ">
-                                <option value="sleep" ${curPreset === 'sleep' ? 'selected' : ''}>Sleep</option>
-                                <option value="smart" ${curPreset === 'smart' ? 'selected' : ''}>Smart</option>
-                                <option value="low" ${curPreset === 'low' ? 'selected' : ''}>Low</option>
-                                <option value="medium" ${curPreset === 'medium' ? 'selected' : ''}>Medium</option>
-                                <option value="high" ${curPreset === 'high' ? 'selected' : ''}>High</option>
-                                <option value="strong" ${curPreset === 'strong' ? 'selected' : ''}>Strong</option>
-                              </select>
-                            </div>
-                          `;
-                        ]]]
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "3"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 50
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 36px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 3) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 3) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 3) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 3) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
+
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "4"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 67
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 36px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 4) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 4) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 4) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 4) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
+
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "5"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 83
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 36px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 5) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 5) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 5) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 5) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
+
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "6"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 100
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 36px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 6) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 6) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 6) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 6) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
+
+              # Card 2: Native Air Purifier Tile Card (Rock-Solid Dropdown)
+              - type: tile
+                entity: fan.office_air_purifier
+                name: Air Purifier
+                icon: mdi:air-purifier
+                tap_action:
+                  action: toggle
+                  haptic: selection
+                features:
+                  - type: fan-preset-modes
+                    style: dropdown
 
           # --- Security & Access Row (Patio Security + Door Lock) ---
           - type: grid
