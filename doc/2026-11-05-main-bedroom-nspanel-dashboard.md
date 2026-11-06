@@ -3,7 +3,7 @@
 **Date:** 2026-11-05  
 **Feature Branch:** `feature/main-bedroom-nspanel`  
 **Target File:** `dashboards/nspanel-main-bedroom.yaml`  
-**Status:** In Review / Ready for Approval  
+**Status:** Completed / Ready for Pull Request  
 
 ---
 
@@ -103,11 +103,23 @@ Key characteristics:
   - `sensor.main_bedroom_lights_off`: complementary count for inactive bedroom lights.
   - `sensor.main_bedroom_light_level`: friendly illuminance descriptor derived from `sensor.zigbee2cube_1002c15147_illuminance`.
 
+#### [NEW] `scripts/ceiling_fan_toggle_direction.yaml`
+- Reversible ceiling fan direction toggle script:
+  - Toggles between `forward` (summer cooling downdraft) and `reverse` (winter circulation updraft) with an optional `entity_id` parameter, defaulting to `fan.main_bedroom_ceiling_fan`.
+  - Tagged with `git_managed` label.
+
 #### [NEW] `scripts/main_bedroom_lights_toggle.yaml`
 - Toggle script for master button:
-  - If `sensor.main_bedroom_lights_on > 0`, turns off all bedroom lights (`light.main_bedroom_ceiling_fan_light`, `light.main_bedroom_light_1`, `light.main_bedroom_light_2`, `light.main_bedroom_closet_light`, `light.smart_fan_backlight_2`, `light.smart_fan_nightlight_2`).
+  - If `sensor.main_bedroom_lights_on > 0`, turns off active bedroom lights (`light.main_bedroom_ceiling_fan_light`, `light.main_bedroom_light_2`, `light.main_bedroom_closet_light`, `light.smart_fan_backlight_2`, `light.smart_fan_nightlight_2`).
   - If `0` on, turns on primary light (`light.main_bedroom_ceiling_fan_light`) bare `light.turn_on` without overwriting brightness/color temperature (preserving user state memory).
-  - Explicitly protects and leaves `light.patio_left_light` untouched.
+  - Explicitly protects `light.main_bedroom_light_1` (in-wall line power relay for ceiling fan with `always_on` tag) and leaves `light.patio_left_light` untouched.
+
+#### [MODIFY] `dashboards/nspanel-office.yaml`
+- Adapted Ceiling Fan card to single-space 2-column layout beside Air Purifier card:
+  - Ceiling Fan: full-width 6-speed segmented pill (`1` to `6`), fluid speed-reactive spinning fan animation, and enlarged Direction toggle button (`[ ↻ Fwd ]` / `[ ↺ Rev ]`).
+  - Air Purifier: restored to native Home Assistant tile card with `fan-preset-modes` dropdown, preventing Android WebView touch-dismiss glitches.
+  - Motion Presence Control: green neon pulsing beacon animation (`@keyframes presence-pulse`) on active presence.
+  - Both cards share identical 104px height and visual styling.
 
 ---
 
@@ -117,7 +129,7 @@ Key characteristics:
 - Bump version from `0.12.0` to `0.13.0` (MINOR increment for new dashboard, scripts, and template sensors).
 
 #### [MODIFY] `CHANGELOG.md`
-- Record addition of Main Bedroom NSPanel dashboard and associated components under `## 0.13.0 - 2026-11-05`.
+- Record addition of Main Bedroom NSPanel dashboard, always-on protections, Main Bathroom extensions, and Office dashboard enhancements under `## 0.13.0 - 2026-11-05`.
 
 ---
 
