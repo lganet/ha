@@ -13,26 +13,73 @@ This repository contains my Home Assistant configuration and is managed using Gi
 - Use the official Home Assistant MCP server for Home Assistant operations whenever possible.
 - Respect and preserve light states (brightness, color temperature, dynamic effects). Avoid hardcoding overrides in lighting controls unless explicitly requested, and account for state memory in implementation plans.
 
-## Git Workflow
+## 🌿 Git Worktrees, Branching, Pull Request & Versioning Workflow
 
-All changes must be made on a dedicated Git branch or worktree.
+All configuration and infrastructure changes must be managed through Git with the discipline of a production engineering repository, utilizing **Git Worktrees** to enable isolated, parallel development without branch switching collisions:
 
-Never make Home Assistant configuration changes directly on `main` unless explicitly instructed.
+### 1. Isolated Git Worktrees for Parallel Development (Never Work on `main`)
+* **The primary checkout (`/Users/gustavo/src/ha`) must remain on `main`.**
+* **Worktree Lifecycle Directives for Agents & Engineers:**
+  1. **Check for Stale Worktrees at Task Start:**
+     * Run `./worktree.sh check-stale`.
+     * If stale worktrees exist (e.g. whose GitHub PR was merged or remote branch was deleted), **ask the user**:
+       > *"I detected the following merged/stale worktrees: [list]. Would you like me to clean them up?"*
+     * If the user approves, run `./worktree.sh clean-stale -y`.
+  2. **Create a Dedicated Worktree for the Task:**
+     * Run `./worktree.sh new <short-name> [type]` (e.g. `./worktree.sh new office-presence-lighting feature`).
+     * This provisions an isolated worktree at `../ha-<short-name>` on branch `<type>/<short-name>` tracking up-to-date `main`.
+  3. **Execute in the Dedicated Worktree:**
+     * All file modifications, diagnostic runs, git commits, and PR creations must occur inside `../ha-<short-name>`.
+     * This guarantees that multiple agents or human developer sessions can operate simultaneously without file lockouts or branch switching conflicts.
+  4. **Post-Merge Cleanup:**
+     * Once a PR is merged on GitHub, the next session will detect it via `./worktree.sh check-stale` and prompt to safely remove the worktree folder.
 
-Before starting work:
+* **Branch Taxonomy:**
+  * `feature/<name>`: New automations, dashboards, scripts, helpers, or capabilities (e.g. `feature/office-presence-automation`, `feature/main-bedroom-nspanel`).
+  * `fix/<name>`: Bug fixes, state sync corrections, sensor race conditions (e.g. `fix/patio-lock-sync`, `fix/bathroom-fan-timer`).
+  * `ops/<name>`: Backup operations, systemd services, hypervisor integration (e.g. `ops/ha-backup-nfs`, `ops/opnsense-integration`).
+  * `refactor/<name>`: Structural cleanups, entity renaming, card modularization (e.g. `refactor/nspanel-tile-cards`, `refactor/lighting-labels`).
+  * `docs/<name>`: Architectural documentation, runbooks, dashboard planning (e.g. `docs/nspanel-pro-guide`).
 
-1. Ensure the working tree is clean, unless there are existing user changes relevant to the task.
-2. Create or use a dedicated branch/worktree for the requested change.
-3. Give the branch a descriptive name.
+### 2. Meaningful Conventional Commits
+* Use logical, atomic commits with conventional commit prefixes:
+  * `feat(dashboard): ...`, `feat(automation): ...`, `feat(script): ...`
+  * `fix(security): ...`, `fix(lighting): ...`, `fix(fan): ...`
+  * `docs(nspanel): ...`, `docs(changelog): ...`
+  * `refactor(helpers): ...`
+* Do not combine unrelated changes across different domains into a single commit.
 
-Examples:
+### 3. Pull Request Protocol (`gh pr create`)
+When the requested work and validation are complete:
+1. Ensure all modified files and configurations are staged and committed inside the worktree.
+2. Ensure `CHANGELOG.md` and `VERSION` are updated.
+3. Review the complete diff: `git diff main...HEAD`.
+4. Push the branch to GitHub: `git push -u origin <branch-name>`.
+5. Open a Pull Request using the GitHub CLI:
+   ```bash
+   gh pr create --title "<type>(<scope>): <summary>" --body "<structured summary of changes, motivation, validation, and rollback>"
+   ```
+6. **Do NOT merge the pull request unless explicitly instructed by the user.** Provide the PR link to the user for review.
 
-- `feature/office-presence-automation`
-- `feature/fp2-dashboard`
-- `fix/bathroom-fan-automation`
-- `refactor/lighting-automations`
+### 4. Semantic Versioning (`VERSION`)
+* The repository version is tracked in the `VERSION` file using Semantic Versioning (`MAJOR.MINOR.PATCH`).
+* When preparing a PR:
+  * **PATCH** (`0.13.X`): Bug fixes, automation timing tweaks, small script adjustments, doc updates.
+  * **MINOR** (`0.X.0`): New automations, new dashboards, new device integrations, helper architectures.
+  * **MAJOR** (`X.0.0`): Core architectural overhauls (e.g. full entity renumbering, breaking schema changes).
+* Increment `VERSION` exactly once per completed pull request, and align the version header in `CHANGELOG.md`.
 
-Do not create unnecessary commits. Prefer logical, meaningful commits.
+### 5. Existing User Changes & Secrets Protection
+* **Preserve User Work:** Never discard, stash, or overwrite existing uncommitted user changes. If unsure, ask before touching.
+* **Secrets Guardrail:** Never commit API tokens, passwords, Cloudflare keys, or live credentials. Always use version-controlled sanitized placeholders.
+
+### 6. Completion Criteria
+A task is complete ONLY when:
+1. The requested Home Assistant configuration change is implemented and validated.
+2. Configuration files in this repository match the live system state.
+3. `VERSION` and `CHANGELOG.md` are updated.
+4. All changes are committed to the feature branch and pushed.
+5. The branch is ready with a created Pull Request.
 
 ## Before Modifying Home Assistant
 
