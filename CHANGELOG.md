@@ -20,11 +20,11 @@
 ### Changed
 - Refactored Ceiling Fan control cards across both Main Bedroom (`dashboards/nspanel-main-bedroom.yaml`) and Office (`dashboards/nspanel-office.yaml`) NSPanel dashboards:
   - Spanned Ceiling Fan card across full width (2 spaces in the 2-column layout) on the Main Bedroom panel where no secondary fan device is present.
-  - Form-fitted Ceiling Fan control into a compact single-space (1 column) card on the Office panel, pairing seamlessly side-by-side with the Air Purifier in the 2-column grid to maintain clean layout symmetry.
-  - Replaced percentage sliders with dedicated tactile buttons for discrete fan speeds (Speeds 1 through 6) with real-time active highlighting.
-  - Added a dedicated Direction toggle button displaying current direction state (Forward / Reverse) with accent styling.
-  - Added dynamic spinning fan icon with rotational animation matching fan speed and direction (clockwise for forward, counter-clockwise for reverse).
-  - Applied the discrete speed and direction controls to both main views and climate sub-panels across both dashboards.
+  - Refactored Office Ceiling Fan and Air Purifier into matching twin cards (~100px height) side-by-side in the 2-column grid:
+    - **Ceiling Fan Card**: Replaced discrete speed buttons with an elegant 38px combo dropdown selector pill with dynamic speed icons (`mdi:fan-speed-1..6`), current speed label, and native touch picker; enlarged the header Direction button (`[ ↻ Fwd ]` / `[ ↺ Rev ]`) with tactile borders and state coloring; preserved speed- and direction-responsive spinning fan animation.
+    - **Air Purifier Card**: Upgraded into a matching twin card featuring a 38px preset modes dropdown selector pill (`Sleep`, `Smart`, `Low`, `Medium`, `High`, `Strong`) and a dynamic cyan breathing pulse animation (`@keyframes purifier-pulse`) on the turbine icon when active (`on`).
+    - **Motion Presence Control**: Added a fancy neon green pulsing beacon animation (`@keyframes presence-pulse`) on the radar icon whenever presence is actively detected (`binary_sensor.office_presence_fp300`).
+  - Applied discrete speed and direction controls to main views and climate sub-panels across both dashboards.
 
 ## 0.12.0 - 2026-11-05
 
