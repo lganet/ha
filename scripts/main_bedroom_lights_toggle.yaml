@@ -1,5 +1,5 @@
 alias: Main Bedroom Lights Toggle
-description: Toggles Main Bedroom lights contextually. If any bedroom lights are on, turns them all off. If all are off, turns on the primary bedroom fan light (or ceiling light 1 if fan is unavailable). Leaves Patio Left light unaffected.
+description: Toggles Main Bedroom lights contextually. If any bedroom lights are on, turns them off. If all are off, turns on the ceiling fan light (and ensures always-on Ceiling Light 1 line power is on). Leaves Patio Left light unaffected.
 icon: mdi:theme-light-dark
 mode: single
 sequence:
@@ -10,7 +10,6 @@ sequence:
               {{ is_state('light.main_bedroom_ceiling_fan_light', 'on')
                  or is_state('light.smart_fan_backlight_2', 'on')
                  or is_state('light.smart_fan_nightlight_2', 'on')
-                 or is_state('light.main_bedroom_light_1', 'on')
                  or is_state('light.main_bedroom_light_2', 'on')
                  or is_state('light.main_bedroom_closet_light', 'on') }}
         sequence:
@@ -20,19 +19,17 @@ sequence:
                 - light.main_bedroom_ceiling_fan_light
                 - light.smart_fan_backlight_2
                 - light.smart_fan_nightlight_2
-                - light.main_bedroom_light_1
                 - light.main_bedroom_light_2
                 - light.main_bedroom_closet_light
     default:
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ states('light.main_bedroom_ceiling_fan_light') not in ['unavailable', 'unknown'] }}"
-            sequence:
-              - action: light.turn_on
-                target:
-                  entity_id: light.main_bedroom_ceiling_fan_light
-        default:
+      - if:
+          - condition: state
+            entity_id: light.main_bedroom_light_1
+            state: "off"
+        then:
           - action: light.turn_on
             target:
               entity_id: light.main_bedroom_light_1
+      - action: light.turn_on
+        target:
+          entity_id: light.main_bedroom_ceiling_fan_light

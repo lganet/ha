@@ -442,28 +442,15 @@ views:
                 features:
                   - type: light-brightness
 
-          # --- Additional Light & Ceiling Fan Row ---
-          - type: grid
-            columns: 2
-            square: false
-            cards:
-              - type: tile
-                entity: light.main_bedroom_light_1
-                name: Ceiling Light 1
-                icon: mdi:ceiling-light-outline
-                tap_action:
-                  action: toggle
-                features:
-                  - type: light-brightness
-
-              - type: tile
-                entity: fan.main_bedroom_ceiling_fan
-                name: Ceiling Fan
-                icon: mdi:fan
-                tap_action:
-                  action: toggle
-                features:
-                  - type: fan-speed
+          # --- Ceiling Fan ---
+          - type: tile
+            entity: fan.main_bedroom_ceiling_fan
+            name: Ceiling Fan
+            icon: mdi:fan
+            tap_action:
+              action: toggle
+            features:
+              - type: fan-speed
 
           # --- Security & Access Row (Patio Security + Door Lock) ---
           - type: grid
@@ -690,11 +677,11 @@ views:
                 tap_action:
                   action: more-info
 
-              # Ceiling Light 1
+              # Ceiling Light 1 (Always-On Fan Power)
               - type: tile
                 entity: light.main_bedroom_light_1
-                name: Ceiling Light 1
-                icon: mdi:ceiling-light-outline
+                name: Ceiling Light 1 (Always-On)
+                icon: mdi:power-plug
                 features:
                   - type: light-brightness
                 tap_action:
