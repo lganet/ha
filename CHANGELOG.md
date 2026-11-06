@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## 0.14.0 - 2026-11-06
+
+### Added
+- Implemented Git Worktree Multi-Agent Workflow Manager (`worktree.sh`):
+  - Added `./worktree.sh new <name> [type]` to provision dedicated, isolated worktrees at `../ha-<name>` on branch `<type>/<name>` tracking up-to-date `main`.
+  - Added `./worktree.sh list` to display active worktree paths, HEAD commits, branches, and uncommitted change alerts.
+  - Added `./worktree.sh check-stale` checking remote tracking branches and querying GitHub PR status via `gh` CLI to identify worktrees whose branches were deleted or PRs merged.
+  - Added `./worktree.sh clean-stale [-y]` to safely remove stale worktree directories, delete local merged branches, and prune git metadata.
+  - Added `./worktree.sh remove <name-or-path>` and `./worktree.sh prune` for safe manual lifecycle maintenance.
+- Updated Agent Governance Directives (`AGENTS.md`):
+  - Codified the rule that the primary checkout (`/Users/gustavo/src/ha`) permanently tracks `main`.
+  - Established mandatory stale worktree checks (`./worktree.sh check-stale`) at the start of tasks, prompting the user for cleanup approval.
+  - Codified that agents automatically spin up and operate inside isolated worktrees for parallel feature execution.
+  - Aligned branch taxonomy, conventional commit standards, and pull request protocol across homelab repositories.
+
 ## 0.13.0 - 2026-11-05
 
 ### Added
