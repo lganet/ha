@@ -6,15 +6,24 @@
 
 ### Added
 - Created Main Bedroom NSPanel Pro dashboard (`dashboards/nspanel-main-bedroom.yaml`, live Lovelace dashboard `nspanel-main-bedroom`) styled with `ios-dark-mode` matching the Office panel:
-  - **Main View (`bedroom`)**: Header badges (illuminance, and temperature/humidity/air quality/pm2.5 placeholders for upcoming monitor), quick-action cards for bedroom fan light, ceiling lights 1 & 2, closet light, ceiling fan speed control, independent Patio Left light switch card, cached weather summary, and modal PIN-protected Alarmo Patio security and Patio Door deadbolt control.
-  - **Shared Views**: Deployed matching sub-panels for `Lights` (room lights plus independent patio light), `Climate` (bedroom fan speed and presets), `Sensors` (all whole-home presence, contact, and environmental sensors), `Battery` (device battery levels and statuses), `Alerts` (active alarms and warning notifications), `Homelab` (server metrics and closet cooling watchdog), and `Energy` (BC Hydro billing and live real-time plug/relay power monitors).
+  - **Main View (`bedroom`)**: Header badges (illuminance, and temperature/humidity/air quality/pm2.5 placeholders for upcoming monitor), quick-action cards for bedroom fan light, ceiling lights 1 & 2, closet light, full-width ceiling fan discrete speed (1-6) and direction control, independent Patio Left light switch card, cached weather summary, and modal PIN-protected Alarmo Patio security and Patio Door deadbolt control.
+  - **Shared Views**: Deployed matching sub-panels for `Lights` (room lights plus independent patio light), `Climate` (bedroom fan discrete speeds 1-6, direction toggle, and presets), `Sensors` (all whole-home presence, contact, and environmental sensors), `Battery` (device battery levels and statuses), `Alerts` (active alarms and warning notifications), `Homelab` (server metrics and closet cooling watchdog), and `Energy` (BC Hydro billing and live real-time plug/relay power monitors).
+- Added Ceiling Fan Direction Toggle script (`scripts/ceiling_fan_toggle_direction.yaml`, `script.ceiling_fan_toggle_direction`) tagged with `git_managed` label to seamlessly toggle fan direction between forward (summer downdraft) and reverse (winter updraft) for any fan entity.
 - Added Main Bedroom template sensors (`templates/main_bedroom_sensors.yaml`):
   - `sensor.main_bedroom_light_level` derived from NSPanel Pro illuminance sensor (`sensor.zigbee2cube_1002c15147_illuminance`).
-  - `sensor.main_bedroom_lights_on` and `sensor.main_bedroom_lights_off` tracking active fixtures while strictly excluding `light.patio_left_light`.
+  - `sensor.main_bedroom_lights_on` and `sensor.main_bedroom_lights_off` tracking active fixtures while strictly excluding `light.patio_left_light` and always-on ceiling line relay `light.main_bedroom_light_1`.
   - Environmental fallbacks (`sensor.main_bedroom_temperature`, `sensor.main_bedroom_humidity`, `sensor.main_bedroom_air_quality`, `sensor.main_bedroom_pm2_5`) that smoothly transition to upcoming dedicated air quality hardware without dashboard reconfiguration.
 - Added Main Bedroom Lights Toggle script (`scripts/main_bedroom_lights_toggle.yaml`):
-  - Smart room toggle that checks `sensor.main_bedroom_lights_on` and either powers off all active bedroom fixtures or turns on the primary fan light with preserved state memory, keeping `light.patio_left_light` unaffected.
+  - Smart room toggle that checks `sensor.main_bedroom_lights_on` and either powers off all active bedroom fixtures or turns on the primary fan light with preserved state memory, keeping `light.patio_left_light` unaffected and strictly preserving line power to always-on relay `light.main_bedroom_light_1`.
 - Enabled hardware proximity wake sensor (`switch.zigbee2cube_1002c15147_proximity_wake`) on Main Bedroom NSPanel Pro for automatic screen wake upon physical approach.
+
+### Changed
+- Refactored Ceiling Fan control cards across both Main Bedroom (`dashboards/nspanel-main-bedroom.yaml`) and Office (`dashboards/nspanel-office.yaml`) NSPanel dashboards:
+  - Spanned Ceiling Fan card across full width (2 spaces in the 2-column layout) to eliminate unbalanced layout.
+  - Replaced percentage sliders with dedicated tactile buttons for discrete fan speeds (Speeds 1 through 6) with real-time active highlighting.
+  - Added a dedicated Direction toggle button displaying current direction state (Forward / Reverse) with accent styling.
+  - Added dynamic spinning fan icon with rotational animation matching fan speed and direction (clockwise for forward, counter-clockwise for reverse).
+  - Applied the discrete speed and direction controls to both main views and climate sub-panels across both dashboards.
 
 ## 0.12.0 - 2026-11-05
 
