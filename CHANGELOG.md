@@ -19,7 +19,8 @@
 
 ### Changed
 - Refactored Ceiling Fan control cards across both Main Bedroom (`dashboards/nspanel-main-bedroom.yaml`) and Office (`dashboards/nspanel-office.yaml`) NSPanel dashboards:
-  - Spanned Ceiling Fan card across full width (2 spaces in the 2-column layout) to eliminate unbalanced layout.
+  - Spanned Ceiling Fan card across full width (2 spaces in the 2-column layout) on the Main Bedroom panel where no secondary fan device is present.
+  - Form-fitted Ceiling Fan control into a compact single-space (1 column) card on the Office panel, pairing seamlessly side-by-side with the Air Purifier in the 2-column grid to maintain clean layout symmetry.
   - Replaced percentage sliders with dedicated tactile buttons for discrete fan speeds (Speeds 1 through 6) with real-time active highlighting.
   - Added a dedicated Direction toggle button displaying current direction state (Forward / Reverse) with accent styling.
   - Added dynamic spinning fan icon with rotational animation matching fan speed and direction (clockwise for forward, counter-clockwise for reverse).

@@ -569,23 +569,19 @@ views:
                       return 'var(--secondary-text-color)';
                     ]]]
 
-          # --- Ceiling Fan Control (Full Width, Discrete Speeds 1-6 & Direction) ---
-          - type: custom:stack-in-card
-            mode: vertical
-            layout_options:
-              grid_columns: 4
-            grid_options:
-              columns: full
-            styles:
-              card:
-                - border-radius: var(--ha-card-border-radius, 16px)
-                - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
-                - padding: 10px 12px 12px 12px
-                - box-sizing: border-box
+          # --- Compact Fan & Air Row ---
+          - type: grid
+            columns: 2
+            square: false
             cards:
-              - type: grid
-                columns: 2
-                square: false
+              - type: custom:stack-in-card
+                mode: vertical
+                styles:
+                  card:
+                    - border-radius: var(--ha-card-border-radius, 12px)
+                    - background-color: var(--ha-card-background, rgba(255, 255, 255, 0.05))
+                    - padding: 6px 6px 8px 6px
+                    - box-sizing: border-box
                 cards:
                   - type: custom:button-card
                     entity: fan.office_ceiling_fan
@@ -599,32 +595,33 @@ views:
                         if (entity.state !== 'on') return 'Off';
                         var pct = entity.attributes.percentage || 0;
                         var spd = Math.round(pct / 16.6667) || 1;
-                        return 'Speed ' + spd;
+                        var dir = entity.attributes.direction === 'reverse' ? 'Rev' : 'Fwd';
+                        return 'Spd ' + spd + ' • ' + dir;
                       ]]]
                     tap_action:
                       action: toggle
                       haptic: selection
                     styles:
                       card:
-                        - min-height: 54px
-                        - padding: 6px 10px
-                        - border-radius: 12px
+                        - min-height: 48px
+                        - padding: 4px 6px
+                        - border-radius: 10px
                         - background-color: >-
                             [[[
-                              return entity.state === 'on' ? 'rgba(41, 182, 246, 0.15)' : 'rgba(255, 255, 255, 0.05)';
+                              return entity.state === 'on' ? 'rgba(41, 182, 246, 0.12)' : 'rgba(255, 255, 255, 0.04)';
                             ]]]
                         - border: >-
                             [[[
-                              return entity.state === 'on' ? '1px solid rgba(41, 182, 246, 0.4)' : '1px solid rgba(255, 255, 255, 0.08)';
+                              return entity.state === 'on' ? '1px solid rgba(41, 182, 246, 0.35)' : '1px solid rgba(255, 255, 255, 0.06)';
                             ]]]
                       grid:
-                        - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 32px 1fr
-                        - grid-template-rows: 1fr 1fr
+                        - grid-template-areas: '"i n dir" "i s dir"'
+                        - grid-template-columns: 26px 1fr 34px
+                        - grid-template-rows: auto auto
                         - align-items: center
                       icon:
-                        - width: 24px
-                        - height: 24px
+                        - width: 22px
+                        - height: 22px
                         - color: >-
                             [[[
                               return entity.state === 'on' ? '#29B6F6' : 'var(--secondary-text-color, #888888)';
@@ -638,7 +635,7 @@ views:
                               return `${dir} ${dur}s linear infinite`;
                             ]]]
                       name:
-                        - font-size: 13px
+                        - font-size: 12px
                         - font-weight: 600
                         - justify-self: start
                         - color: var(--primary-text-color)
@@ -650,6 +647,44 @@ views:
                             [[[
                               return entity.state === 'on' ? '#29B6F6' : 'var(--secondary-text-color)';
                             ]]]
+                      custom_fields:
+                        dir:
+                          - justify-self: end
+                    custom_fields:
+                      dir:
+                        card:
+                          type: custom:button-card
+                          entity: fan.office_ceiling_fan
+                          show_name: false
+                          show_icon: true
+                          icon: >-
+                            [[[
+                              return entity.attributes.direction === 'reverse' ? 'mdi:rotate-left' : 'mdi:rotate-right';
+                            ]]]
+                          tap_action:
+                            action: call-service
+                            service: script.ceiling_fan_toggle_direction
+                            data:
+                              entity_id: fan.office_ceiling_fan
+                            haptic: selection
+                          styles:
+                            card:
+                              - width: 30px
+                              - height: 30px
+                              - border-radius: 8px
+                              - background-color: rgba(255, 255, 255, 0.08)
+                              - border: 1px solid rgba(255, 255, 255, 0.12)
+                              - padding: 0
+                              - display: flex
+                              - justify-content: center
+                              - align-items: center
+                            icon:
+                              - width: 18px
+                              - height: 18px
+                              - color: >-
+                                  [[[
+                                    return entity.attributes.direction === 'reverse' ? '#FFA726' : '#42A5F5';
+                                  ]]]
                     extra_styles: |
                       @keyframes spin-cw {
                         0% { transform: rotate(0deg); }
@@ -660,329 +695,284 @@ views:
                         100% { transform: rotate(0deg); }
                       }
 
-                  - type: custom:button-card
-                    entity: fan.office_ceiling_fan
-                    name: Direction
-                    show_name: true
-                    show_state: true
-                    show_icon: true
-                    icon: >-
-                      [[[
-                        return entity.attributes.direction === 'reverse' ? 'mdi:rotate-left' : 'mdi:rotate-right';
-                      ]]]
-                    state_display: >-
-                      [[[
-                        return entity.attributes.direction === 'reverse' ? 'Reverse' : 'Forward';
-                      ]]]
-                    tap_action:
-                      action: call-service
-                      service: script.ceiling_fan_toggle_direction
-                      data:
-                        entity_id: fan.office_ceiling_fan
-                      haptic: selection
-                    styles:
-                      card:
-                        - min-height: 54px
-                        - padding: 6px 10px
-                        - border-radius: 12px
-                        - background-color: rgba(255, 255, 255, 0.05)
-                        - border: 1px solid rgba(255, 255, 255, 0.08)
-                      grid:
-                        - grid-template-areas: '"i n" "i s"'
-                        - grid-template-columns: 28px 1fr
-                        - grid-template-rows: 1fr 1fr
-                        - align-items: center
-                      icon:
-                        - width: 22px
-                        - height: 22px
-                        - color: >-
-                            [[[
-                              return entity.attributes.direction === 'reverse' ? '#FFA726' : '#42A5F5';
-                            ]]]
-                      name:
-                        - font-size: 13px
-                        - font-weight: 600
-                        - justify-self: start
-                        - color: var(--primary-text-color)
-                      state:
-                        - font-size: 11px
-                        - font-weight: 500
-                        - justify-self: start
-                        - color: var(--secondary-text-color)
+                  - type: grid
+                    columns: 6
+                    square: false
+                    cards:
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "1"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 17
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 30px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 1) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 1) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 1) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 1) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
 
-              - type: grid
-                columns: 6
-                square: false
-                cards:
-                  - type: custom:button-card
-                    entity: fan.office_ceiling_fan
-                    name: "1"
-                    show_name: true
-                    show_icon: false
-                    tap_action:
-                      action: call-service
-                      service: fan.set_percentage
-                      data:
-                        entity_id: fan.office_ceiling_fan
-                        percentage: 17
-                      haptic: selection
-                    styles:
-                      card:
-                        - height: 38px
-                        - border-radius: 10px
-                        - background-color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 1) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
-                            ]]]
-                        - border: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 1) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
-                            ]]]
-                      name:
-                        - font-size: 14px
-                        - font-weight: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 1) ? '700' : '500';
-                            ]]]
-                        - color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 1) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
-                            ]]]
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "2"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 33
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 30px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 2) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 2) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 2) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 2) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
 
-                  - type: custom:button-card
-                    entity: fan.office_ceiling_fan
-                    name: "2"
-                    show_name: true
-                    show_icon: false
-                    tap_action:
-                      action: call-service
-                      service: fan.set_percentage
-                      data:
-                        entity_id: fan.office_ceiling_fan
-                        percentage: 33
-                      haptic: selection
-                    styles:
-                      card:
-                        - height: 38px
-                        - border-radius: 10px
-                        - background-color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 2) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
-                            ]]]
-                        - border: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 2) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
-                            ]]]
-                      name:
-                        - font-size: 14px
-                        - font-weight: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 2) ? '700' : '500';
-                            ]]]
-                        - color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 2) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
-                            ]]]
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "3"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 50
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 30px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 3) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 3) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 3) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 3) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
 
-                  - type: custom:button-card
-                    entity: fan.office_ceiling_fan
-                    name: "3"
-                    show_name: true
-                    show_icon: false
-                    tap_action:
-                      action: call-service
-                      service: fan.set_percentage
-                      data:
-                        entity_id: fan.office_ceiling_fan
-                        percentage: 50
-                      haptic: selection
-                    styles:
-                      card:
-                        - height: 38px
-                        - border-radius: 10px
-                        - background-color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 3) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
-                            ]]]
-                        - border: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 3) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
-                            ]]]
-                      name:
-                        - font-size: 14px
-                        - font-weight: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 3) ? '700' : '500';
-                            ]]]
-                        - color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 3) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
-                            ]]]
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "4"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 67
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 30px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 4) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 4) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 4) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 4) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
 
-                  - type: custom:button-card
-                    entity: fan.office_ceiling_fan
-                    name: "4"
-                    show_name: true
-                    show_icon: false
-                    tap_action:
-                      action: call-service
-                      service: fan.set_percentage
-                      data:
-                        entity_id: fan.office_ceiling_fan
-                        percentage: 67
-                      haptic: selection
-                    styles:
-                      card:
-                        - height: 38px
-                        - border-radius: 10px
-                        - background-color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 4) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
-                            ]]]
-                        - border: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 4) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
-                            ]]]
-                      name:
-                        - font-size: 14px
-                        - font-weight: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 4) ? '700' : '500';
-                            ]]]
-                        - color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 4) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
-                            ]]]
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "5"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 83
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 30px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 5) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 5) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 5) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 5) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
 
-                  - type: custom:button-card
-                    entity: fan.office_ceiling_fan
-                    name: "5"
-                    show_name: true
-                    show_icon: false
-                    tap_action:
-                      action: call-service
-                      service: fan.set_percentage
-                      data:
-                        entity_id: fan.office_ceiling_fan
-                        percentage: 83
-                      haptic: selection
-                    styles:
-                      card:
-                        - height: 38px
-                        - border-radius: 10px
-                        - background-color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 5) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
-                            ]]]
-                        - border: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 5) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
-                            ]]]
-                      name:
-                        - font-size: 14px
-                        - font-weight: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 5) ? '700' : '500';
-                            ]]]
-                        - color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 5) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
-                            ]]]
+                      - type: custom:button-card
+                        entity: fan.office_ceiling_fan
+                        name: "6"
+                        show_name: true
+                        show_icon: false
+                        tap_action:
+                          action: call-service
+                          service: fan.set_percentage
+                          data:
+                            entity_id: fan.office_ceiling_fan
+                            percentage: 100
+                          haptic: selection
+                        styles:
+                          card:
+                            - height: 30px
+                            - padding: 0
+                            - border-radius: 6px
+                            - background-color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 6) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
+                                ]]]
+                            - border: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 6) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
+                                ]]]
+                          name:
+                            - font-size: 13px
+                            - font-weight: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 6) ? '700' : '500';
+                                ]]]
+                            - color: >-
+                                [[[
+                                  var pct = entity.attributes.percentage || 0;
+                                  var spd = Math.round(pct / 16.6667);
+                                  return (entity.state === 'on' && spd === 6) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
+                                ]]]
 
-                  - type: custom:button-card
-                    entity: fan.office_ceiling_fan
-                    name: "6"
-                    show_name: true
-                    show_icon: false
-                    tap_action:
-                      action: call-service
-                      service: fan.set_percentage
-                      data:
-                        entity_id: fan.office_ceiling_fan
-                        percentage: 100
-                      haptic: selection
-                    styles:
-                      card:
-                        - height: 38px
-                        - border-radius: 10px
-                        - background-color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 6) ? '#29B6F6' : 'rgba(255, 255, 255, 0.08)';
-                            ]]]
-                        - border: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 6) ? '1px solid #29B6F6' : '1px solid rgba(255, 255, 255, 0.1)';
-                            ]]]
-                      name:
-                        - font-size: 14px
-                        - font-weight: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 6) ? '700' : '500';
-                            ]]]
-                        - color: >-
-                            [[[
-                              var pct = entity.attributes.percentage || 0;
-                              var spd = Math.round(pct / 16.6667);
-                              return (entity.state === 'on' && spd === 6) ? '#FFFFFF' : 'var(--secondary-text-color, #CCCCCC)';
-                            ]]]
-
-          # --- Air Purifier ---
-          - type: tile
-            entity: fan.office_air_purifier
-            name: Air Purifier
-            icon: mdi:air-purifier
-            tap_action:
-              action: toggle
-              haptic: selection
-            features:
-              - type: fan-preset-modes
-                style: dropdown
+              - type: tile
+                entity: fan.office_air_purifier
+                name: Air Purifier
+                icon: mdi:air-purifier
+                tap_action:
+                  action: toggle
+                  haptic: selection
+                features:
+                  - type: fan-preset-modes
+                    style: dropdown
 
           # --- Security & Access Row (Patio Security + Door Lock) ---
           - type: grid
