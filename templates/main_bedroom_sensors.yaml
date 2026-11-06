@@ -1,0 +1,76 @@
+- sensor:
+    - name: Main Bedroom Light Level
+      unique_id: main_bedroom_light_level
+      icon: mdi:brightness-6
+      state: >-
+        {% set lx = states('sensor.zigbee2cube_1002c15147_illuminance') | float(0) %}
+        {% if lx < 5 %}Dark
+        {% elif lx < 20 %}Dim
+        {% elif lx < 100 %}Soft Light
+        {% elif lx < 300 %}Indoor Light
+        {% else %}Bright{% endif %}
+
+    - name: Main Bedroom Lights On
+      unique_id: main_bedroom_lights_on
+      unit_of_measurement: "on"
+      state: >-
+        {% set fan_on = 1 if (is_state('light.main_bedroom_ceiling_fan_light', 'on') or is_state('light.smart_fan_backlight_2', 'on') or is_state('light.smart_fan_nightlight_2', 'on')) else 0 %}
+        {% set cl2_on = 1 if is_state('light.main_bedroom_light_2', 'on') else 0 %}
+        {% set closet_on = 1 if is_state('light.main_bedroom_closet_light', 'on') else 0 %}
+        {{ fan_on + cl2_on + closet_on }}
+
+    - name: Main Bedroom Lights Off
+      unique_id: main_bedroom_lights_off
+      unit_of_measurement: "off"
+      state: >-
+        {% set fan_on = 1 if (is_state('light.main_bedroom_ceiling_fan_light', 'on') or is_state('light.smart_fan_backlight_2', 'on') or is_state('light.smart_fan_nightlight_2', 'on')) else 0 %}
+        {% set cl2_on = 1 if is_state('light.main_bedroom_light_2', 'on') else 0 %}
+        {% set closet_on = 1 if is_state('light.main_bedroom_closet_light', 'on') else 0 %}
+        {{ 3 - (fan_on + cl2_on + closet_on) }}
+
+    - name: Main Bedroom Temperature
+      unique_id: main_bedroom_temperature
+      icon: mdi:thermometer
+      unit_of_measurement: "°C"
+      state: >-
+        {% if states('sensor.main_bedroom_air_quality_temperature') not in ['unavailable', 'unknown', ''] %}
+          {{ states('sensor.main_bedroom_air_quality_temperature') }}
+        {% elif state_attr('weather.forecast_home', 'temperature') is not none %}
+          {{ state_attr('weather.forecast_home', 'temperature') }}
+        {% else %}
+          --
+        {% endif %}
+
+    - name: Main Bedroom Humidity
+      unique_id: main_bedroom_humidity
+      icon: mdi:water-percent
+      unit_of_measurement: "%"
+      state: >-
+        {% if states('sensor.main_bedroom_air_quality_humidity') not in ['unavailable', 'unknown', ''] %}
+          {{ states('sensor.main_bedroom_air_quality_humidity') }}
+        {% elif state_attr('weather.forecast_home', 'humidity') is not none %}
+          {{ state_attr('weather.forecast_home', 'humidity') }}
+        {% else %}
+          --
+        {% endif %}
+
+    - name: Main Bedroom Air Quality
+      unique_id: main_bedroom_air_quality
+      icon: mdi:air-filter
+      state: >-
+        {% if states('sensor.main_bedroom_air_quality_air_quality_index') not in ['unavailable', 'unknown', ''] %}
+          {{ states('sensor.main_bedroom_air_quality_air_quality_index') }}
+        {% else %}
+          Good
+        {% endif %}
+
+    - name: Main Bedroom PM2.5
+      unique_id: main_bedroom_pm2_5
+      icon: mdi:molecule
+      unit_of_measurement: "µg/m³"
+      state: >-
+        {% if states('sensor.main_bedroom_air_quality_pm2_5') not in ['unavailable', 'unknown', ''] %}
+          {{ states('sensor.main_bedroom_air_quality_pm2_5') }}
+        {% else %}
+          Clean
+        {% endif %}

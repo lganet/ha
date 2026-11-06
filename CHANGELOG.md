@@ -2,6 +2,34 @@
 
 ## Unreleased
 
+## 0.13.0 - 2026-11-05
+
+### Added
+- Created Main Bedroom NSPanel Pro dashboard (`dashboards/nspanel-main-bedroom.yaml`, live Lovelace dashboard `nspanel-main-bedroom`) styled with `ios-dark-mode` matching the Office panel:
+  - **Main View (`bedroom`)**: Header badges (illuminance, and temperature/humidity/air quality/pm2.5 placeholders for upcoming monitor), quick-action cards for bedroom fan light, ceiling lights 1 & 2, closet light, full-width ceiling fan discrete speed (1-6) and direction control, independent Patio Left light switch card, cached weather summary, and modal PIN-protected Alarmo Patio security and Patio Door deadbolt control.
+  - **Shared Views**: Deployed matching sub-panels for `Lights` (room lights plus independent patio light), `Climate` (bedroom fan discrete speeds 1-6, direction toggle, and presets), `Sensors` (all whole-home presence, contact, and environmental sensors), `Battery` (device battery levels and statuses), `Alerts` (active alarms and warning notifications), `Homelab` (server metrics and closet cooling watchdog), and `Energy` (BC Hydro billing and live real-time plug/relay power monitors).
+- Added Ceiling Fan Direction Toggle script (`scripts/ceiling_fan_toggle_direction.yaml`, `script.ceiling_fan_toggle_direction`) tagged with `git_managed` label to seamlessly toggle fan direction between forward (summer downdraft) and reverse (winter updraft) for any fan entity.
+- Added Main Bedroom template sensors (`templates/main_bedroom_sensors.yaml`):
+  - `sensor.main_bedroom_light_level` derived from NSPanel Pro illuminance sensor (`sensor.zigbee2cube_1002c15147_illuminance`).
+  - `sensor.main_bedroom_lights_on` and `sensor.main_bedroom_lights_off` tracking active fixtures while strictly excluding `light.patio_left_light` and always-on ceiling line relay `light.main_bedroom_light_1`.
+  - Environmental fallbacks (`sensor.main_bedroom_temperature`, `sensor.main_bedroom_humidity`, `sensor.main_bedroom_air_quality`, `sensor.main_bedroom_pm2_5`) that smoothly transition to upcoming dedicated air quality hardware without dashboard reconfiguration.
+- Added Main Bedroom Lights Toggle script (`scripts/main_bedroom_lights_toggle.yaml`):
+  - Smart room toggle that checks `sensor.main_bedroom_lights_on` and either powers off all active bedroom fixtures or turns on the primary fan light with preserved state memory, keeping `light.patio_left_light` unaffected and strictly preserving line power to always-on relay `light.main_bedroom_light_1`.
+- Enabled hardware proximity wake sensor (`switch.zigbee2cube_1002c15147_proximity_wake`) on Main Bedroom NSPanel Pro for automatic screen wake upon physical approach.
+
+### Changed
+- Refactored Main Bedroom NSPanel Pro dashboard (`dashboards/nspanel-main-bedroom.yaml`):
+  - Removed always-on power relay `light.main_bedroom_light_1` (`Ceiling Light 1`) from the Lights view (`path: lights`) to protect constant line voltage to the smart ceiling fan and prevent accidental disconnection.
+  - Added dedicated `Main Bathroom Lighting` section to the Lights view with dimmable controls for Vanity Light (`light.main_bathroom_vanity_light`) and Shower Light (`light.main_bathroom_shower_light`).
+  - Added `Ventilation & Humidity` section to the Climate/Fan view (`path: climate`) with one-tap toggle for the Main Bathroom Exhaust Fan (`switch.main_bathroom_fan`) paired side-by-side with the Humidifier in a balanced 2-column grid.
+- Refactored Ceiling Fan control cards across both Main Bedroom (`dashboards/nspanel-main-bedroom.yaml`) and Office (`dashboards/nspanel-office.yaml`) NSPanel dashboards:
+  - Spanned Ceiling Fan card across full width (2 spaces in the 2-column layout) on the Main Bedroom panel where no secondary fan device is present.
+  - Refactored Office Ceiling Fan and Air Purifier row (~104px height) side-by-side in the 2-column grid:
+    - **Air Purifier Card**: Restored to native Home Assistant Tile card (`fan.office_air_purifier`) with `fan-preset-modes` dropdown, ensuring full-width layout and rock-solid native touch popover without touch dismiss glitches.
+    - **Ceiling Fan Card**: Preserved fluid speed- and direction-responsive spinning fan animation, enlarged the header Direction toggle button (`[ ↻ Fwd ]` / `[ ↺ Rev ]`) with tactile borders, and embedded a full-width 36px segmented speed pill (`1` to `6`) with single-tap speed setting and active speed highlighting, maintaining exact 104px height symmetry alongside the Air Purifier.
+    - **Motion Presence Control**: Added a fancy neon green pulsing beacon animation (`@keyframes presence-pulse`) on the radar icon whenever presence is actively detected (`binary_sensor.office_presence_fp300`).
+  - Applied discrete speed and direction controls to main views and climate sub-panels across both dashboards.
+
 ## 0.12.0 - 2026-11-05
 
 ### Added
