@@ -1,0 +1,89 @@
+id: "1794019200001"
+alias: "IKEA Button 1 - Living Room Lamp & LEDs Plug Controls"
+description: "Controls Living Room Lamp HS220 via single press and LEDs Plug via hold-and-lift on IKEA RODRET (Button 1)."
+mode: restart
+labels:
+  - git_managed
+
+triggers:
+  # Single Press ON -> Turn on Lamp HS220
+  - trigger: device
+    domain: mqtt
+    device_id: f5c7842da2ee21c8b66fda6533ead56f
+    type: action
+    subtype: "on"
+    id: press_on
+
+  # Single Press OFF -> Turn off Lamp HS220
+  - trigger: device
+    domain: mqtt
+    device_id: f5c7842da2ee21c8b66fda6533ead56f
+    type: action
+    subtype: "off"
+    id: press_off
+
+  # Hold ON (brightness_move_up) -> Wait for lift (brightness_stop) -> Turn on LEDs Plug
+  - trigger: device
+    domain: mqtt
+    device_id: f5c7842da2ee21c8b66fda6533ead56f
+    type: action
+    subtype: "brightness_move_up"
+    id: hold_on
+
+  # Hold OFF (brightness_move_down) -> Wait for lift (brightness_stop) -> Turn off LEDs Plug
+  - trigger: device
+    domain: mqtt
+    device_id: f5c7842da2ee21c8b66fda6533ead56f
+    type: action
+    subtype: "brightness_move_down"
+    id: hold_off
+
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: press_on
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.patio_left_light
+
+      - conditions:
+          - condition: trigger
+            id: press_off
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id: light.patio_left_light
+
+      - conditions:
+          - condition: trigger
+            id: hold_on
+        sequence:
+          - wait_for_trigger:
+              - trigger: device
+                domain: mqtt
+                device_id: f5c7842da2ee21c8b66fda6533ead56f
+                type: action
+                subtype: "brightness_stop"
+            timeout: "00:00:15"
+            continue_on_timeout: false
+          - action: switch.turn_on
+            target:
+              entity_id: switch.living_room_leds_plug
+
+      - conditions:
+          - condition: trigger
+            id: hold_off
+        sequence:
+          - wait_for_trigger:
+              - trigger: device
+                domain: mqtt
+                device_id: f5c7842da2ee21c8b66fda6533ead56f
+                type: action
+                subtype: "brightness_stop"
+            timeout: "00:00:15"
+            continue_on_timeout: false
+          - action: switch.turn_off
+            target:
+              entity_id: switch.living_room_leds_plug

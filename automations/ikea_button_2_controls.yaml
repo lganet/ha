@@ -1,0 +1,106 @@
+id: "1794019200002"
+alias: "IKEA Button 2 - Patio Light, Lock & Camera Controls"
+description: "Controls Patio Left light, Patio Door lock, and Google Hub Max camera streams via IKEA STYRBAR (Button 2)."
+mode: parallel
+max: 10
+labels:
+  - git_managed
+
+triggers:
+  # Single Press ON -> Turn on Patio Left light
+  - trigger: device
+    domain: mqtt
+    device_id: 05576871ebba04eaacde799001c53603
+    type: action
+    subtype: "on"
+    id: press_on
+
+  # Single Press OFF -> Turn off Patio Left light
+  - trigger: device
+    domain: mqtt
+    device_id: 05576871ebba04eaacde799001c53603
+    type: action
+    subtype: "off"
+    id: press_off
+
+  # Hold ON -> Unlock Patio Door Lock
+  - trigger: device
+    domain: mqtt
+    device_id: 05576871ebba04eaacde799001c53603
+    type: action
+    subtype: "brightness_move_up"
+    id: hold_on
+
+  # Hold OFF -> Lock Patio Door Lock
+  - trigger: device
+    domain: mqtt
+    device_id: 05576871ebba04eaacde799001c53603
+    type: action
+    subtype: "brightness_move_down"
+    id: hold_off
+
+  # Press LEFT Arrow -> Stream Left Camera to Google Nest Hub Max
+  - trigger: device
+    domain: mqtt
+    device_id: 05576871ebba04eaacde799001c53603
+    type: action
+    subtype: "arrow_left_click"
+    id: click_left
+
+  # Press RIGHT Arrow -> Stream Right Camera to Google Nest Hub Max
+  - trigger: device
+    domain: mqtt
+    device_id: 05576871ebba04eaacde799001c53603
+    type: action
+    subtype: "arrow_right_click"
+    id: click_right
+
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: press_on
+        sequence:
+          - action: switch.turn_on
+            target:
+              entity_id: switch.patio_left_light_switch
+
+      - conditions:
+          - condition: trigger
+            id: press_off
+        sequence:
+          - action: switch.turn_off
+            target:
+              entity_id: switch.patio_left_light_switch
+
+      - conditions:
+          - condition: trigger
+            id: hold_on
+        sequence:
+          - action: lock.unlock
+            target:
+              entity_id: lock.patio_door_lock
+
+      - conditions:
+          - condition: trigger
+            id: hold_off
+        sequence:
+          - action: lock.lock
+            target:
+              entity_id: lock.patio_door_lock
+
+      - conditions:
+          - condition: trigger
+            id: click_left
+        sequence:
+          - action: script.stream_patio_camera_to_hub
+            data:
+              camera_entity: camera.patio_left
+
+      - conditions:
+          - condition: trigger
+            id: click_right
+        sequence:
+          - action: script.stream_patio_camera_to_hub
+            data:
+              camera_entity: camera.patio_right

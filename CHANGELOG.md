@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## 0.15.0 - 2026-11-07
+
+### Added
+- Added IKEA Button 1 automation (`automations/ikea_button_1_controls.yaml`, `automation.ikea_button_1_living_room_lamp_leds_plug_controls`) for IKEA RODRET wireless dimmer tagged with `git_managed`:
+  - Single press ON/OFF toggles Living Room Lamp HS220 (`light.patio_left_light`).
+  - Hold and release (lift) ON/OFF toggles Living Room LEDs Plug (`switch.living_room_leds_plug`) using `wait_for_trigger` on `brightness_stop`.
+- Added IKEA Button 2 automation (`automations/ikea_button_2_controls.yaml`, `automation.ikea_button_2_patio_light_lock_camera_controls`) for IKEA STYRBAR remote control tagged with `git_managed`:
+  - Single press ON/OFF toggles Patio Left light switch (`switch.patio_left_light_switch`).
+  - Hold ON/OFF directly unlocks and locks the Patio Door lock (`lock.patio_door_lock`).
+  - Left and Right arrow clicks trigger 5-minute camera streaming on the Google Nest Hub Max (`media_player.kitchen_display`).
+- Added Patio Camera streaming script (`scripts/stream_patio_camera_to_hub.yaml`, `script.stream_patio_camera_to_hub`) tagged with `git_managed`:
+  - Starts P2P livestream and casts requested camera (`camera.patio_left` or `camera.patio_right`) to Google Nest Hub Max.
+  - Automatically terminates stream after 5 minutes and shuts down P2P livestreaming.
+  - Handles seamless camera switching with `mode: restart` while shutting down the inactive camera stream.
+- Added architectural documentation and implementation plan (`doc/2026-11-07-ikea-buttons-automation.md`).
+
 ## 0.14.0 - 2026-11-06
 
 ### Added

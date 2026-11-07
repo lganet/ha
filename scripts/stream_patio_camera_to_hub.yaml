@@ -1,0 +1,53 @@
+alias: Stream Patio Camera to Hub Display
+description: Streams a selected Patio camera to Google Nest Hub Max for 5 minutes, then stops.
+mode: restart
+icon: mdi:cctv
+fields:
+  camera_entity:
+    description: Camera entity to stream (e.g. camera.patio_left or camera.patio_right)
+    example: camera.patio_left
+    required: true
+    selector:
+      entity:
+        domain: camera
+
+sequence:
+  # Stop the opposite camera's P2P stream to save battery and bandwidth
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ camera_entity == 'camera.patio_left' }}"
+        sequence:
+          - action: eufy_security.stop_p2p_livestream
+            target:
+              entity_id: camera.patio_right
+      - conditions:
+          - condition: template
+            value_template: "{{ camera_entity == 'camera.patio_right' }}"
+        sequence:
+          - action: eufy_security.stop_p2p_livestream
+            target:
+              entity_id: camera.patio_left
+
+  # Start P2P livestream on the selected camera
+  - action: eufy_security.start_p2p_livestream
+    target:
+      entity_id: "{{ camera_entity }}"
+
+  # Cast the camera stream to the Google Nest Hub Max
+  - action: camera.play_stream
+    target:
+      entity_id: "{{ camera_entity }}"
+    data:
+      media_player: media_player.kitchen_display
+
+  # Keep stream active for exactly 5 minutes as requested
+  - delay: "00:05:00"
+
+  # Stop streaming on Google Hub Max and shut down P2P stream
+  - action: media_player.media_stop
+    target:
+      entity_id: media_player.kitchen_display
+  - action: eufy_security.stop_p2p_livestream
+    target:
+      entity_id: "{{ camera_entity }}"
