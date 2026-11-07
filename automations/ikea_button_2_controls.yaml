@@ -1,12 +1,12 @@
 id: "1794019200002"
 alias: "IKEA Button 2 - Patio Light, Lock & Camera Controls"
-description: "Controls Patio Left light, Patio Door lock, and Google Hub Max camera streams via IKEA STYRBAR (Button 2)."
+description: "Controls Right Patio Light (toggle on click ON), Patio Door Lock (toggle on click OFF), and Google Hub Max camera streams (Left and Right arrows) via IKEA STYRBAR (Button 2)."
 mode: restart
 labels:
   - git_managed
 
 triggers:
-  # Single Press ON -> Turn on Patio Left light
+  # Single Press ON -> Toggle Right Patio Light
   - trigger: mqtt
     topic: "zigbee2mqtt/Ikea button 2/action"
     payload: "on"
@@ -18,7 +18,7 @@ triggers:
     subtype: "on"
     id: press_on
 
-  # Single Press OFF -> Turn off Patio Left light
+  # Single Press OFF -> Toggle Patio Door Lock
   - trigger: mqtt
     topic: "zigbee2mqtt/Ikea button 2/action"
     payload: "off"
@@ -29,30 +29,6 @@ triggers:
     type: action
     subtype: "off"
     id: press_off
-
-  # Hold ON -> Wait for finger release -> Unlock Patio Door Lock
-  - trigger: mqtt
-    topic: "zigbee2mqtt/Ikea button 2/action"
-    payload: "brightness_move_up"
-    id: hold_on
-  - trigger: device
-    domain: mqtt
-    device_id: 05576871ebba04eaacde799001c53603
-    type: action
-    subtype: "brightness_move_up"
-    id: hold_on
-
-  # Hold OFF -> Wait for finger release -> Lock Patio Door Lock
-  - trigger: mqtt
-    topic: "zigbee2mqtt/Ikea button 2/action"
-    payload: "brightness_move_down"
-    id: hold_off
-  - trigger: device
-    domain: mqtt
-    device_id: 05576871ebba04eaacde799001c53603
-    type: action
-    subtype: "brightness_move_down"
-    id: hold_off
 
   # Press LEFT Arrow -> Stream Left Camera to Google Nest Hub Max
   - trigger: mqtt
@@ -80,60 +56,34 @@ triggers:
 
 actions:
   - choose:
+      # Single Press ON -> Toggle Right Patio Light
       - conditions:
           - condition: trigger
             id: press_on
         sequence:
-          - action: switch.turn_on
+          - action: switch.toggle
             target:
-              entity_id: switch.patio_left_light_switch
+              entity_id: switch.patio_right_light
 
+      # Single Press OFF -> Toggle Patio Door Lock (lock if unlocked, unlock if locked)
       - conditions:
           - condition: trigger
             id: press_off
         sequence:
-          - action: switch.turn_off
-            target:
-              entity_id: switch.patio_left_light_switch
+          - if:
+              - condition: state
+                entity_id: lock.patio_door_lock
+                state: "locked"
+            then:
+              - action: lock.unlock
+                target:
+                  entity_id: lock.patio_door_lock
+            else:
+              - action: lock.lock
+                target:
+                  entity_id: lock.patio_door_lock
 
-      - conditions:
-          - condition: trigger
-            id: hold_on
-        sequence:
-          - wait_for_trigger:
-              - trigger: mqtt
-                topic: "zigbee2mqtt/Ikea button 2/action"
-                payload: "brightness_stop"
-              - trigger: device
-                domain: mqtt
-                device_id: 05576871ebba04eaacde799001c53603
-                type: action
-                subtype: "brightness_stop"
-            timeout: "00:00:15"
-            continue_on_timeout: true
-          - action: lock.unlock
-            target:
-              entity_id: lock.patio_door_lock
-
-      - conditions:
-          - condition: trigger
-            id: hold_off
-        sequence:
-          - wait_for_trigger:
-              - trigger: mqtt
-                topic: "zigbee2mqtt/Ikea button 2/action"
-                payload: "brightness_stop"
-              - trigger: device
-                domain: mqtt
-                device_id: 05576871ebba04eaacde799001c53603
-                type: action
-                subtype: "brightness_stop"
-            timeout: "00:00:15"
-            continue_on_timeout: true
-          - action: lock.lock
-            target:
-              entity_id: lock.patio_door_lock
-
+      # Press LEFT Arrow -> Stream Left Camera to Google Nest Hub Max
       - conditions:
           - condition: trigger
             id: click_left
@@ -142,6 +92,7 @@ actions:
             data:
               camera_entity: camera.patio_left
 
+      # Press RIGHT Arrow -> Stream Right Camera to Google Nest Hub Max
       - conditions:
           - condition: trigger
             id: click_right

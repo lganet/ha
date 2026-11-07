@@ -6,13 +6,16 @@
 
 ### Added
 - Added IKEA Button 1 automation (`automations/ikea_button_1_controls.yaml`, `automation.ikea_button_1_living_room_lamp_leds_plug_controls`) for IKEA RODRET wireless dimmer tagged with `git_managed`:
-  - Single press ON/OFF toggles Living Room Lamp HS220 (`light.patio_left_light`).
-  - Hold and release (lift) ON/OFF toggles Living Room LEDs Plug (`switch.living_room_leds_plug`) using `wait_for_trigger` on `brightness_stop`.
+  - Single press ON toggles Living Room Lamp HS220 (`light.patio_left_light`).
+  - Hold and release (lift) ON toggles Dining Room Ceiling Light (`light.dining_room_light`).
+  - Single press OFF toggles Living Room LEDs Plug (`switch.living_room_leds_plug`).
+  - Hold and release (lift) OFF toggles Patio Left light switch (`switch.patio_left_light_switch`).
+  - Uses dual MQTT topic (`zigbee2mqtt/Botao Ikea 1/action`) and device triggers with `wait_for_trigger` on `brightness_stop`.
 - Added IKEA Button 2 automation (`automations/ikea_button_2_controls.yaml`, `automation.ikea_button_2_patio_light_lock_camera_controls`) for IKEA STYRBAR remote control tagged with `git_managed`:
-  - Single press ON/OFF toggles Patio Left light switch (`switch.patio_left_light_switch`).
-  - Dual MQTT topic (`zigbee2mqtt/Ikea button 2/action`) and device triggers for rock-solid event matching across all 4 buttons.
-  - Hold and release (lift) ON/OFF unlocks and locks the Patio Door lock (`lock.patio_door_lock`) using `wait_for_trigger` on `brightness_stop`.
-  - Left and Right arrow clicks trigger 5-minute camera streaming on the Google Nest Hub Max via `script.stream_patio_camera_to_hub`.
+  - Single press ON toggles Right Patio light (`switch.patio_right_light`).
+  - Single press OFF toggles Patio Door lock (`lock.patio_door_lock`) (unlocks if locked, locks if unlocked).
+  - Left and Right arrow clicks trigger 5-minute camera streaming on the Google Nest Hub Max (`media_player.kitchen_hub_display`) via `script.stream_patio_camera_to_hub`.
+  - Uses dual MQTT topic (`zigbee2mqtt/Ikea button 2/action`) and device triggers.
 - Added Patio Camera streaming script (`scripts/stream_patio_camera_to_hub.yaml`, `script.stream_patio_camera_to_hub`) tagged with `git_managed`:
   - Starts P2P livestream and casts requested camera (`camera.patio_left` or `camera.patio_right`) to Google Nest Hub Max (`media_player.kitchen_hub_display`) via `webrtc.dash_cast`.
   - Added robust `continue_on_error: true` error handling on Eufy P2P service calls to prevent crashes when livestreams are not actively running.
