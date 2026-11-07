@@ -16,10 +16,19 @@
   - Single press OFF toggles Patio Door lock (`lock.patio_door_lock`) (unlocks if locked, locks if unlocked).
   - Left and Right arrow clicks control Patio camera streaming via `script.stream_patio_camera_to_hub`.
   - Uses dual MQTT topic (`zigbee2mqtt/Ikea button 2/action`) and device triggers.
-- Added Patio Camera streaming script (`scripts/stream_patio_camera_to_hub.yaml`, `script.stream_patio_camera_to_hub`) tagged with `git_managed`:
-  - Dispatches native text command via `google_assistant_sdk.send_text_command` to stream the requested patio camera (`stream patio left/right camera on kitchen display`) on the Google Nest Hub Max without third-party cast screens.
-  - Automatically stops streaming after 5 minutes by issuing `stop on kitchen display` and `media_player.media_stop`.
-  - Handles seamless camera switching with `mode: restart`.
+- Added Camera Controls dashboard (`dashboards/camera-controls.yaml`, url: `test-camera`) optimized for the 10-inch Google Nest Hub Max and desktop/mobile browsers:
+  - Battery-friendly dual camera layout with high-resolution event snapshot cards (`image.patio_left_event_image`, `image.patio_right_event_image`) and interactive tap-to-refresh (`eufy_security.generate_image`).
+  - Dynamic conditional cards that toggle between idle snapshot cards and live streaming cards (`camera_view: live`).
+  - Prominent touch controls to trigger on-demand live streams (`▶ Start Live Stream (2 min)`) and manual stop (`⏹ Stop Live Stream`).
+  - Top security badges for Patio Door Lock status, motion sensors, and Eufy HomeBase mode.
+  - Bottom controls bar with Patio light switches, door lock toggle, and a one-touch Nest Hub Cast dismiss button.
+- Added battery-safe timed streaming scripts (`scripts/stream_patio_left.yaml`, `scripts/stream_patio_right.yaml`, `scripts/stop_patio_left.yaml`, `scripts/stop_patio_right.yaml`) tagged with `git_managed`:
+  - Starts P2P livestreaming on demand and automatically stops after 2 minutes to protect camera battery life.
+- Updated Patio Camera streaming script (`scripts/stream_patio_camera_to_hub.yaml`, `script.stream_patio_camera_to_hub`) tagged with `git_managed`:
+  - Wakes up requested camera, captures a fresh snapshot, and casts the Camera Controls dashboard to the Nest Hub Max (`media_player.kitchen_hub_display`).
+  - Automatically shuts down livestream and returns the Nest Hub Max to ambient mode after 2 minutes.
+- Fixed trigger ID bug in motion automations (`automations/patio_cameras_start_livestream_on_motion.yaml`, `automations/patio_cameras_stop_livestream_on_no_motion.yaml`):
+  - Added explicit trigger IDs (`patio_right_motion`, `patio_left_motion`) so motion triggers properly activate the corresponding camera livestream.
 - Added architectural documentation and implementation plan (`doc/2026-11-07-ikea-buttons-automation.md`).
 
 ## 0.14.0 - 2026-11-06

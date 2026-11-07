@@ -1,5 +1,5 @@
 alias: Stream Patio Camera to Hub Display
-description: Streams a selected Patio camera to Google Nest Hub Max for 5 minutes via Google Assistant, then stops.
+description: Wakes the selected camera, updates snapshot, and casts the Camera Control dashboard to the Nest Hub Max for 2 minutes.
 mode: restart
 icon: mdi:cctv
 fields:
@@ -12,31 +12,53 @@ fields:
         domain: camera
 
 sequence:
-  # Send text command to Google Assistant to stream the camera on kitchen display
+  # 1. Stop the opposite camera's stream to avoid HomeBase bandwidth overload
   - choose:
       - conditions:
           - condition: template
             value_template: "{{ camera_entity == 'camera.patio_left' }}"
         sequence:
-          - action: google_assistant_sdk.send_text_command
-            data:
-              command: "stream patio left camera on kitchen display"
+          - action: eufy_security.stop_p2p_livestream
+            target:
+              entity_id: camera.patio_right
+            continue_on_error: true
       - conditions:
           - condition: template
             value_template: "{{ camera_entity == 'camera.patio_right' }}"
         sequence:
-          - action: google_assistant_sdk.send_text_command
-            data:
-              command: "stream patio right camera on kitchen display"
+          - action: eufy_security.stop_p2p_livestream
+            target:
+              entity_id: camera.patio_left
+            continue_on_error: true
 
-  # Wait for 5 minutes as requested
-  - delay: "00:05:00"
-
-  # Stop streaming after 5 minutes
-  - action: google_assistant_sdk.send_text_command
-    data:
-      command: "stop on kitchen display"
+  # 2. Wake up the selected camera and capture a fresh snapshot
+  - action: eufy_security.start_p2p_livestream
+    target:
+      entity_id: "{{ camera_entity }}"
     continue_on_error: true
+  - action: eufy_security.generate_image
+    target:
+      entity_id: "{{ camera_entity }}"
+    continue_on_error: true
+
+  # 3. Cast the Camera Controls dashboard to the Nest Hub Max
+  - action: cast.show_lovelace_view
+    data:
+      dashboard_path: test-camera
+      view_path: overview
+      entity_id: media_player.kitchen_hub_display
+    continue_on_error: true
+
+  # 4. Keep active for 2 minutes
+  - delay: "00:02:00"
+
+  # 5. Shut down stream to protect camera battery
+  - action: eufy_security.stop_p2p_livestream
+    target:
+      entity_id: "{{ camera_entity }}"
+    continue_on_error: true
+
+  # 6. Return Nest Hub Max to ambient clock/photos
   - action: media_player.media_stop
     target:
       entity_id: media_player.kitchen_hub_display

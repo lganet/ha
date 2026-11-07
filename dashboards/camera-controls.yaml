@@ -1,0 +1,151 @@
+title: Camera Controls
+views:
+- title: Cameras
+  path: overview
+  type: sections
+  badges:
+  - entity: lock.patio_door_lock
+    name: Patio Door
+    type: entity
+  - entity: binary_sensor.patio_left_motion_detected
+    name: Patio Left Motion
+    type: entity
+  - entity: binary_sensor.patio_right_motion_detected
+    name: Patio Right Motion
+    type: entity
+  - entity: sensor.gushomebase_current_mode
+    name: Security Mode
+    type: entity
+  sections:
+  - type: grid
+    cards:
+    - type: heading
+      heading: Patio Left Camera
+      icon: mdi:camera-outline
+    - type: conditional
+      conditions:
+      - entity: camera.patio_left
+        state_not: streaming
+      card:
+        type: picture-glance
+        title: Patio Left (Snapshot - Tap to Refresh)
+        image_entity: image.patio_left_event_image
+        entities:
+        - binary_sensor.patio_left_motion_detected
+        - binary_sensor.patio_left_person_detected
+        - camera.patio_left
+        tap_action:
+          action: call-service
+          service: eufy_security.generate_image
+          target:
+            entity_id: camera.patio_left
+    - type: conditional
+      conditions:
+      - entity: camera.patio_left
+        state: streaming
+      card:
+        type: picture-entity
+        entity: camera.patio_left
+        camera_image: camera.patio_left
+        camera_view: live
+        show_name: true
+        show_state: true
+    - type: conditional
+      conditions:
+      - entity: camera.patio_left
+        state_not: streaming
+      card:
+        type: button
+        name: "\u25B6 Start Live Stream (2 min)"
+        icon: mdi:play-circle-outline
+        tap_action:
+          action: call-service
+          service: script.stream_patio_left
+    - type: conditional
+      conditions:
+      - entity: camera.patio_left
+        state: streaming
+      card:
+        type: button
+        name: "\u23F9 Stop Live Stream"
+        icon: mdi:stop-circle-outline
+        tap_action:
+          action: call-service
+          service: script.stop_patio_left
+  - type: grid
+    cards:
+    - type: heading
+      heading: Patio Right Camera
+      icon: mdi:camera-outline
+    - type: conditional
+      conditions:
+      - entity: camera.patio_right
+        state_not: streaming
+      card:
+        type: picture-glance
+        title: Patio Right (Snapshot - Tap to Refresh)
+        image_entity: image.patio_right_event_image
+        entities:
+        - binary_sensor.patio_right_motion_detected
+        - binary_sensor.patio_right_person_detected
+        - camera.patio_right
+        tap_action:
+          action: call-service
+          service: eufy_security.generate_image
+          target:
+            entity_id: camera.patio_right
+    - type: conditional
+      conditions:
+      - entity: camera.patio_right
+        state: streaming
+      card:
+        type: picture-entity
+        entity: camera.patio_right
+        camera_image: camera.patio_right
+        camera_view: live
+        show_name: true
+        show_state: true
+    - type: conditional
+      conditions:
+      - entity: camera.patio_right
+        state_not: streaming
+      card:
+        type: button
+        name: "\u25B6 Start Live Stream (2 min)"
+        icon: mdi:play-circle-outline
+        tap_action:
+          action: call-service
+          service: script.stream_patio_right
+    - type: conditional
+      conditions:
+      - entity: camera.patio_right
+        state: streaming
+      card:
+        type: button
+        name: "\u23F9 Stop Live Stream"
+        icon: mdi:stop-circle-outline
+        tap_action:
+          action: call-service
+          service: script.stop_patio_right
+  - type: grid
+    cards:
+    - type: heading
+      heading: Patio Quick Controls
+      icon: mdi:home-automation
+    - type: tile
+      entity: switch.patio_left_light_switch
+      name: Patio Left Light
+    - type: tile
+      entity: switch.patio_right_light
+      name: Patio Right Light
+    - type: tile
+      entity: lock.patio_door_lock
+      name: Patio Door Lock
+    - type: button
+      name: Dismiss Nest Hub Cast
+      icon: mdi:cast-off
+      tap_action:
+        action: call-service
+        service: media_player.media_stop
+        target:
+          entity_id: media_player.kitchen_hub_display

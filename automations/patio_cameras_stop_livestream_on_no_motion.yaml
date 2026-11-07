@@ -1,0 +1,35 @@
+id: "1756982400001"
+alias: Patio cameras stop livestream on no motion
+description: Stop P2P livestream when motion stops on patio cameras
+mode: single
+labels:
+  - git_managed
+triggers:
+  - trigger: state
+    entity_id: binary_sensor.patio_right_motion_detected
+    to: "off"
+    for:
+      seconds: 30
+    id: patio_right_motion
+  - trigger: state
+    entity_id: binary_sensor.patio_left_motion_detected
+    to: "off"
+    for:
+      seconds: 30
+    id: patio_left_motion
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: patio_right_motion
+        sequence:
+          - action: eufy_security.stop_p2p_livestream
+            target:
+              entity_id: camera.patio_right
+      - conditions:
+          - condition: trigger
+            id: patio_left_motion
+        sequence:
+          - action: eufy_security.stop_p2p_livestream
+            target:
+              entity_id: camera.patio_left

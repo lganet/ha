@@ -29,19 +29,26 @@ Configure Home Assistant automations for two distinct remotes:
 2. **Finger Lift Timing**: Implemented via `wait_for_trigger` on `brightness_stop` following `brightness_move_up` / `brightness_move_down` with a 15-second safety timeout.
 3. **Dual MQTT & Device Triggers**: Both remotes listen on both direct Zigbee2MQTT MQTT topics (`zigbee2mqtt/<device_name>/action`) and HA device automation triggers for instantaneous, fault-tolerant execution.
 4. **Patio Inverted Entities Alignment**: Corrected inverted Left and Right Patio light and camera mappings per user clarification.
-5. **Camera Streaming on Google Nest Hub Max**:
-   - Streamed via `script.stream_patio_camera_to_hub` using `google_assistant_sdk.send_text_command` sending `"stream patio left/right camera on kitchen display"`.
-   - Eliminates third-party DashCast loading screens and leverages Google's native camera viewer.
-   - Automatically stops after 5 minutes via `"stop on kitchen display"` and `media_player.media_stop`.
-   - Handles seamless camera switching with `mode: restart`.
+5. **Camera Streaming on Google Nest Hub Max & Dashboard Controls**:
+   - Google Assistant text commands for remote camera streaming are restricted by Eufy's cloud policy (*"Patio Left does not support remote streaming"*).
+   - Designed a purpose-built **Camera Controls** dashboard (`dashboards/camera-controls.yaml`) optimized for the 10-inch Nest Hub Max (1280x800) and desktop/mobile browsers.
+   - Built around low-power snapshot viewing (`image.patio_left_event_image`, `image.patio_right_event_image`) to preserve battery life, with on-demand 2-minute live stream controls and tap-to-refresh snapshot actions.
+   - Automated via `script.stream_patio_camera_to_hub` to wake the requested camera and cast the dashboard view to the Nest Hub Max for 2 minutes before automatically returning to ambient clock/photos mode.
 
 ---
 
 ## Repository Files
 
-### 1. Scripts
-- `scripts/stream_patio_camera_to_hub.yaml`: Google Assistant SDK text-command streaming to Nest Hub Max with 5-minute timer.
+### 1. Dashboards
+- `dashboards/camera-controls.yaml`: 10-inch optimized dashboard with conditional snapshot/live video cards and patio controls.
 
-### 2. Automations
+### 2. Scripts
+- `scripts/stream_patio_camera_to_hub.yaml`: Wakes camera, captures snapshot, and casts Camera Controls dashboard to Nest Hub Max for 2 minutes.
+- `scripts/stream_patio_left.yaml` & `scripts/stream_patio_right.yaml`: 2-minute auto-timed P2P streaming scripts.
+- `scripts/stop_patio_left.yaml` & `scripts/stop_patio_right.yaml`: Immediate manual stream termination scripts.
+
+### 3. Automations
 - `automations/ikea_button_1_controls.yaml`: RODRET toggle controls for Lamp, Dining Light, LEDs Plug, and Patio Right Light.
-- `automations/ikea_button_2_controls.yaml`: STYRBAR toggle controls for Patio Left Light, Patio Door Lock, and camera streams.
+- `automations/ikea_button_2_controls.yaml`: STYRBAR toggle controls for Patio Left Light, Patio Door Lock, and camera dashboard cast.
+- `automations/patio_cameras_start_livestream_on_motion.yaml`: Fixed trigger IDs for motion activation.
+- `automations/patio_cameras_stop_livestream_on_no_motion.yaml`: Fixed trigger IDs for motion deactivation.
