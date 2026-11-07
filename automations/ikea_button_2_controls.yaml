@@ -1,13 +1,16 @@
 id: "1794019200002"
 alias: "IKEA Button 2 - Patio Light, Lock & Camera Controls"
 description: "Controls Patio Left light, Patio Door lock, and Google Hub Max camera streams via IKEA STYRBAR (Button 2)."
-mode: parallel
-max: 10
+mode: restart
 labels:
   - git_managed
 
 triggers:
   # Single Press ON -> Turn on Patio Left light
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Ikea button 2/action"
+    payload: "on"
+    id: press_on
   - trigger: device
     domain: mqtt
     device_id: 05576871ebba04eaacde799001c53603
@@ -16,6 +19,10 @@ triggers:
     id: press_on
 
   # Single Press OFF -> Turn off Patio Left light
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Ikea button 2/action"
+    payload: "off"
+    id: press_off
   - trigger: device
     domain: mqtt
     device_id: 05576871ebba04eaacde799001c53603
@@ -23,7 +30,11 @@ triggers:
     subtype: "off"
     id: press_off
 
-  # Hold ON -> Unlock Patio Door Lock
+  # Hold ON -> Wait for finger release -> Unlock Patio Door Lock
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Ikea button 2/action"
+    payload: "brightness_move_up"
+    id: hold_on
   - trigger: device
     domain: mqtt
     device_id: 05576871ebba04eaacde799001c53603
@@ -31,7 +42,11 @@ triggers:
     subtype: "brightness_move_up"
     id: hold_on
 
-  # Hold OFF -> Lock Patio Door Lock
+  # Hold OFF -> Wait for finger release -> Lock Patio Door Lock
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Ikea button 2/action"
+    payload: "brightness_move_down"
+    id: hold_off
   - trigger: device
     domain: mqtt
     device_id: 05576871ebba04eaacde799001c53603
@@ -40,6 +55,10 @@ triggers:
     id: hold_off
 
   # Press LEFT Arrow -> Stream Left Camera to Google Nest Hub Max
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Ikea button 2/action"
+    payload: "arrow_left_click"
+    id: click_left
   - trigger: device
     domain: mqtt
     device_id: 05576871ebba04eaacde799001c53603
@@ -48,6 +67,10 @@ triggers:
     id: click_left
 
   # Press RIGHT Arrow -> Stream Right Camera to Google Nest Hub Max
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Ikea button 2/action"
+    payload: "arrow_right_click"
+    id: click_right
   - trigger: device
     domain: mqtt
     device_id: 05576871ebba04eaacde799001c53603
@@ -77,6 +100,17 @@ actions:
           - condition: trigger
             id: hold_on
         sequence:
+          - wait_for_trigger:
+              - trigger: mqtt
+                topic: "zigbee2mqtt/Ikea button 2/action"
+                payload: "brightness_stop"
+              - trigger: device
+                domain: mqtt
+                device_id: 05576871ebba04eaacde799001c53603
+                type: action
+                subtype: "brightness_stop"
+            timeout: "00:00:15"
+            continue_on_timeout: true
           - action: lock.unlock
             target:
               entity_id: lock.patio_door_lock
@@ -85,6 +119,17 @@ actions:
           - condition: trigger
             id: hold_off
         sequence:
+          - wait_for_trigger:
+              - trigger: mqtt
+                topic: "zigbee2mqtt/Ikea button 2/action"
+                payload: "brightness_stop"
+              - trigger: device
+                domain: mqtt
+                device_id: 05576871ebba04eaacde799001c53603
+                type: action
+                subtype: "brightness_stop"
+            timeout: "00:00:15"
+            continue_on_timeout: true
           - action: lock.lock
             target:
               entity_id: lock.patio_door_lock

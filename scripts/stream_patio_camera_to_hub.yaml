@@ -12,7 +12,7 @@ fields:
         domain: camera
 
 sequence:
-  # Stop the opposite camera's P2P stream to save battery and bandwidth
+  # Stop opposite camera livestream safely if running
   - choose:
       - conditions:
           - condition: template
@@ -21,6 +21,7 @@ sequence:
           - action: eufy_security.stop_p2p_livestream
             target:
               entity_id: camera.patio_right
+            continue_on_error: true
       - conditions:
           - condition: template
             value_template: "{{ camera_entity == 'camera.patio_right' }}"
@@ -28,26 +29,33 @@ sequence:
           - action: eufy_security.stop_p2p_livestream
             target:
               entity_id: camera.patio_left
+            continue_on_error: true
 
-  # Start P2P livestream on the selected camera
+  # Start P2P livestream on selected camera
   - action: eufy_security.start_p2p_livestream
     target:
       entity_id: "{{ camera_entity }}"
+    continue_on_error: true
 
-  # Cast the camera stream to the Google Nest Hub Max
-  - action: camera.play_stream
-    target:
-      entity_id: "{{ camera_entity }}"
+  - delay: "00:00:02"
+
+  # Cast camera feed to Google Nest Hub Max via WebRTC Dash Cast
+  - action: webrtc.dash_cast
     data:
-      media_player: media_player.kitchen_display
+      entity_id: media_player.kitchen_hub_display
+      entity: "{{ camera_entity }}"
+    continue_on_error: true
 
-  # Keep stream active for exactly 5 minutes as requested
+  # Wait for 5 minutes as requested
   - delay: "00:05:00"
 
-  # Stop streaming on Google Hub Max and shut down P2P stream
+  # Stop cast and stop livestream
   - action: media_player.media_stop
     target:
-      entity_id: media_player.kitchen_display
+      entity_id: media_player.kitchen_hub_display
+    continue_on_error: true
+
   - action: eufy_security.stop_p2p_livestream
     target:
       entity_id: "{{ camera_entity }}"
+    continue_on_error: true
