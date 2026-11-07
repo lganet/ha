@@ -12,7 +12,7 @@ fields:
         domain: camera
 
 sequence:
-  # Stop opposite camera livestream safely if running
+  # Safe P2P stream management for Eufy cameras
   - choose:
       - conditions:
           - condition: template
@@ -37,24 +37,10 @@ sequence:
       entity_id: "{{ camera_entity }}"
     continue_on_error: true
 
-  - delay: "00:00:02"
-
-  # Cast camera feed to Google Nest Hub Max via WebRTC Dash Cast
-  - action: webrtc.dash_cast
-    data:
-      entity_id: media_player.kitchen_hub_display
-      entity: "{{ camera_entity }}"
-    continue_on_error: true
-
-  # Wait for 5 minutes as requested
+  # 5 minutes duration
   - delay: "00:05:00"
 
-  # Stop cast and stop livestream
-  - action: media_player.media_stop
-    target:
-      entity_id: media_player.kitchen_hub_display
-    continue_on_error: true
-
+  # Stop livestream after 5 minutes
   - action: eufy_security.stop_p2p_livestream
     target:
       entity_id: "{{ camera_entity }}"

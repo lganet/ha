@@ -1,12 +1,12 @@
 id: "1794019200002"
 alias: "IKEA Button 2 - Patio Light, Lock & Camera Controls"
-description: "Controls Right Patio Light (toggle on click ON), Patio Door Lock (toggle on click OFF), and Google Hub Max camera streams (Left and Right arrows) via IKEA STYRBAR (Button 2)."
+description: "Controls Left Patio Light (toggle on click ON), Patio Door Lock (toggle on click OFF), and Google Hub Max camera streams (Left and Right arrows) via IKEA STYRBAR (Button 2)."
 mode: restart
 labels:
   - git_managed
 
 triggers:
-  # Single Press ON -> Toggle Right Patio Light
+  # Single Press ON -> Toggle Left Patio Light
   - trigger: mqtt
     topic: "zigbee2mqtt/Ikea button 2/action"
     payload: "on"
@@ -30,7 +30,7 @@ triggers:
     subtype: "off"
     id: press_off
 
-  # Press LEFT Arrow -> Stream Left Camera to Google Nest Hub Max
+  # Press LEFT Arrow -> Stream Right Camera to Google Nest Hub Max
   - trigger: mqtt
     topic: "zigbee2mqtt/Ikea button 2/action"
     payload: "arrow_left_click"
@@ -42,7 +42,7 @@ triggers:
     subtype: "arrow_left_click"
     id: click_left
 
-  # Press RIGHT Arrow -> Stream Right Camera to Google Nest Hub Max
+  # Press RIGHT Arrow -> Stream Left Camera to Google Nest Hub Max
   - trigger: mqtt
     topic: "zigbee2mqtt/Ikea button 2/action"
     payload: "arrow_right_click"
@@ -56,14 +56,14 @@ triggers:
 
 actions:
   - choose:
-      # Single Press ON -> Toggle Right Patio Light
+      # Single Press ON -> Toggle Left Patio Light
       - conditions:
           - condition: trigger
             id: press_on
         sequence:
           - action: switch.toggle
             target:
-              entity_id: switch.patio_right_light
+              entity_id: switch.patio_left_light_switch
 
       # Single Press OFF -> Toggle Patio Door Lock (lock if unlocked, unlock if locked)
       - conditions:
@@ -83,20 +83,20 @@ actions:
                 target:
                   entity_id: lock.patio_door_lock
 
-      # Press LEFT Arrow -> Stream Left Camera to Google Nest Hub Max
+      # Press LEFT Arrow -> Stream Right Camera to Google Nest Hub Max
       - conditions:
           - condition: trigger
             id: click_left
         sequence:
           - action: script.stream_patio_camera_to_hub
             data:
-              camera_entity: camera.patio_left
+              camera_entity: camera.patio_right
 
-      # Press RIGHT Arrow -> Stream Right Camera to Google Nest Hub Max
+      # Press RIGHT Arrow -> Stream Left Camera to Google Nest Hub Max
       - conditions:
           - condition: trigger
             id: click_right
         sequence:
           - action: script.stream_patio_camera_to_hub
             data:
-              camera_entity: camera.patio_right
+              camera_entity: camera.patio_left

@@ -1,6 +1,6 @@
 id: "1794019200001"
 alias: "IKEA Button 1 - Living Room Lamp & LEDs Plug Controls"
-description: "Controls Lamp HS220 (toggle on click ON), Dining Room Ceiling Light (toggle on hold ON), LEDs Plug (toggle on click OFF), and Patio Left Light (toggle on hold OFF) via IKEA RODRET (Button 1)."
+description: "Controls Lamp HS220 (toggle on click ON), Dining Room Ceiling Light (toggle on hold ON), LEDs Plug (toggle on click OFF), and Patio Right Light (toggle on hold OFF) via IKEA RODRET (Button 1)."
 mode: restart
 labels:
   - git_managed
@@ -42,7 +42,7 @@ triggers:
     subtype: "brightness_move_up"
     id: hold_on
 
-  # Hold OFF -> Wait for lift -> Toggle Patio Left Light
+  # Hold OFF -> Wait for lift -> Toggle Patio Right Light
   - trigger: mqtt
     topic: "zigbee2mqtt/Botao Ikea 1/action"
     payload: "brightness_move_down"
@@ -94,7 +94,7 @@ actions:
             target:
               entity_id: light.dining_room_light
 
-      # Hold OFF -> Lift -> Toggle Patio Left Light
+      # Hold OFF -> Lift -> Toggle Patio Right Light
       - conditions:
           - condition: trigger
             id: hold_off
@@ -112,4 +112,4 @@ actions:
             continue_on_timeout: true
           - action: switch.toggle
             target:
-              entity_id: switch.patio_left_light_switch
+              entity_id: switch.patio_right_light
