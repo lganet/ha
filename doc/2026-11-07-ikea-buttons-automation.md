@@ -30,16 +30,17 @@ Configure Home Assistant automations for two distinct remotes:
 3. **Dual MQTT & Device Triggers**: Both remotes listen on both direct Zigbee2MQTT MQTT topics (`zigbee2mqtt/<device_name>/action`) and HA device automation triggers for instantaneous, fault-tolerant execution.
 4. **Patio Inverted Entities Alignment**: Corrected inverted Left and Right Patio light and camera mappings per user clarification.
 5. **Camera Streaming on Google Nest Hub Max**:
-   - `webrtc.dash_cast` was removed as it invoked an unsupported third-party DashCast receiver app on the Hub Max.
-   - P2P livestream lifecycle managed via `eufy_security.start_p2p_livestream` and `eufy_security.stop_p2p_livestream` with `continue_on_error: true`.
-   - Text command streaming via Google Assistant requires the `google_assistant_sdk` integration (`google_assistant_sdk.send_text_command`), analogous to `alexa_devices.send_text_command` in Alexa Media Player.
+   - Streamed via `script.stream_patio_camera_to_hub` using `google_assistant_sdk.send_text_command` sending `"stream patio left/right camera on kitchen display"`.
+   - Eliminates third-party DashCast loading screens and leverages Google's native camera viewer.
+   - Automatically stops after 5 minutes via `"stop on kitchen display"` and `media_player.media_stop`.
+   - Handles seamless camera switching with `mode: restart`.
 
 ---
 
 ## Repository Files
 
 ### 1. Scripts
-- `scripts/stream_patio_camera_to_hub.yaml`: P2P livestream lifecycle management with 5-minute timer.
+- `scripts/stream_patio_camera_to_hub.yaml`: Google Assistant SDK text-command streaming to Nest Hub Max with 5-minute timer.
 
 ### 2. Automations
 - `automations/ikea_button_1_controls.yaml`: RODRET toggle controls for Lamp, Dining Light, LEDs Plug, and Patio Right Light.

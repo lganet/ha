@@ -17,10 +17,9 @@
   - Left and Right arrow clicks control Patio camera streaming via `script.stream_patio_camera_to_hub`.
   - Uses dual MQTT topic (`zigbee2mqtt/Ikea button 2/action`) and device triggers.
 - Added Patio Camera streaming script (`scripts/stream_patio_camera_to_hub.yaml`, `script.stream_patio_camera_to_hub`) tagged with `git_managed`:
-  - Handles P2P livestream lifecycle for requested camera (`camera.patio_left` or `camera.patio_right`).
-  - Added robust `continue_on_error: true` error handling on Eufy P2P service calls to prevent crashes when livestreams are not actively running.
-  - Automatically terminates stream after 5 minutes and shuts down P2P livestreaming.
-  - Handles seamless camera switching with `mode: restart` while shutting down the inactive camera stream.
+  - Dispatches native text command via `google_assistant_sdk.send_text_command` to stream the requested patio camera (`stream patio left/right camera on kitchen display`) on the Google Nest Hub Max without third-party cast screens.
+  - Automatically stops streaming after 5 minutes by issuing `stop on kitchen display` and `media_player.media_stop`.
+  - Handles seamless camera switching with `mode: restart`.
 - Added architectural documentation and implementation plan (`doc/2026-11-07-ikea-buttons-automation.md`).
 
 ## 0.14.0 - 2026-11-06

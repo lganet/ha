@@ -1,10 +1,10 @@
 alias: Stream Patio Camera to Hub Display
-description: Streams a selected Patio camera to Google Nest Hub Max for 5 minutes, then stops.
+description: Streams a selected Patio camera to Google Nest Hub Max for 5 minutes via Google Assistant, then stops.
 mode: restart
 icon: mdi:cctv
 fields:
   camera_entity:
-    description: Camera entity to stream (e.g. camera.patio_left or camera.patio_right)
+    description: Camera entity to stream (camera.patio_left or camera.patio_right)
     example: camera.patio_left
     required: true
     selector:
@@ -12,36 +12,32 @@ fields:
         domain: camera
 
 sequence:
-  # Safe P2P stream management for Eufy cameras
+  # Send text command to Google Assistant to stream the camera on kitchen display
   - choose:
       - conditions:
           - condition: template
             value_template: "{{ camera_entity == 'camera.patio_left' }}"
         sequence:
-          - action: eufy_security.stop_p2p_livestream
-            target:
-              entity_id: camera.patio_right
-            continue_on_error: true
+          - action: google_assistant_sdk.send_text_command
+            data:
+              command: "stream patio left camera on kitchen display"
       - conditions:
           - condition: template
             value_template: "{{ camera_entity == 'camera.patio_right' }}"
         sequence:
-          - action: eufy_security.stop_p2p_livestream
-            target:
-              entity_id: camera.patio_left
-            continue_on_error: true
+          - action: google_assistant_sdk.send_text_command
+            data:
+              command: "stream patio right camera on kitchen display"
 
-  # Start P2P livestream on selected camera
-  - action: eufy_security.start_p2p_livestream
-    target:
-      entity_id: "{{ camera_entity }}"
-    continue_on_error: true
-
-  # 5 minutes duration
+  # Wait for 5 minutes as requested
   - delay: "00:05:00"
 
-  # Stop livestream after 5 minutes
-  - action: eufy_security.stop_p2p_livestream
+  # Stop streaming after 5 minutes
+  - action: google_assistant_sdk.send_text_command
+    data:
+      command: "stop on kitchen display"
+    continue_on_error: true
+  - action: media_player.media_stop
     target:
-      entity_id: "{{ camera_entity }}"
+      entity_id: media_player.kitchen_hub_display
     continue_on_error: true
