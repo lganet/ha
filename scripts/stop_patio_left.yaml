@@ -1,0 +1,9 @@
+alias: Stop Patio Left Stream
+description: Manually stops the live stream on Patio Left camera immediately.
+mode: single
+icon: mdi:camera-off
+sequence:
+  - action: eufy_security.stop_p2p_livestream
+    target:
+      entity_id: camera.patio_left
+    continue_on_error: true

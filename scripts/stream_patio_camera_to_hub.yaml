@@ -1,0 +1,65 @@
+alias: Stream Patio Camera to Hub Display
+description: Wakes the selected camera, updates snapshot, and casts the Camera Control dashboard to the Nest Hub Max for 2 minutes.
+mode: restart
+icon: mdi:cctv
+fields:
+  camera_entity:
+    description: Camera entity to stream (camera.patio_left or camera.patio_right)
+    example: camera.patio_left
+    required: true
+    selector:
+      entity:
+        domain: camera
+
+sequence:
+  # 1. Stop the opposite camera's stream to avoid HomeBase bandwidth overload
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ camera_entity == 'camera.patio_left' }}"
+        sequence:
+          - action: eufy_security.stop_p2p_livestream
+            target:
+              entity_id: camera.patio_right
+            continue_on_error: true
+      - conditions:
+          - condition: template
+            value_template: "{{ camera_entity == 'camera.patio_right' }}"
+        sequence:
+          - action: eufy_security.stop_p2p_livestream
+            target:
+              entity_id: camera.patio_left
+            continue_on_error: true
+
+  # 2. Wake up the selected camera and capture a fresh snapshot
+  - action: eufy_security.start_p2p_livestream
+    target:
+      entity_id: "{{ camera_entity }}"
+    continue_on_error: true
+  - action: eufy_security.generate_image
+    target:
+      entity_id: "{{ camera_entity }}"
+    continue_on_error: true
+
+  # 3. Cast the Camera Controls dashboard to the Nest Hub Max
+  - action: cast.show_lovelace_view
+    data:
+      dashboard_path: test-camera
+      view_path: overview
+      entity_id: media_player.kitchen_hub_display
+    continue_on_error: true
+
+  # 4. Keep active for 2 minutes
+  - delay: "00:02:00"
+
+  # 5. Shut down stream to protect camera battery
+  - action: eufy_security.stop_p2p_livestream
+    target:
+      entity_id: "{{ camera_entity }}"
+    continue_on_error: true
+
+  # 6. Return Nest Hub Max to ambient clock/photos
+  - action: media_player.media_stop
+    target:
+      entity_id: media_player.kitchen_hub_display
+    continue_on_error: true

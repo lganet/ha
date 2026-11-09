@@ -1,0 +1,115 @@
+id: "1794019200001"
+alias: "IKEA Button 1 - Living Room Lamp & LEDs Plug Controls"
+description: "Controls Lamp HS220 (toggle on click ON), Dining Room Ceiling Light (toggle on hold ON), LEDs Plug (toggle on click OFF), and Patio Right Light (toggle on hold OFF) via IKEA RODRET (Button 1)."
+mode: restart
+labels:
+  - git_managed
+
+triggers:
+  # Single Press ON -> Toggle Lamp HS220
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Botao Ikea 1/action"
+    payload: "on"
+    id: press_on
+  - trigger: device
+    domain: mqtt
+    device_id: f5c7842da2ee21c8b66fda6533ead56f
+    type: action
+    subtype: "on"
+    id: press_on
+
+  # Single Press OFF -> Toggle LEDs Plug
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Botao Ikea 1/action"
+    payload: "off"
+    id: press_off
+  - trigger: device
+    domain: mqtt
+    device_id: f5c7842da2ee21c8b66fda6533ead56f
+    type: action
+    subtype: "off"
+    id: press_off
+
+  # Hold ON -> Wait for lift -> Toggle Dining Room Ceiling Light
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Botao Ikea 1/action"
+    payload: "brightness_move_up"
+    id: hold_on
+  - trigger: device
+    domain: mqtt
+    device_id: f5c7842da2ee21c8b66fda6533ead56f
+    type: action
+    subtype: "brightness_move_up"
+    id: hold_on
+
+  # Hold OFF -> Wait for lift -> Toggle Patio Right Light
+  - trigger: mqtt
+    topic: "zigbee2mqtt/Botao Ikea 1/action"
+    payload: "brightness_move_down"
+    id: hold_off
+  - trigger: device
+    domain: mqtt
+    device_id: f5c7842da2ee21c8b66fda6533ead56f
+    type: action
+    subtype: "brightness_move_down"
+    id: hold_off
+
+actions:
+  - choose:
+      # Single Press ON -> Toggle Lamp HS220
+      - conditions:
+          - condition: trigger
+            id: press_on
+        sequence:
+          - action: light.toggle
+            target:
+              entity_id: light.patio_left_light
+
+      # Single Press OFF -> Toggle LEDs Plug
+      - conditions:
+          - condition: trigger
+            id: press_off
+        sequence:
+          - action: switch.toggle
+            target:
+              entity_id: switch.living_room_leds_plug
+
+      # Hold ON -> Lift -> Toggle Dining Room Ceiling Light
+      - conditions:
+          - condition: trigger
+            id: hold_on
+        sequence:
+          - wait_for_trigger:
+              - trigger: mqtt
+                topic: "zigbee2mqtt/Botao Ikea 1/action"
+                payload: "brightness_stop"
+              - trigger: device
+                domain: mqtt
+                device_id: f5c7842da2ee21c8b66fda6533ead56f
+                type: action
+                subtype: "brightness_stop"
+            timeout: "00:00:15"
+            continue_on_timeout: true
+          - action: light.toggle
+            target:
+              entity_id: light.dining_room_light
+
+      # Hold OFF -> Lift -> Toggle Patio Right Light
+      - conditions:
+          - condition: trigger
+            id: hold_off
+        sequence:
+          - wait_for_trigger:
+              - trigger: mqtt
+                topic: "zigbee2mqtt/Botao Ikea 1/action"
+                payload: "brightness_stop"
+              - trigger: device
+                domain: mqtt
+                device_id: f5c7842da2ee21c8b66fda6533ead56f
+                type: action
+                subtype: "brightness_stop"
+            timeout: "00:00:15"
+            continue_on_timeout: true
+          - action: switch.toggle
+            target:
+              entity_id: switch.patio_right_light

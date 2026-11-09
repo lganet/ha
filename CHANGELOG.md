@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+## 0.15.0 - 2026-11-07
+
+### Added
+- Added IKEA Button 1 automation (`automations/ikea_button_1_controls.yaml`, `automation.ikea_button_1_living_room_lamp_leds_plug_controls`) for IKEA RODRET wireless dimmer tagged with `git_managed`:
+  - Single press ON toggles Living Room Lamp HS220 (`light.patio_left_light`).
+  - Hold and release (lift) ON toggles Dining Room Ceiling Light (`light.dining_room_light`).
+  - Single press OFF toggles Living Room LEDs Plug (`switch.living_room_leds_plug`).
+  - Hold and release (lift) OFF toggles Patio Right light (`switch.patio_right_light`).
+  - Uses dual MQTT topic (`zigbee2mqtt/Botao Ikea 1/action`) and device triggers with `wait_for_trigger` on `brightness_stop`.
+- Added IKEA Button 2 automation (`automations/ikea_button_2_controls.yaml`, `automation.ikea_button_2_patio_light_lock_camera_controls`) for IKEA STYRBAR remote control tagged with `git_managed`:
+  - Single press ON toggles Patio Left light switch (`switch.patio_left_light_switch`).
+  - Single press OFF toggles Patio Door lock (`lock.patio_door_lock`) (unlocks if locked, locks if unlocked).
+  - Left and Right arrow clicks control Patio camera streaming via `script.stream_patio_camera_to_hub`.
+  - Uses dual MQTT topic (`zigbee2mqtt/Ikea button 2/action`) and device triggers.
+- Added Camera Controls dashboard (`dashboards/camera-controls.yaml`, url: `test-camera`) optimized for the 10-inch Google Nest Hub Max and desktop/mobile browsers:
+  - Battery-friendly dual camera layout with high-resolution event snapshot cards (`image.patio_left_event_image`, `image.patio_right_event_image`) and interactive tap-to-refresh (`eufy_security.generate_image`).
+  - Dynamic conditional cards that toggle between idle snapshot cards and live streaming cards (`camera_view: live`).
+  - Prominent touch controls to trigger on-demand live streams (`▶ Start Live Stream (2 min)`) and manual stop (`⏹ Stop Live Stream`).
+  - Top security badges for Patio Door Lock status, motion sensors, and Eufy HomeBase mode.
+  - Bottom controls bar with Patio light switches, door lock toggle, and a one-touch Nest Hub Cast dismiss button.
+- Added battery-safe timed streaming scripts (`scripts/stream_patio_left.yaml`, `scripts/stream_patio_right.yaml`, `scripts/stop_patio_left.yaml`, `scripts/stop_patio_right.yaml`) tagged with `git_managed`:
+  - Starts P2P livestreaming on demand and automatically stops after 2 minutes to protect camera battery life.
+- Updated Patio Camera streaming script (`scripts/stream_patio_camera_to_hub.yaml`, `script.stream_patio_camera_to_hub`) tagged with `git_managed`:
+  - Wakes up requested camera, captures a fresh snapshot, and casts the Camera Controls dashboard to the Nest Hub Max (`media_player.kitchen_hub_display`).
+  - Automatically shuts down livestream and returns the Nest Hub Max to ambient mode after 2 minutes.
+- Fixed trigger ID bug in motion automations (`automations/patio_cameras_start_livestream_on_motion.yaml`, `automations/patio_cameras_stop_livestream_on_no_motion.yaml`):
+  - Added explicit trigger IDs (`patio_right_motion`, `patio_left_motion`) so motion triggers properly activate the corresponding camera livestream.
+- Added architectural documentation and implementation plan (`doc/2026-11-07-ikea-buttons-automation.md`).
+
 ## 0.14.0 - 2026-11-06
 
 ### Added

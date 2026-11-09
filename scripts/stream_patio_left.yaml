@@ -1,0 +1,14 @@
+alias: Stream Patio Left Camera
+description: Starts P2P livestream on Patio Left camera for 2 minutes, then stops to save battery.
+mode: restart
+icon: mdi:camera
+sequence:
+  - action: eufy_security.start_p2p_livestream
+    target:
+      entity_id: camera.patio_left
+    continue_on_error: true
+  - delay: "00:02:00"
+  - action: eufy_security.stop_p2p_livestream
+    target:
+      entity_id: camera.patio_left
+    continue_on_error: true
