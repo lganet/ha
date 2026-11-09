@@ -5,18 +5,28 @@ mode: single
 sequence:
   - choose:
       - conditions:
-          - condition: template
-            value_template: >-
-              {{ is_state('light.main_bedroom_ceiling_fan_light', 'on')
-                 or is_state('light.smart_fan_backlight_2', 'on')
-                 or is_state('light.smart_fan_nightlight_2', 'on')
-                 or is_state('light.main_bedroom_light_2', 'on')
-                 or is_state('light.main_bedroom_closet_light', 'on') }}
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: light.main_bedroom_fan_light
+                state: "on"
+              - condition: state
+                entity_id: light.smart_fan_backlight_2
+                state: "on"
+              - condition: state
+                entity_id: light.smart_fan_nightlight_2
+                state: "on"
+              - condition: state
+                entity_id: light.main_bedroom_light_2
+                state: "on"
+              - condition: state
+                entity_id: light.main_bedroom_closet_light
+                state: "on"
         sequence:
           - action: light.turn_off
             target:
               entity_id:
-                - light.main_bedroom_ceiling_fan_light
+                - light.main_bedroom_fan_light
                 - light.smart_fan_backlight_2
                 - light.smart_fan_nightlight_2
                 - light.main_bedroom_light_2
@@ -32,4 +42,4 @@ sequence:
               entity_id: light.main_bedroom_light_1
       - action: light.turn_on
         target:
-          entity_id: light.main_bedroom_ceiling_fan_light
+          entity_id: light.main_bedroom_fan_light
