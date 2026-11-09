@@ -2,7 +2,28 @@
 
 ## Unreleased
 
-## 0.15.0 - 2026-11-07
+## 0.16.0 - 2026-11-09
+
+### Added
+- Created unified Shared Diagnostics Dashboard (`dashboards/nspanel-system-diagnostics.yaml`, url: `nspanel-system-diagnostics`, Title: `System & Diagnostics`):
+  - Consolidates shared house-wide monitoring tabs: Sensors, Battery Health, Security & Perimeter Alerts, Homelab Infrastructure, and Energy & Real-Time Power Monitoring.
+  - Implemented top dual-return navigation bar on every view (`⬅ Office Panel` and `⬅ Bedroom Panel`) for instant one-touch return to either physical room switch.
+  - Registered and deployed live in Home Assistant storage mode.
+- Added Always-On Watchdog protection for Main Bedroom Ceiling Fan line power (`automations/always_on_switch_watchdog.yaml`):
+  - Added `light.main_bedroom_light_1` (Ceiling Light 1 - TP-Link KS220M line relay) to the state trigger list.
+  - Switched recovery action to `homeassistant.turn_on` to support both `switch.*` and `light.*` entity domains, ensuring immediate automatic restoration if line power is ever cut.
+  - Removed Assist / conversation voice exposure from `light.main_bedroom_light_1` (`expose_to: {conversation: false}`) so "Turn off bedroom lights" voice commands never cut power to the smart fan fixture.
+- Added implementation plan and architecture documentation (`doc/2026-11-09-nspanel-performance-optimization-and-watchdog.md`).
+
+### Changed
+- Streamlined Office NSPanel Dashboard (`dashboards/nspanel-office.yaml`):
+  - Retained only 3 essential room views: Office (Main), Lights, and Climate, reducing configuration size by over 1,500 lines and eliminating heavy background WebSocket subscriptions from wattage sensors.
+  - Added clean "System Diagnostics & Energy" navigation shortcut tile on the main view.
+  - Updated live in Home Assistant storage mode.
+- Streamlined Main Bedroom NSPanel Dashboard (`dashboards/nspanel-main-bedroom.yaml`):
+  - Retained only 3 essential room views: Main Bedroom (Main), Lights, and Climate.
+  - Added clean "System Diagnostics & Energy" navigation shortcut tile on the main view.
+  - Updated live in Home Assistant storage mode.
 
 ### Added
 - Added IKEA Button 1 automation (`automations/ikea_button_1_controls.yaml`, `automation.ikea_button_1_living_room_lamp_leds_plug_controls`) for IKEA RODRET wireless dimmer tagged with `git_managed`:
