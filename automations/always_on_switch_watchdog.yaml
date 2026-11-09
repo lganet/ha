@@ -11,21 +11,22 @@ triggers:
       - switch.office_fan_light_switch
       - switch.office_pc_plug
       - switch.living_room_tv_console_plug
+      - light.main_bedroom_light_1
     to: "off"
 conditions: []
 actions:
-  - action: switch.turn_on
+  - action: homeassistant.turn_on
     target:
       entity_id: "{{ trigger.entity_id }}"
   - action: persistent_notification.create
     data:
-      title: "⚠️ Always-On Switch Restored"
-      message: "Critical switch {{ trigger.to_state.name | default(trigger.entity_id) }} was turned OFF. Power has been automatically restored."
+      title: "⚠️ Always-On Power Restored"
+      message: "Critical device {{ trigger.to_state.name | default(trigger.entity_id) }} was turned OFF. Power has been automatically restored."
       notification_id: "always_on_guard_{{ trigger.entity_id }}"
   - action: notify.mobile_app_fold_8
     data:
       title: "⚠️ Always-On Power Restored"
-      message: "Critical switch {{ trigger.to_state.name | default(trigger.entity_id) }} was turned OFF! Automatically restored power."
+      message: "Critical device {{ trigger.to_state.name | default(trigger.entity_id) }} was turned OFF! Automatically restored power."
       data:
         priority: high
         channel: alert
