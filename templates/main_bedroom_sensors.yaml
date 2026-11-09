@@ -14,7 +14,7 @@
       unique_id: main_bedroom_lights_on
       unit_of_measurement: "on"
       state: >-
-        {% set fan_on = 1 if (is_state('light.main_bedroom_ceiling_fan_light', 'on') or is_state('light.smart_fan_backlight_2', 'on') or is_state('light.smart_fan_nightlight_2', 'on')) else 0 %}
+        {% set fan_on = 1 if (is_state('light.main_bedroom_fan_light', 'on') or is_state('light.smart_fan_backlight_2', 'on') or is_state('light.smart_fan_nightlight_2', 'on')) else 0 %}
         {% set cl2_on = 1 if is_state('light.main_bedroom_light_2', 'on') else 0 %}
         {% set closet_on = 1 if is_state('light.main_bedroom_closet_light', 'on') else 0 %}
         {{ fan_on + cl2_on + closet_on }}
@@ -23,7 +23,7 @@
       unique_id: main_bedroom_lights_off
       unit_of_measurement: "off"
       state: >-
-        {% set fan_on = 1 if (is_state('light.main_bedroom_ceiling_fan_light', 'on') or is_state('light.smart_fan_backlight_2', 'on') or is_state('light.smart_fan_nightlight_2', 'on')) else 0 %}
+        {% set fan_on = 1 if (is_state('light.main_bedroom_fan_light', 'on') or is_state('light.smart_fan_backlight_2', 'on') or is_state('light.smart_fan_nightlight_2', 'on')) else 0 %}
         {% set cl2_on = 1 if is_state('light.main_bedroom_light_2', 'on') else 0 %}
         {% set closet_on = 1 if is_state('light.main_bedroom_closet_light', 'on') else 0 %}
         {{ 3 - (fan_on + cl2_on + closet_on) }}

@@ -1,0 +1,37 @@
+id: "1794240167929"
+alias: Main Bedroom Fan Light State Sync
+description: Synchronizes Alexa and Tuya light states by waking light.main_bedroom_ceiling_fan_light when switch.smart_fan_lights_2 is turned on, and keeping switch states aligned.
+triggers:
+  - trigger: state
+    entity_id: switch.smart_fan_lights_2
+    to: "on"
+    id: switch_turned_on
+  - trigger: state
+    entity_id: light.main_bedroom_ceiling_fan_light
+    to: "off"
+    id: light_turned_off
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: switch_turned_on
+          - condition: state
+            entity_id: light.main_bedroom_ceiling_fan_light
+            state: "off"
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.main_bedroom_ceiling_fan_light
+      - conditions:
+          - condition: trigger
+            id: light_turned_off
+          - condition: state
+            entity_id: switch.smart_fan_lights_2
+            state: "on"
+        sequence:
+          - action: switch.turn_off
+            target:
+              entity_id: switch.smart_fan_lights_2
+mode: queued
+max: 5

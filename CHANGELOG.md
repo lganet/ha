@@ -15,6 +15,14 @@
   - Removed Assist / conversation voice exposure from `light.main_bedroom_light_1` (`expose_to: {conversation: false}`) so "Turn off bedroom lights" voice commands never cut power to the smart fan fixture.
 - Added implementation plan and architecture documentation (`doc/2026-11-09-nspanel-performance-optimization-and-watchdog.md`).
 
+### Fixed
+- Fixed Alexa and NSPanel fan light conflict (`automations/main_bedroom_fan_light_sync.yaml`, `scripts/main_bedroom_lights_toggle.yaml`, `templates/main_bedroom_sensors.yaml`, `dashboards/nspanel-main-bedroom.yaml`):
+  - Resolved hardware lockout where turning off the bedroom lights via NSPanel disabled the light for subsequent Alexa voice commands.
+  - Created Template Light `light.main_bedroom_fan_light` mirroring `switch.smart_fan_lights_2` power while routing dimming and color temperature to `light.main_bedroom_ceiling_fan_light`.
+  - Added bidirectional sync automation `automation.main_bedroom_fan_light_state_sync` tagged with `git_managed` that wakes `light.main_bedroom_ceiling_fan_light` whenever Alexa flips `switch.smart_fan_lights_2` to `on`.
+  - Updated `scripts/main_bedroom_lights_toggle.yaml` and NSPanel tiles to toggle `light.main_bedroom_fan_light`, keeping the Tuya controller in an active ready state.
+  - Updated `sensor.main_bedroom_lights_on` and `sensor.main_bedroom_lights_off` helpers so turning off the fan light via Alexa immediately and accurately updates the bedroom badge count to 0.
+
 ### Changed
 - Streamlined Office NSPanel Dashboard (`dashboards/nspanel-office.yaml`):
   - Retained only 3 essential room views: Office (Main), Lights, and Climate, reducing configuration size by over 1,500 lines and eliminating heavy background WebSocket subscriptions from wattage sensors.

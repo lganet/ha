@@ -33,6 +33,18 @@ The user reported that turning off bedroom lights caused the ceiling fan light t
   - Add `light.main_bedroom_light_1` to `automations/always_on_switch_watchdog.yaml` using `homeassistant.turn_on` so power is restored instantly if ever cut.
   - Unexpose `light.main_bedroom_light_1` from Home Assistant voice assistants (`expose_to: {conversation: false}`).
 
+### C. Alexa & Tuya Fan Light Lockout Resolution
+- **Root Cause:**
+  - Tuya Local exposes both a master DP switch (`switch.smart_fan_lights_2`, "Lights") and a primary Light entity (`light.main_bedroom_ceiling_fan_light`, "Ceiling Fan").
+  - Alexa is linked to Tuya cloud and exclusively toggles `switch.smart_fan_lights_2`.
+  - When NSPanel called `light.turn_off` on `light.main_bedroom_ceiling_fan_light`, the Tuya controller entered a disabled state ignoring Alexa's switch toggle commands.
+  - Standby power verification via Office fan relay (`sensor.den_fan_light_power`) showed 2.0W baseline power regardless of light entity state, confirming keeping the light ready consumes zero extra energy.
+- **Solution:**
+  - Created Template Light `light.main_bedroom_fan_light` mirroring `switch.smart_fan_lights_2` for on/off state while routing brightness and color temp to `light.main_bedroom_ceiling_fan_light`.
+  - Added bidirectional sync automation `automation.main_bedroom_fan_light_state_sync` to auto-wake `light.main_bedroom_ceiling_fan_light` whenever Alexa turns on `switch.smart_fan_lights_2`.
+  - Updated `scripts/main_bedroom_lights_toggle.yaml` and NSPanel tiles to control `light.main_bedroom_fan_light`.
+  - Updated `sensor.main_bedroom_lights_on` and `sensor.main_bedroom_lights_off` helpers so Alexa toggles accurately update the badge count.
+
 ---
 
 ## 2. Work Breakdown

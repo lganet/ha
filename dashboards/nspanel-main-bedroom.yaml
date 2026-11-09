@@ -424,7 +424,7 @@ views:
             square: false
             cards:
               - type: tile
-                entity: light.main_bedroom_ceiling_fan_light
+                entity: light.main_bedroom_fan_light
                 name: Ceiling Fan Light
                 icon: mdi:ceiling-fan-light
                 tap_action:
@@ -1075,7 +1075,7 @@ views:
             cards:
               # Ceiling Fan Light
               - type: tile
-                entity: light.main_bedroom_ceiling_fan_light
+                entity: light.main_bedroom_fan_light
                 name: Fan Light
                 icon: mdi:ceiling-fan-light
                 features:
