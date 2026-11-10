@@ -376,6 +376,8 @@ views:
                   action: call-service
                   haptic: selection
                   service: script.office_adaptive_lights_toggle
+                  data:
+                    sound: true
                 styles:
                   card:
                     - height: 140px
@@ -1345,12 +1347,9 @@ views:
                         ]]]
                     - opacity: >-
                         [[[
-                          return entity.state === 'on' ? '1.0' : '0.45';
+                          return entity.state === 'on' ? '1.0' : '0.7';
                         ]]]
-                    - pointer-events: >-
-                        [[[
-                          return entity.state === 'on' ? 'auto' : 'none';
-                        ]]]
+                    - pointer-events: auto
                     - border: >-
                         [[[
                           return entity.state === 'on' ? '1px solid rgba(76, 175, 80, 0.6)' : 'none';
@@ -1441,12 +1440,9 @@ views:
                         ]]]
                     - opacity: >-
                         [[[
-                          return entity.state === 'on' ? '1.0' : '0.45';
+                          return entity.state === 'on' ? '1.0' : '0.7';
                         ]]]
-                    - pointer-events: >-
-                        [[[
-                          return entity.state === 'on' ? 'auto' : 'none';
-                        ]]]
+                    - pointer-events: auto
                     - border: >-
                         [[[
                           return entity.state === 'on' ? '1px solid rgba(156, 39, 176, 0.6)' : 'none';

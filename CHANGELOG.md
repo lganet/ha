@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.16.1 - 2026-11-10
+
+### Fixed
+- Fixed NSPanel master button chime on "Turn Lights On / Off":
+  - Added explicit `data: { sound: true }` to the master button card in `dashboards/nspanel-office.yaml`.
+  - Updated live `script.office_adaptive_lights_toggle` and `script.office_activate_day_preset` to propagate `sound` parameter to `script.den_all_lights_on` and `script.den_all_lights_off`, restoring audio chime feedback on panel touch.
+- Fixed Wall LEDs turning off during night preset transitions:
+  - Updated fallback sequence in `scripts/office_activate_night_preset.yaml` to include Wall LEDs (`light.office_desk_leds`) in `light.turn_on` rather than `light.turn_off`, preserving ambient illumination even when scenes are not yet populated.
+  - Included `light.office_ceiling_fan_backlight` in `scripts/office_save_day_preset.yaml` and `scripts/office_save_night_preset.yaml` snapshot entity lists.
+  - Initialized dynamic `scene.office_night_preset` in live Home Assistant with Wall LEDs active.
+- Improved Presets Management usability on NSPanel:
+  - Removed `pointer-events: none` on "Save Day Lights" and "Save Night Lights" cards in `dashboards/nspanel-office.yaml`, allowing users to manually snapshot presets at any time.
+- Added implementation plan `doc/2026-11-10-office-presets-and-audio-feedback-fix.md`.
+
 ## 0.16.0 - 2026-11-09
 
 ### Added

@@ -15,6 +15,7 @@ sequence:
         - light.den_night_light
         - light.humidifier_night_light
         - light.office_floor_lamp_corner
+        - light.office_ceiling_fan_backlight
         - switch.office_floor_lamp_side_light
         - switch.office_floor_lamp_bottom_light
         - switch.office_floor_lamp_ripple_light

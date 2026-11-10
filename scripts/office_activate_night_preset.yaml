@@ -46,13 +46,13 @@ sequence:
         target:
           entity_id:
             - light.office_floor_lamp
-            - light.office_desk_leds
       - action: light.turn_on
         target:
           entity_id:
             - light.den_night_light
             - light.humidifier_night_light
             - light.office_floor_lamp_corner
+            - light.office_desk_leds
       - action: switch.turn_on
         target:
           entity_id:
