@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## [0.17.0] - 2026-11-13
+
+### Added
+- Added Patio Climate Card to `nspanel-office.yaml` and `nspanel-main-bedroom.yaml`:
+  - Configured entities `sensor.temp_humidity_sensor_temperature` and `sensor.temp_humidity_sensor_humidity` (YoLink THSensor - Patio).
+  - Implemented sleek horizontal-stack tile card styled for NSPanel portrait display (matching dark theme aesthetic, rounded borders, and clear typography).
+  - Provided meaningful icons (`mdi:thermometer` and `mdi:water-percent`) with primary accent colors (`orange` and `cyan`).
+  - Included `tap_action: more-info` with haptic feedback for quick drill-down.
+  - Handled unavailable and unknown states gracefully.
+  - Rollback Procedure: `git revert HEAD` or restore previous dashboard YAML files.
+
 ## 0.16.1 - 2026-11-10
 
 ### Fixed
