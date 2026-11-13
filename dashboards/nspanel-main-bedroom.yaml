@@ -932,6 +932,27 @@ views:
                           return entity.state === 'locked' ? '#EF5350' : '#81C784';
                         ]]]
 
+          # --- Patio Climate (Temperature & Humidity) ---
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                entity: sensor.temp_humidity_sensor_temperature
+                name: Patio Temperature
+                icon: mdi:thermometer
+                color: orange
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
+              - type: tile
+                entity: sensor.temp_humidity_sensor_humidity
+                name: Patio Humidity
+                icon: mdi:water-percent
+                color: cyan
+                tap_action:
+                  action: more-info
+                  haptic: selection
+
           # --- Resilient Cached Weather Card (Never breaks or disappears) ---
           - type: custom:button-card
             entity: weather.forecast_home
