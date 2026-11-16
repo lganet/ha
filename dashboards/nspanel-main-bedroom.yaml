@@ -956,10 +956,15 @@ views:
                 [[[
                   var al = states['alarm_control_panel.vacation_simulation'];
                   if (!al || al.state === 'unavailable' || al.state === 'unknown') {
-                    return 'toggle';
+                    return 'call-service';
                   }
                   return 'more-info';
                 ]]]
+              service: input_boolean.toggle
+              data:
+                entity_id: input_boolean.vacation_simulation_mode
+              target:
+                entity_id: input_boolean.vacation_simulation_mode
               entity: alarm_control_panel.vacation_simulation
               haptic: selection
             styles:
