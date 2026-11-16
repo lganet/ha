@@ -52,7 +52,10 @@ trigger:
     entity_id:
       - media_player.shield_2
       - media_player.shield
-    to: "playing"
+      - media_player.living_room_samsung_oled
+    to:
+      - "playing"
+      - "on"
     id: tv_playing_suppress_audio
 
   # --- Evening TV & Leisure Triggers (18:00–22:00) ---
@@ -114,12 +117,10 @@ action:
               entity_id: media_player.luis_s_echo_spot
             data:
               volume_level: 0.3
-          - action: media_player.play_media
-            target:
-              entity_id: media_player.luis_s_echo_spot
+          - action: alexa_devices.send_sound
             data:
-              media_content_type: sound
-              media_content_id: amzn_sfx_bell_chimes_01
+              device_id: "167f1badb66d2c5095cd78c55a74336c"
+              sound: "amzn_sfx_doorbell_chime_01"
           - delay: "00:01:00"
           - action: media_player.media_stop
             target:
@@ -241,27 +242,32 @@ action:
               - work_audio_session_1
               - work_audio_session_2
           - condition: template
-            value_template: "{{ states('media_player.shield_2') != 'playing' and states('media_player.shield') != 'playing' }}"
+            value_template: "{{ states('media_player.shield_2') != 'playing' and states('media_player.shield') != 'playing' and states('media_player.living_room_samsung_oled') != 'on' }}"
         sequence:
           - action: media_player.volume_set
             target:
               entity_id: media_player.luis_s_echo
             data:
               volume_level: 0.3
-          - action: media_player.play_media
-            target:
-              entity_id: media_player.luis_s_echo
+          - action: alexa_devices.send_text_command
             data:
-              media_content_type: custom
-              media_content_id: "play my favorites on Spotify"
+              device_id: "c5e4f7977d90dd68570dabe2db6d787a"
+              text_command: "play my favorites on Spotify"
           - wait_for_trigger:
               - platform: state
                 entity_id:
                   - media_player.shield_2
                   - media_player.shield
-                to: "playing"
+                  - media_player.living_room_samsung_oled
+                to:
+                  - "playing"
+                  - "on"
             timeout: "00:45:00"
             continue_on_timeout: true
+          - action: alexa_devices.send_text_command
+            data:
+              device_id: "c5e4f7977d90dd68570dabe2db6d787a"
+              text_command: "stop"
           - action: media_player.media_stop
             target:
               entity_id: media_player.luis_s_echo
@@ -271,6 +277,10 @@ action:
           - condition: trigger
             id: tv_playing_suppress_audio
         sequence:
+          - action: alexa_devices.send_text_command
+            data:
+              device_id: "c5e4f7977d90dd68570dabe2db6d787a"
+              text_command: "stop"
           - action: media_player.media_stop
             target:
               entity_id: media_player.luis_s_echo
@@ -296,10 +306,19 @@ action:
               entity_id: remote.shield
             data:
               activity: "com.google.android.youtube.tv"
+          - delay: "00:00:04"
+          - action: remote.send_command
+            target:
+              entity_id: remote.shield
+            data:
+              command: DPAD_CENTER
           - delay: "01:00:00"
           - action: remote.turn_off
             target:
               entity_id: remote.shield
+          - action: media_player.turn_off
+            target:
+              entity_id: media_player.living_room_samsung_oled
           - action: light.turn_off
             target:
               entity_id:
@@ -324,10 +343,19 @@ action:
               entity_id: remote.shield
             data:
               activity: "com.google.android.youtube.tv"
+          - delay: "00:00:04"
+          - action: remote.send_command
+            target:
+              entity_id: remote.shield
+            data:
+              command: DPAD_CENTER
           - delay: "01:15:00"
           - action: remote.turn_off
             target:
               entity_id: remote.shield
+          - action: media_player.turn_off
+            target:
+              entity_id: media_player.living_room_samsung_oled
           - action: light.turn_off
             target:
               entity_id:
@@ -342,6 +370,9 @@ action:
           - action: remote.turn_off
             target:
               entity_id: remote.shield
+          - action: media_player.turn_off
+            target:
+              entity_id: media_player.living_room_samsung_oled
           - action: light.turn_off
             target:
               entity_id:
