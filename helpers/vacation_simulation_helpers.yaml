@@ -1,0 +1,5 @@
+# Version-controlled reference for vacation simulation helpers
+input_boolean:
+  vacation_simulation_mode:
+    name: Vacation Simulation Mode
+    icon: mdi:home-clock
