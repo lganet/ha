@@ -18,6 +18,7 @@
     - Added authenticated Vacation Mode card in the View 0 Security & Access sections matching the `lock.patio_door_lock` UX pattern.
     - Shows "Vacation Mode (PIN Req)" with dynamic icon (`mdi:shield-airplane` when active, `mdi:home-account` when disabled).
     - Tapping opens the Alarmo keypad popup modal (`alarm_control_panel.vacation_simulation`) requiring a PIN code to arm or disarm, with resilient direct-service fallback (`input_boolean.toggle`) when unconfigured in Alarmo.
+    - Integrated side-by-side with Patio Security in a vertical stack directly below Patio Lock, perfectly matching its 56px dimensions, typography, and guardrails.
   - **Comprehensive Simulation Routines (`automations/vacation_occupancy_simulation.yaml`)**:
     - Guarded by global condition `condition: state, entity_id: input_boolean.vacation_simulation_mode, state: 'on'`.
     - **Morning Routine (08:00–09:00)**: Wakeup audio/chime on `media_player.luis_s_echo_spot` at 08:00 for 1 minute at volume 0.3; checks FP2 illuminance (`sensor.living_room_presence_sensor_fp2_light_sensor_light_level < 50`) and turns on kitchen lights and LEDs for 30 minutes.
