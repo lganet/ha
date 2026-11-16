@@ -1,0 +1,463 @@
+id: "1794200000002"
+alias: "Vacation House Occupancy Simulation"
+description: "Simulates realistic resident presence and daily routines during extended absence (morning routine, working hours lighting/audio, evening TV leisure, patio security lighting, and late-night bursts)."
+mode: parallel
+max: 20
+labels:
+  - git_managed
+trigger:
+  # --- Morning Routine Triggers ---
+  - platform: time
+    at: "08:00:00"
+    id: morning_wakeup_audio
+  - platform: time
+    at: "08:00:00"
+    id: morning_light_check_start
+  - platform: time
+    at: "08:30:00"
+    id: morning_light_check_mid
+  - platform: numeric_state
+    entity_id: sensor.living_room_presence_sensor_fp2_light_sensor_light_level
+    below: 50
+    id: morning_light_level_drop
+
+  # --- Working Hours Triggers (10:00–17:30) ---
+  - platform: time
+    at: "10:15:00"
+    id: work_lights_session_1
+  - platform: time
+    at: "11:00:00"
+    id: work_audio_session_1
+  - platform: time
+    at: "11:45:00"
+    id: work_lights_session_2
+  - platform: time
+    at: "13:30:00"
+    id: work_lights_session_3
+  - platform: time
+    at: "14:15:00"
+    id: work_audio_session_2
+  - platform: time
+    at: "15:00:00"
+    id: work_lights_session_4
+  - platform: time
+    at: "16:30:00"
+    id: work_lights_session_5
+  - platform: time
+    at: "17:30:00"
+    id: work_lights_cleanup
+
+  # --- Mutual Exclusion: TV starts playing -> stop Alexa background audio ---
+  - platform: state
+    entity_id:
+      - media_player.shield_2
+      - media_player.shield
+    to: "playing"
+    id: tv_playing_suppress_audio
+
+  # --- Evening TV & Leisure Triggers (18:00–22:00) ---
+  - platform: time
+    at: "18:15:00"
+    id: tv_session_1
+  - platform: time
+    at: "20:00:00"
+    id: tv_session_2
+  - platform: time
+    at: "22:00:00"
+    id: tv_cleanup
+
+  # --- Patio Evening Lighting Triggers (20:00–23:00) ---
+  - platform: time
+    at: "20:00:00"
+    id: patio_lights_on_time
+  - platform: sun
+    event: sunset
+    id: patio_lights_sunset
+  - platform: time
+    at: "23:00:00"
+    id: patio_lights_off
+
+  # --- Late Night Activity Triggers (22:00–06:00) ---
+  - platform: time
+    at: "23:45:00"
+    id: late_night_burst_1
+  - platform: time
+    at: "01:30:00"
+    id: late_night_burst_2
+  - platform: time
+    at: "03:15:00"
+    id: late_night_burst_3
+  - platform: time
+    at: "05:10:00"
+    id: late_night_burst_4
+  - platform: time
+    at: "06:00:00"
+    id: late_night_cleanup
+
+condition:
+  - condition: state
+    entity_id: input_boolean.vacation_simulation_mode
+    state: "on"
+
+action:
+  - choose:
+      # =========================================================================
+      # 1. MORNING ROUTINE (08:00–09:00)
+      # =========================================================================
+      # 1a. Morning Wakeup Chime (08:00) - 1 minute at vol 0.3
+      - conditions:
+          - condition: trigger
+            id: morning_wakeup_audio
+        sequence:
+          - action: media_player.volume_set
+            target:
+              entity_id: media_player.luis_s_echo_spot
+            data:
+              volume_level: 0.3
+          - action: media_player.play_media
+            target:
+              entity_id: media_player.luis_s_echo_spot
+            data:
+              media_content_type: sound
+              media_content_id: amzn_sfx_bell_chimes_01
+          - delay: "00:01:00"
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo_spot
+
+      # 1b. Morning Ambient Light Check (08:00–09:00) - FP2 < 50 lx -> 30 min lights
+      - conditions:
+          - condition: trigger
+            id:
+              - morning_light_check_start
+              - morning_light_check_mid
+              - morning_light_level_drop
+          - condition: time
+            after: "07:59:59"
+            before: "09:00:00"
+          - condition: numeric_state
+            entity_id: sensor.living_room_presence_sensor_fp2_light_sensor_light_level
+            below: 50
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id:
+                - light.kitchen_lights
+                - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
+          - delay: "00:30:00"
+          - action: light.turn_off
+            target:
+              entity_id:
+                - light.kitchen_lights
+                - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
+
+      # =========================================================================
+      # 2. WORKING HOURS (10:00–17:30)
+      # =========================================================================
+      # 2a. Staggered Light Sessions (15-45 min on, 30-60 min off)
+      - conditions:
+          - condition: trigger
+            id: work_lights_session_1
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id:
+                - light.kitchen_hallway_light
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+          - delay: "00:25:00"
+          - action: light.turn_off
+            target:
+              entity_id:
+                - light.kitchen_hallway_light
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+
+      - conditions:
+          - condition: trigger
+            id: work_lights_session_2
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.dining_room_light
+          - delay: "00:35:00"
+          - action: light.turn_off
+            target:
+              entity_id: light.dining_room_light
+
+      - conditions:
+          - condition: trigger
+            id: work_lights_session_3
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.kitchen_hallway_light
+          - delay: "00:20:00"
+          - action: light.turn_off
+            target:
+              entity_id: light.kitchen_hallway_light
+
+      - conditions:
+          - condition: trigger
+            id: work_lights_session_4
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id:
+                - light.dining_room_light
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+          - delay: "00:40:00"
+          - action: light.turn_off
+            target:
+              entity_id:
+                - light.dining_room_light
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+
+      - conditions:
+          - condition: trigger
+            id: work_lights_session_5
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.kitchen_hallway_light
+          - delay: "00:25:00"
+          - action: light.turn_off
+            target:
+              entity_id: light.kitchen_hallway_light
+
+      - conditions:
+          - condition: trigger
+            id: work_lights_cleanup
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id:
+                - light.dining_room_light
+                - light.kitchen_hallway_light
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+
+      # 2b. Background Audio (Spotify Favorites via Alexa at vol 0.3)
+      - conditions:
+          - condition: trigger
+            id:
+              - work_audio_session_1
+              - work_audio_session_2
+          - condition: template
+            value_template: "{{ states('media_player.shield_2') != 'playing' and states('media_player.shield') != 'playing' }}"
+        sequence:
+          - action: media_player.volume_set
+            target:
+              entity_id: media_player.luis_s_echo
+            data:
+              volume_level: 0.3
+          - action: media_player.play_media
+            target:
+              entity_id: media_player.luis_s_echo
+            data:
+              media_content_type: custom
+              media_content_id: "play my favorites on Spotify"
+          - wait_for_trigger:
+              - platform: state
+                entity_id:
+                  - media_player.shield_2
+                  - media_player.shield
+                to: "playing"
+            timeout: "00:45:00"
+            continue_on_timeout: true
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+
+      # 2c. Strict Mutual Exclusion: Stop Audio when TV is Playing
+      - conditions:
+          - condition: trigger
+            id: tv_playing_suppress_audio
+        sequence:
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+
+      # =========================================================================
+      # 3. EVENING TV & LEISURE (18:00–22:00)
+      # =========================================================================
+      # 3a. TV Session 1 (18:15) - 60 minutes
+      - conditions:
+          - condition: trigger
+            id: tv_session_1
+        sequence:
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+          - action: light.turn_on
+            target:
+              entity_id:
+                - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+          - action: remote.turn_on
+            target:
+              entity_id: remote.shield
+            data:
+              activity: "com.google.android.youtube.tv"
+          - delay: "01:00:00"
+          - action: remote.turn_off
+            target:
+              entity_id: remote.shield
+          - action: light.turn_off
+            target:
+              entity_id:
+                - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+
+      # 3b. TV Session 2 (20:00) - 75 minutes
+      - conditions:
+          - condition: trigger
+            id: tv_session_2
+        sequence:
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+          - action: light.turn_on
+            target:
+              entity_id:
+                - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+          - action: remote.turn_on
+            target:
+              entity_id: remote.shield
+            data:
+              activity: "com.google.android.youtube.tv"
+          - delay: "01:15:00"
+          - action: remote.turn_off
+            target:
+              entity_id: remote.shield
+          - action: light.turn_off
+            target:
+              entity_id:
+                - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+
+      # 3c. TV Cleanup (22:00)
+      - conditions:
+          - condition: trigger
+            id: tv_cleanup
+        sequence:
+          - action: remote.turn_off
+            target:
+              entity_id: remote.shield
+          - action: light.turn_off
+            target:
+              entity_id:
+                - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+
+      # =========================================================================
+      # 4. PATIO EVENING LIGHTING (20:00–23:00)
+      # =========================================================================
+      # 4a. Patio Lights Turn ON during dark hours
+      - conditions:
+          - condition: trigger
+            id:
+              - patio_lights_on_time
+              - patio_lights_sunset
+          - condition: time
+            after: "19:59:59"
+            before: "23:00:00"
+        sequence:
+          - action: switch.turn_on
+            target:
+              entity_id:
+                - switch.patio_left_light_switch
+                - switch.patio_right_light
+
+      # 4b. Patio Lights Turn OFF at 23:00
+      - conditions:
+          - condition: trigger
+            id: patio_lights_off
+        sequence:
+          - action: switch.turn_off
+            target:
+              entity_id:
+                - switch.patio_left_light_switch
+                - switch.patio_right_light
+
+      # =========================================================================
+      # 5. LATE NIGHT ACTIVITY (22:00–06:00)
+      # =========================================================================
+      # 5a. Burst 1 (23:45) - Hallway + Kitchen Hallway (4 min, low brightness)
+      - conditions:
+          - condition: trigger
+            id: late_night_burst_1
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id:
+                - light.hallway_lights
+                - light.kitchen_hallway_light
+            data:
+              brightness_pct: 15
+          - delay: "00:04:00"
+          - action: light.turn_off
+            target:
+              entity_id:
+                - light.hallway_lights
+                - light.kitchen_hallway_light
+
+      # 5b. Burst 2 (01:30) - Main Bedroom Light 2 (3 min, low brightness)
+      - conditions:
+          - condition: trigger
+            id: late_night_burst_2
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.main_bedroom_light_2
+            data:
+              brightness_pct: 10
+          - delay: "00:03:00"
+          - action: light.turn_off
+            target:
+              entity_id: light.main_bedroom_light_2
+
+      # 5c. Burst 3 (03:15) - Kitchen LEDs + Kitchen Hallway (5 min, low brightness)
+      - conditions:
+          - condition: trigger
+            id: late_night_burst_3
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id:
+                - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
+                - light.kitchen_hallway_light
+            data:
+              brightness_pct: 15
+          - delay: "00:05:00"
+          - action: light.turn_off
+            target:
+              entity_id:
+                - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
+                - light.kitchen_hallway_light
+
+      # 5d. Burst 4 (05:10) - Hallway Lights (3 min, low brightness)
+      - conditions:
+          - condition: trigger
+            id: late_night_burst_4
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.hallway_lights
+            data:
+              brightness_pct: 15
+          - delay: "00:03:00"
+          - action: light.turn_off
+            target:
+              entity_id: light.hallway_lights
+
+      # 5e. Late Night Cleanup (06:00)
+      - conditions:
+          - condition: trigger
+            id: late_night_cleanup
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id:
+                - light.hallway_lights
+                - light.kitchen_hallway_light
+                - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
+                - light.main_bedroom_light_2
