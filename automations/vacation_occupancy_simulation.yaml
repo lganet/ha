@@ -323,7 +323,28 @@ action:
           - action: remote.turn_on
             target:
               entity_id: remote.shield
-          - delay: "01:00:00"
+          - action: remote.send_command
+            target:
+              entity_id: remote.shield
+            data:
+              command: HOME
+          - delay: "00:00:02"
+          - action: media_player.select_source
+            target:
+              entity_id: media_player.living_room_samsung_oled
+            data:
+              source: "TV"
+          - delay: "00:20:00"
+          - action: media_player.media_next_track
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - delay: "00:25:00"
+          - action: remote.send_command
+            target:
+              entity_id: remote.living_room_samsung_oled
+            data:
+              command: KEY_CHDOWN
+          - delay: "00:15:00"
           - action: media_player.turn_off
             target:
               entity_id: media_player.living_room_samsung_oled
@@ -352,7 +373,28 @@ action:
           - action: remote.turn_on
             target:
               entity_id: remote.shield
-          - delay: "01:15:00"
+          - action: remote.send_command
+            target:
+              entity_id: remote.shield
+            data:
+              command: HOME
+          - delay: "00:00:02"
+          - action: media_player.select_source
+            target:
+              entity_id: media_player.living_room_samsung_oled
+            data:
+              source: "TV"
+          - delay: "00:25:00"
+          - action: media_player.media_next_track
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - delay: "00:30:00"
+          - action: remote.send_command
+            target:
+              entity_id: remote.living_room_samsung_oled
+            data:
+              command: KEY_CHUP
+          - delay: "00:20:00"
           - action: media_player.turn_off
             target:
               entity_id: media_player.living_room_samsung_oled
