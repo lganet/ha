@@ -61,13 +61,30 @@ trigger:
       - "on"
     id: tv_playing_suppress_audio
 
-  # --- Evening TV & Leisure Triggers (18:00–22:00) ---
+  # --- Evening TV & Leisure Triggers (18:00–22:00, Weekdays) ---
   - platform: time
     at: "18:15:00"
     id: tv_session_1
   - platform: time
     at: "20:00:00"
     id: tv_session_2
+
+  # --- Weekend Daytime & Evening TV Triggers (10:00–22:00, Sat & Sun) ---
+  - platform: time
+    at: "10:30:00"
+    id: weekend_tv_session_1
+  - platform: time
+    at: "13:30:00"
+    id: weekend_tv_session_2
+  - platform: time
+    at: "15:30:00"
+    id: weekend_audio_session
+  - platform: time
+    at: "17:15:00"
+    id: weekend_tv_session_3
+  - platform: time
+    at: "20:00:00"
+    id: weekend_tv_session_4
   - platform: time
     at: "22:00:00"
     id: tv_cleanup
@@ -226,12 +243,19 @@ action:
                 - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
 
       # =========================================================================
-      # 2. WORKING HOURS (10:00–17:30)
+      # 2. WORKING HOURS (10:00–17:30, Weekdays Only)
       # =========================================================================
       # 2a. Staggered Light Sessions (15-45 min on, 30-60 min off)
       - conditions:
           - condition: trigger
             id: work_lights_session_1
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
         sequence:
           - action: light.turn_on
             target:
@@ -248,6 +272,13 @@ action:
       - conditions:
           - condition: trigger
             id: work_lights_session_2
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
         sequence:
           - action: light.turn_on
             target:
@@ -260,6 +291,13 @@ action:
       - conditions:
           - condition: trigger
             id: work_lights_session_3
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
         sequence:
           - action: light.turn_on
             target:
@@ -272,6 +310,13 @@ action:
       - conditions:
           - condition: trigger
             id: work_lights_session_4
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
         sequence:
           - action: light.turn_on
             target:
@@ -288,6 +333,13 @@ action:
       - conditions:
           - condition: trigger
             id: work_lights_session_5
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
         sequence:
           - action: light.turn_on
             target:
@@ -300,6 +352,13 @@ action:
       - conditions:
           - condition: trigger
             id: work_lights_cleanup
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
         sequence:
           - action: light.turn_off
             target:
@@ -308,12 +367,19 @@ action:
                 - light.kitchen_hallway_light
                 - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
 
-      # 2b. Background Audio (Spotify Favorites via Alexa at vol 0.3)
+      # 2b. Background Audio (Spotify Favorites via Alexa at vol 0.3, Weekdays)
       - conditions:
           - condition: trigger
             id:
               - work_audio_session_1
               - work_audio_session_2
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
           - condition: template
             value_template: "{{ states('media_player.shield_2') != 'playing' and states('media_player.shield') != 'playing' and states('media_player.living_room_samsung_oled') != 'on' }}"
         sequence:
@@ -359,12 +425,19 @@ action:
               entity_id: media_player.luis_s_echo
 
       # =========================================================================
-      # 3. EVENING TV & LEISURE (18:00–22:00)
+      # 3. WEEKDAY EVENING TV (18:00–22:00, Mon–Fri)
       # =========================================================================
-      # 3a. TV Session 1 (18:15) - 60 minutes
+      # 3a. Weekday TV Session 1 (18:15) - 60 minutes
       - conditions:
           - condition: trigger
             id: tv_session_1
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
         sequence:
           - action: media_player.media_stop
             target:
@@ -411,10 +484,17 @@ action:
                 - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
                 - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
 
-      # 3b. TV Session 2 (20:00) - 75 minutes
+      # 3b. Weekday TV Session 2 (20:00) - 75 minutes
       - conditions:
           - condition: trigger
             id: tv_session_2
+          - condition: time
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
         sequence:
           - action: media_player.media_stop
             target:
@@ -449,6 +529,222 @@ action:
             data:
               command: KEY_CHUP
           - delay: "00:20:00"
+          - action: media_player.turn_off
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - action: remote.turn_off
+            target:
+              entity_id: remote.shield
+          - action: light.turn_off
+            target:
+              entity_id:
+                - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+
+      # =========================================================================
+      # 4. WEEKEND TV & LEISURE (10:00–22:00, Sat & Sun)
+      # =========================================================================
+      # 4a. Weekend TV Session 1 (10:30–11:30) - 60 min
+      - conditions:
+          - condition: trigger
+            id: weekend_tv_session_1
+          - condition: time
+            weekday:
+              - sat
+              - sun
+        sequence:
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+          - action: remote.turn_on
+            target:
+              entity_id: remote.shield
+          - action: remote.send_command
+            target:
+              entity_id: remote.shield
+            data:
+              command: HOME
+          - delay: "00:00:02"
+          - action: media_player.select_source
+            target:
+              entity_id: media_player.living_room_samsung_oled
+            data:
+              source: "TV"
+          - delay: "00:25:00"
+          - action: media_player.media_next_track
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - delay: "00:35:00"
+          - action: media_player.turn_off
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - action: remote.turn_off
+            target:
+              entity_id: remote.shield
+
+      # 4b. Weekend TV Session 2 (13:30–14:45) - 75 min
+      - conditions:
+          - condition: trigger
+            id: weekend_tv_session_2
+          - condition: time
+            weekday:
+              - sat
+              - sun
+        sequence:
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+          - action: remote.turn_on
+            target:
+              entity_id: remote.shield
+          - action: remote.send_command
+            target:
+              entity_id: remote.shield
+            data:
+              command: HOME
+          - delay: "00:00:02"
+          - action: media_player.select_source
+            target:
+              entity_id: media_player.living_room_samsung_oled
+            data:
+              source: "TV"
+          - delay: "00:30:00"
+          - action: media_player.media_next_track
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - delay: "00:25:00"
+          - action: remote.send_command
+            target:
+              entity_id: remote.living_room_samsung_oled
+            data:
+              command: KEY_CHDOWN
+          - delay: "00:20:00"
+          - action: media_player.turn_off
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - action: remote.turn_off
+            target:
+              entity_id: remote.shield
+
+      # 4c. Weekend Background Music (15:30–16:15) - 45 min (Strictly if TV is off)
+      - conditions:
+          - condition: trigger
+            id: weekend_audio_session
+          - condition: time
+            weekday:
+              - sat
+              - sun
+          - condition: template
+            value_template: "{{ states('media_player.shield_2') != 'playing' and states('media_player.shield') != 'playing' and states('media_player.living_room_samsung_oled') != 'on' }}"
+        sequence:
+          - action: media_player.volume_set
+            target:
+              entity_id: media_player.luis_s_echo
+            data:
+              volume_level: 0.3
+          - action: alexa_devices.send_text_command
+            data:
+              device_id: "c5e4f7977d90dd68570dabe2db6d787a"
+              text_command: "play acoustic hits on Spotify"
+          - wait_for_trigger:
+              - platform: state
+                entity_id:
+                  - media_player.shield_2
+                  - media_player.shield
+                  - media_player.living_room_samsung_oled
+                to:
+                  - "playing"
+                  - "on"
+            timeout: "00:45:00"
+            continue_on_timeout: true
+          - action: alexa_devices.send_text_command
+            data:
+              device_id: "c5e4f7977d90dd68570dabe2db6d787a"
+              text_command: "stop"
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+
+      # 4d. Weekend TV Session 3 (17:15–18:15) - 60 min
+      - conditions:
+          - condition: trigger
+            id: weekend_tv_session_3
+          - condition: time
+            weekday:
+              - sat
+              - sun
+        sequence:
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+          - action: remote.turn_on
+            target:
+              entity_id: remote.shield
+          - action: remote.send_command
+            target:
+              entity_id: remote.shield
+            data:
+              command: HOME
+          - delay: "00:00:02"
+          - action: media_player.select_source
+            target:
+              entity_id: media_player.living_room_samsung_oled
+            data:
+              source: "TV"
+          - delay: "00:30:00"
+          - action: media_player.media_next_track
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - delay: "00:30:00"
+          - action: media_player.turn_off
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - action: remote.turn_off
+            target:
+              entity_id: remote.shield
+
+      # 4e. Weekend TV Session 4 (20:00–21:30) - 90 min (with accent lighting)
+      - conditions:
+          - condition: trigger
+            id: weekend_tv_session_4
+          - condition: time
+            weekday:
+              - sat
+              - sun
+        sequence:
+          - action: media_player.media_stop
+            target:
+              entity_id: media_player.luis_s_echo
+          - action: light.turn_on
+            target:
+              entity_id:
+                - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
+                - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
+          - action: remote.turn_on
+            target:
+              entity_id: remote.shield
+          - action: remote.send_command
+            target:
+              entity_id: remote.shield
+            data:
+              command: HOME
+          - delay: "00:00:02"
+          - action: media_player.select_source
+            target:
+              entity_id: media_player.living_room_samsung_oled
+            data:
+              source: "TV"
+          - delay: "00:30:00"
+          - action: media_player.media_next_track
+            target:
+              entity_id: media_player.living_room_samsung_oled
+          - delay: "00:30:00"
+          - action: remote.send_command
+            target:
+              entity_id: remote.living_room_samsung_oled
+            data:
+              command: KEY_CHUP
+          - delay: "00:30:00"
           - action: media_player.turn_off
             target:
               entity_id: media_player.living_room_samsung_oled
