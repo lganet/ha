@@ -2,6 +2,51 @@
 
 ## Unreleased
 
+## [0.18.0] - 2026-11-16
+
+### Added
+- **Vacation House Occupancy Simulation System**:
+  - **Component**: `automation`, `helper`, `dashboard`
+  - **Rationale**: Simulate realistic resident presence and daily routines during an extended 3-month absence to enhance home security and deterrent realism without hardcoded state locks.
+  - **Helpers (`helpers/vacation_simulation_helpers.yaml`)**:
+    - Created `input_boolean.vacation_simulation_mode` (name: "Vacation Simulation Mode", icon: `mdi:home-clock`).
+  - **Alarmo PIN Synchronization (`automations/alarmo_vacation_simulation_sync.yaml`)**:
+    - Bi-directionally synchronizes `alarm_control_panel.vacation_simulation` with `input_boolean.vacation_simulation_mode`.
+    - Disarming or arming via Alarmo keypad modal reflects immediately on `input_boolean.vacation_simulation_mode`.
+    - Includes automatic state reconciliation trigger upon Alarmo startup/initialization (`alarmo_initialized`).
+  - **NSPanel Pro Dashboard Cards (`dashboards/nspanel-office.yaml`, `dashboards/nspanel-main-bedroom.yaml`)**:
+    - Added authenticated Vacation Mode card in the View 0 Security & Access sections matching the `lock.patio_door_lock` UX pattern.
+    - Shows "Vacation Mode (PIN Req)" with dynamic icon (`mdi:shield-airplane` when active, `mdi:home-account` when disabled).
+    - Tapping opens the Alarmo keypad popup modal (`alarm_control_panel.vacation_simulation`) requiring a PIN code to arm or disarm, with resilient direct-service fallback (`input_boolean.toggle`) when unconfigured in Alarmo.
+    - Integrated side-by-side with Patio Security in a vertical stack directly below Patio Lock, perfectly matching its 56px dimensions, typography, and guardrails.
+  - **Comprehensive Simulation Routines (`automations/vacation_occupancy_simulation.yaml`)**:
+    - Guarded by global condition `condition: state, entity_id: input_boolean.vacation_simulation_mode, state: 'on'`.
+    - **Morning Routine (08:00–09:00)**: Wakeup audio rotation on Echo Spot (`media_player.luis_s_echo_spot`) randomly choosing daily between Spotify morning acoustic music (15 min at vol 0.3), alarm chime (2 min at vol 0.3), and Alexa `"good morning"` daily greeting; turns on Main Bedroom fan light (`light.main_bedroom_fan_light`) for 25 minutes; checks FP2 illuminance (`sensor.living_room_presence_sensor_fp2_light_sensor_light_level < 50`) and turns on kitchen lights and LEDs for 30 minutes.
+    - **Working Hours (10:00–17:30, Weekdays Only)**: Staggered intervals (15–45 min on, 30–60 min off) across dining room light, kitchen hallway light, and living room lamp; plays Spotify favorites on `media_player.luis_s_echo` via `alexa_devices.send_text_command` at volume 0.3 with strict mutual exclusion stopping audio if SHIELD TV (`media_player.shield_2` / `media_player.shield`) or Samsung OLED TV (`media_player.living_room_samsung_oled`) is active.
+    - **Weekday Evening TV (18:00–22:00, Mon–Fri)**: Two evening sessions (18:15–19:15 and 20:00–21:15) with TV backlight and lamp, wakes via SHIELD CEC to Samsung TV Plus, channel browsing, and clean power-off.
+    - **Weekend TV & Leisure (10:00–22:00, Sat & Sun)**: Frequent daytime and evening TV sessions (10:30–11:30, 13:30–14:45, 17:15–18:15, and 20:00–21:30) with 1.5–2.5 hour buffer gaps, optional afternoon acoustic music (15:30–16:15), and strict mutual exclusion preventing TV and music from playing simultaneously.
+    - **Electricity Bill Protection & Safety Watchdog**: Multi-layer turn-off safeguards ensure the TV never remains on overnight:
+      - End-of-session explicit turn off targeting `media_player.living_room_samsung_oled` and `remote.shield`.
+      - Triple safety sweeps at 22:00, 22:15, and 22:30 unconditionally powering off `media_player.living_room_samsung_oled` and `remote.shield`.
+      - Overnight safety watchdog: automatically turns off the TV if `media_player.living_room_samsung_oled` remains on between 22:00 and 08:00 for more than 5 minutes.
+      - Disarm shutdown: immediately terminates TV playback, stops Alexa Spotify music, and shuts off all simulation lights whenever Vacation Mode is disabled.
+    - **Patio Evening Lighting (20:00–23:00)**: Switches patio fixtures (`switch.patio_left_light_switch` and `switch.patio_right_light`) on during dark hours, turning off at 23:00.
+    - **Late Night Activity (22:00–06:00)**: Intermittent 2–5 minute realistic lighting bursts across hallway (`light.hallway_lights` at 70% brightness), kitchen hallway (`light.kitchen_hallway_light`), bedroom light 2 (`light.main_bedroom_light_2` at 10%), and kitchen LEDs at 15%, featuring multi-device turn-off sweeps and `continue_on_error: true` resilience.
+  - **Modified Files**:
+    - `VERSION`
+    - `CHANGELOG.md`
+    - `helpers/vacation_simulation_helpers.yaml`
+    - `automations/alarmo_vacation_simulation_sync.yaml`
+    - `automations/vacation_occupancy_simulation.yaml`
+    - `dashboards/nspanel-office.yaml`
+    - `dashboards/nspanel-main-bedroom.yaml`
+    - `doc/2026-11-16-vacation-occupancy-simulation.md`
+  - **Verification Commands**:
+    - `python3 -c "import yaml; [yaml.safe_load(open(f)) for f in ['helpers/vacation_simulation_helpers.yaml', 'automations/alarmo_vacation_simulation_sync.yaml', 'automations/vacation_occupancy_simulation.yaml', 'dashboards/nspanel-office.yaml', 'dashboards/nspanel-main-bedroom.yaml']]"`
+  - **Rollback Procedure**:
+    - Revert the git commit: `git revert HEAD`
+    - Or delete newly created files (`helpers/vacation_simulation_helpers.yaml`, `automations/alarmo_vacation_simulation_sync.yaml`, `automations/vacation_occupancy_simulation.yaml`) and revert changes in dashboards via `git checkout HEAD~1 -- dashboards/`.
+
 ## [0.17.0] - 2026-11-13
 
 ### Added

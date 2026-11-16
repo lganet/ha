@@ -1,0 +1,96 @@
+id: "1794200000001"
+alias: "Alarmo Vacation Simulation PIN Synchronization"
+description: "Synchronizes Alarmo Vacation Simulation area with input_boolean.vacation_simulation_mode, requiring a PIN code via popup keypad to activate or deactivate."
+mode: queued
+max: 5
+labels:
+  - git_managed
+trigger:
+  - platform: state
+    entity_id: alarm_control_panel.vacation_simulation
+    id: alarmo_simulation_state
+  - platform: state
+    entity_id: input_boolean.vacation_simulation_mode
+    id: helper_simulation_state
+  - platform: state
+    entity_id: alarm_control_panel.vacation_simulation
+    from:
+      - unavailable
+      - unknown
+    id: alarmo_initialized
+condition:
+  - condition: template
+    value_template: "{{ trigger.from_state is not none and trigger.to_state is not none and trigger.from_state.state != trigger.to_state.state }}"
+action:
+  - choose:
+      # Triggered by Alarmo Vacation Simulation area (e.g. user entered PIN in popup)
+      - conditions:
+          - condition: trigger
+            id: alarmo_simulation_state
+        sequence:
+          - choose:
+              # When Alarmo area is disarmed (PIN entered) -> Turn off vacation simulation mode
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state == 'disarmed' }}"
+                sequence:
+                  - if:
+                      - condition: state
+                        entity_id: input_boolean.vacation_simulation_mode
+                        state: "on"
+                    then:
+                      - action: input_boolean.turn_off
+                        target:
+                          entity_id: input_boolean.vacation_simulation_mode
+              # When Alarmo area is armed -> Turn on vacation simulation mode
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state in ['armed_away', 'armed_home', 'armed_vacation'] }}"
+                sequence:
+                  - if:
+                      - condition: state
+                        entity_id: input_boolean.vacation_simulation_mode
+                        state: "off"
+                    then:
+                      - action: input_boolean.turn_on
+                        target:
+                          entity_id: input_boolean.vacation_simulation_mode
+
+      # Triggered when Alarmo area first comes online or restarts
+      - conditions:
+          - condition: trigger
+            id: alarmo_initialized
+        sequence:
+          - if:
+              - condition: state
+                entity_id: input_boolean.vacation_simulation_mode
+                state: "on"
+            then:
+              - action: alarm_control_panel.alarm_arm_away
+                target:
+                  entity_id: alarm_control_panel.vacation_simulation
+            else:
+              - action: alarm_control_panel.alarm_disarm
+                target:
+                  entity_id: alarm_control_panel.vacation_simulation
+
+      # Triggered by input_boolean.vacation_simulation_mode state changes -> sync back to Alarmo area
+      - conditions:
+          - condition: trigger
+            id: helper_simulation_state
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state == 'on' and states('alarm_control_panel.vacation_simulation') not in ['armed_away', 'armed_home', 'armed_vacation'] }}"
+                sequence:
+                  - action: alarm_control_panel.alarm_arm_away
+                    target:
+                      entity_id: alarm_control_panel.vacation_simulation
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.to_state.state == 'off' and states('alarm_control_panel.vacation_simulation') != 'disarmed' }}"
+                sequence:
+                  - action: alarm_control_panel.alarm_disarm
+                    target:
+                      entity_id: alarm_control_panel.vacation_simulation
