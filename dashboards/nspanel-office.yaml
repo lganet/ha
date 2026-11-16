@@ -1115,6 +1115,72 @@ views:
                           return entity.state === 'locked' ? '#EF5350' : '#81C784';
                         ]]]
 
+          # --- Vacation Simulation Mode ---
+          - type: custom:button-card
+            entity: input_boolean.vacation_simulation_mode
+            name: Vacation Mode
+            show_name: true
+            show_state: true
+            state_display: >-
+              [[[
+                var al = states['alarm_control_panel.vacation_simulation'];
+                var hasPin = al && al.state && al.state !== 'unavailable' && al.state !== 'unknown';
+                if (entity.state === 'on') {
+                  return hasPin ? 'Vacation Mode (PIN Req)' : 'Active';
+                }
+                return hasPin ? 'Disabled (PIN Req)' : 'Disabled';
+              ]]]
+            icon: >-
+              [[[
+                return entity.state === 'on' ? 'mdi:shield-airplane' : 'mdi:home-account';
+              ]]]
+            tap_action:
+              action: >-
+                [[[
+                  var al = states['alarm_control_panel.vacation_simulation'];
+                  if (!al || al.state === 'unavailable' || al.state === 'unknown') {
+                    return 'toggle';
+                  }
+                  return 'more-info';
+                ]]]
+              entity: alarm_control_panel.vacation_simulation
+              haptic: selection
+            styles:
+              card:
+                - min-height: 58px
+                - padding: 8px 10px
+                - border-radius: var(--ha-card-border-radius, 12px)
+                - background-color: rgba(255, 255, 255, 0.05)
+                - border: >-
+                    [[[
+                      return entity.state === 'on' ? '1px solid rgba(255, 152, 0, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)';
+                    ]]]
+              grid:
+                - grid-template-areas: '"i n" "i s"'
+                - grid-template-columns: 32px 1fr
+                - grid-template-rows: 1fr 1fr
+                - align-items: center
+              icon:
+                - width: 22px
+                - height: 22px
+                - color: >-
+                    [[[
+                      return entity.state === 'on' ? '#FFA726' : 'var(--secondary-text-color, #CCCCCC)';
+                    ]]]
+              name:
+                - font-size: 13px
+                - font-weight: 600
+                - justify-self: start
+                - color: var(--primary-text-color)
+              state:
+                - font-size: 11px
+                - font-weight: 500
+                - justify-self: start
+                - color: >-
+                    [[[
+                      return entity.state === 'on' ? '#FFA726' : 'var(--secondary-text-color, #CCCCCC)';
+                    ]]]
+
           # --- Patio Climate (Temperature & Humidity) ---
           - type: horizontal-stack
             cards:
