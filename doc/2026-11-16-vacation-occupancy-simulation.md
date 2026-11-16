@@ -167,3 +167,32 @@ Added to View 0 Security & Access sections in both `nspanel-office.yaml` and `ns
 2. Run automated validation checks on modified dashboard configs and automations.
 3. Verify live entities via Home Assistant MCP tools (`ha_search`, `ha_config_get_automation`).
 4. Validate version bump in `VERSION` and format in `CHANGELOG.md`.
+
+## 6. Comprehensive Schedule Table: Vacation House Occupancy Simulation
+
+The schedule below details the finalized, live-validated routine running under `automation.vacation_house_occupancy_simulation`, guarded by `input_boolean.vacation_simulation_mode`:
+
+| Time / Trigger | Routine / Phase | Target Entities | Simulated Behavior & Safeguards |
+| :--- | :--- | :--- | :--- |
+| **08:00:00** | **Morning Wakeup Audio** | `media_player.luis_s_echo_spot` | Dynamic daily rotation across 3 wake-up styles at volume `0.3`:<br>1. 🎵 **Morning Music**: Streams morning acoustic music on Spotify for **15 minutes**.<br>2. ⏰ **Alarm Tone**: Plays morning alarm sound for **2 minutes**.<br>3. 🗣️ **Morning Greeting**: Executes `"good morning"`, reading daily greeting, weather, and date. |
+| **08:00 – 08:25** | **Morning Bedroom Light** | `light.main_bedroom_fan_light` | Main bedroom ceiling fan light turns on for **25 minutes** to simulate waking up, then turns off. |
+| **08:00 – 09:00** | **Morning Ambience** | `light.kitchen_lights`<br>`light.kitchen_leds`<br>`sensor.fp2_light_sensor` | Checks ambient light: if dark (`< 50 lx`), turns on Kitchen lights and LEDs for **30 minutes**, then turns off. |
+| **10:15 – 10:40** | **Working Hours (Session 1)** | `light.kitchen_hallway_light`<br>`light.lamp` / `light.patio_left_light` | Daytime transit: turns on Hallway & Lamp for **25 minutes**, then turns off. |
+| **11:00 – 11:45** | **Background Music (Morning)** | `media_player.luis_s_echo` | Plays **Spotify Favorites** at volume `0.3` for **45 minutes** (automatically suppressed if TV turns on). |
+| **11:45 – 12:20** | **Working Hours (Session 2)** | `light.dining_room_light` | Lunchtime activity: Dining room ceiling light turns on for **35 minutes**, then turns off. |
+| **13:30 – 13:50** | **Working Hours (Session 3)** | `light.kitchen_hallway_light` | Midday transit: Kitchen hallway light turns on for **20 minutes**, then turns off. |
+| **14:15 – 15:00** | **Background Music (Afternoon)** | `media_player.luis_s_echo` | Plays **Spotify Favorites** at volume `0.3` for **45 minutes** (suppressed if TV turns on). |
+| **15:00 – 15:40** | **Working Hours (Session 4)** | `light.dining_room_light`<br>`light.lamp` / `light.patio_left_light` | Afternoon work session: Dining light & Lamp turn on for **40 minutes**, then turn off. |
+| **16:30 – 16:55** | **Working Hours (Session 5)** | `light.kitchen_hallway_light` | Pre-evening transit: Kitchen hallway light turns on for **25 minutes**, then turns off. |
+| **17:30:00** | **Work Hours Cleanup** | Dining light, Hallway light, Lamp | Sweep ensuring all daytime work lights are unconditionally turned off. |
+| **18:15 – 19:15** | **Evening TV (Session 1)** | `remote.shield`<br>`media_player.living_room_samsung_oled`<br>`light.living_room_tv_backlight`<br>`light.lamp` | Wakes TV setup via SHIELD CEC (`remote.shield` HOME), tunes into Samsung TV Plus broadcast channel, turns on TV Backlight & Lamp. Changes channels at **+20m** (`media_next_track`) and **+45m** (`KEY_CHDOWN`), then powers off all TV hardware and lights at 19:15. |
+| **20:00 – 21:15** | **Evening TV (Session 2)** | `remote.shield`<br>`media_player.living_room_samsung_oled`<br>`light.living_room_tv_backlight`<br>`light.lamp` | Evening movie/news session: Wakes via SHIELD CEC to Samsung TV Plus, TV Backlight & Lamp on. Changes channels at **+25m** (`media_next_track`) and **+55m** (`KEY_CHUP`), then powers off all TV hardware and lights at 21:15. |
+| **20:00 – 23:00** | **Patio Evening Lighting** | `switch.patio_left_light_switch`<br>`switch.patio_right_light` | Turns on patio exterior lights at 20:00 (or sunset if later) and powers off at 23:00. |
+| **22:00, 22:15, 22:30** | **Overnight TV Safety Sweeps** | `media_player.living_room_samsung_oled`<br>`remote.shield`<br>TV Backlight & Lamp | Triple safety sweep ensuring SHIELD, Samsung TV, and accent lights are strictly off. |
+| **22:00 – 08:00** | **Overnight TV Safety Watchdog** | `media_player.living_room_samsung_oled` | Triggered if Samsung TV stays on for >5 minutes during the night; immediately powers off TV and SHIELD. |
+| **23:45 – 23:49** | **Late Night Burst 1** | `light.hallway_lights`<br>`light.kitchen_hallway_light` | Hallway transit: turns on at **70% brightness** for **4 minutes**, then turns off. |
+| **01:30 – 01:33** | **Late Night Burst 2** | `light.main_bedroom_light_2` | Bedroom movement: turns on at **10% brightness** for **3 minutes**, then turns off. |
+| **03:15 – 03:20** | **Late Night Burst 3** | Kitchen LEDs (`light.kitchen_leds` / `light.leds`)<br>`light.kitchen_hallway_light` | Nighttime water/snack: turns on at **15% brightness** for **5 minutes**, then turns off. |
+| **05:10 – 05:13** | **Late Night Burst 4** | `light.hallway_lights`<br>`light.kitchen_hallway_light` | Early transit: turns on at **70% brightness** for **3 minutes**, then turns off. |
+| **06:00:00** | **Late Night Cleanup** | Hallway, Kitchen Hallway, Night Light, Bedroom 2, LEDs | Sweep ensuring all late-night burst fixtures are unconditionally turned off. |
+| **Any Time** | **Disarm / Shutdown Cleanup** | All simulation lights, switches, TVs, and Alexa players | Triggered whenever Vacation Mode is turned off: immediately halts all playback and shuts off all lights. |

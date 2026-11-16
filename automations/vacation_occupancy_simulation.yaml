@@ -12,6 +12,9 @@ trigger:
     id: morning_wakeup_audio
   - platform: time
     at: "08:00:00"
+    id: morning_bedroom_light
+  - platform: time
+    at: "08:00:00"
     id: morning_light_check_start
   - platform: time
     at: "08:30:00"
@@ -126,7 +129,7 @@ action:
       # =========================================================================
       # 1. MORNING ROUTINE (08:00–09:00)
       # =========================================================================
-      # 1a. Morning Wakeup Chime (08:00) - 1 minute at vol 0.3
+      # 1a. Morning Wakeup Audio (08:00) - Dynamic Daily Rotation (Music / Alarm / Greeting)
       - conditions:
           - condition: trigger
             id: morning_wakeup_audio
@@ -136,16 +139,67 @@ action:
               entity_id: media_player.luis_s_echo_spot
             data:
               volume_level: 0.3
-          - action: alexa_devices.send_sound
-            data:
-              device_id: "167f1badb66d2c5095cd78c55a74336c"
-              sound: "amzn_sfx_doorbell_chime_01"
-          - delay: "00:01:00"
-          - action: media_player.media_stop
-            target:
-              entity_id: media_player.luis_s_echo_spot
+          - variables:
+              wake_mode: "{{ ['music', 'alarm', 'greeting'] | random }}"
+          - choose:
+              # Mode 1: Morning Music (15 min on Spotify)
+              - conditions:
+                  - condition: template
+                    value_template: "{{ wake_mode == 'music' }}"
+                sequence:
+                  - action: alexa_devices.send_text_command
+                    data:
+                      device_id: "167f1badb66d2c5095cd78c55a74336c"
+                      text_command: "play morning acoustic on Spotify"
+                  - delay: "00:15:00"
+                  - action: alexa_devices.send_text_command
+                    data:
+                      device_id: "167f1badb66d2c5095cd78c55a74336c"
+                      text_command: "stop"
+                  - action: media_player.media_stop
+                    target:
+                      entity_id: media_player.luis_s_echo_spot
 
-      # 1b. Morning Ambient Light Check (08:00–09:00) - FP2 < 50 lx -> 30 min lights
+              # Mode 2: Alarm Tone (2 min)
+              - conditions:
+                  - condition: template
+                    value_template: "{{ wake_mode == 'alarm' }}"
+                sequence:
+                  - action: alexa_devices.send_sound
+                    data:
+                      device_id: "167f1badb66d2c5095cd78c55a74336c"
+                      sound: "amzn_sfx_doorbell_chime_01"
+                  - delay: "00:02:00"
+                  - action: media_player.media_stop
+                    target:
+                      entity_id: media_player.luis_s_echo_spot
+
+              # Mode 3: Morning Greeting (Alexa native Good Morning)
+              - conditions:
+                  - condition: template
+                    value_template: "{{ wake_mode == 'greeting' }}"
+                sequence:
+                  - action: alexa_devices.send_text_command
+                    data:
+                      device_id: "167f1badb66d2c5095cd78c55a74336c"
+                      text_command: "good morning"
+
+      # 1b. Morning Main Bedroom Light (08:00–08:25) - 25 min wake-up light
+      - conditions:
+          - condition: trigger
+            id: morning_bedroom_light
+        sequence:
+          - action: light.turn_on
+            continue_on_error: true
+            target:
+              entity_id: light.main_bedroom_fan_light
+          - delay: "00:25:00"
+          - action: light.turn_off
+            continue_on_error: true
+            target:
+              entity_id: light.main_bedroom_fan_light
+
+      # 1c. Morning Ambient Light Check (08:00–09:00) - FP2 < 50 lx -> 30 min lights
       - conditions:
           - condition: trigger
             id:
@@ -613,6 +667,7 @@ action:
                 - light.hallway_lights
                 - light.hallway_night_light
                 - light.main_bedroom_light_2
+                - light.main_bedroom_fan_light
           - action: switch.turn_off
             continue_on_error: true
             target:
