@@ -485,7 +485,7 @@ action:
           - action: light.turn_on
             target:
               entity_id:
-                - light.hallway_lights
+                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
                 - light.kitchen_hallway_light
             data:
               brightness_pct: 15
@@ -493,7 +493,7 @@ action:
           - action: light.turn_off
             target:
               entity_id:
-                - light.hallway_lights
+                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
                 - light.kitchen_hallway_light
 
       # 5b. Burst 2 (01:30) - Main Bedroom Light 2 (3 min, low brightness)
@@ -537,13 +537,15 @@ action:
         sequence:
           - action: light.turn_on
             target:
-              entity_id: light.hallway_lights
+              entity_id:
+                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
             data:
               brightness_pct: 15
           - delay: "00:03:00"
           - action: light.turn_off
             target:
-              entity_id: light.hallway_lights
+              entity_id:
+                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
 
       # 5e. Late Night Cleanup (06:00)
       - conditions:
@@ -553,7 +555,7 @@ action:
           - action: light.turn_off
             target:
               entity_id:
-                - light.hallway_lights
+                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
                 - light.kitchen_hallway_light
                 - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
                 - light.main_bedroom_light_2
@@ -589,7 +591,7 @@ action:
                 - light.kitchen_hallway_light
                 - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
                 - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
-                - light.hallway_lights
+                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
                 - light.main_bedroom_light_2
           - action: switch.turn_off
             target:
