@@ -2,6 +2,44 @@
 
 ## Unreleased
 
+## [0.18.0] - 2026-11-16
+
+### Added
+- **Vacation House Occupancy Simulation System**:
+  - **Component**: `automation`, `helper`, `dashboard`
+  - **Rationale**: Simulate realistic resident presence and daily routines during an extended 3-month absence to enhance home security and deterrent realism without hardcoded state locks.
+  - **Helpers (`helpers/vacation_simulation_helpers.yaml`)**:
+    - Created `input_boolean.vacation_simulation_mode` (name: "Vacation Simulation Mode", icon: `mdi:home-clock`).
+  - **Alarmo PIN Synchronization (`automations/alarmo_vacation_simulation_sync.yaml`)**:
+    - Bi-directionally synchronizes `alarm_control_panel.vacation_simulation` with `input_boolean.vacation_simulation_mode`.
+    - Disarming or arming via Alarmo keypad modal reflects immediately on `input_boolean.vacation_simulation_mode`.
+    - Includes automatic state reconciliation trigger upon Alarmo startup/initialization (`alarmo_initialized`).
+  - **NSPanel Pro Dashboard Cards (`dashboards/nspanel-office.yaml`, `dashboards/nspanel-main-bedroom.yaml`)**:
+    - Added authenticated Vacation Mode card in the View 0 Security & Access sections matching the `lock.patio_door_lock` UX pattern.
+    - Shows "Vacation Mode (PIN Req)" with dynamic icon (`mdi:shield-airplane` when active, `mdi:home-account` when disabled).
+    - Tapping opens the Alarmo keypad popup modal (`alarm_control_panel.vacation_simulation`) requiring a PIN code to arm or disarm.
+  - **Comprehensive Simulation Routines (`automations/vacation_occupancy_simulation.yaml`)**:
+    - Guarded by global condition `condition: state, entity_id: input_boolean.vacation_simulation_mode, state: 'on'`.
+    - **Morning Routine (08:00–09:00)**: Wakeup audio/chime on `media_player.luis_s_echo_spot` at 08:00 for 1 minute at volume 0.3; checks FP2 illuminance (`sensor.living_room_presence_sensor_fp2_light_sensor_light_level < 50`) and turns on kitchen lights and LEDs for 30 minutes.
+    - **Working Hours (10:00–17:30)**: Staggered intervals (15–45 min on, 30–60 min off) across dining room light, kitchen hallway light, and living room lamp; plays Spotify favorites on `media_player.luis_s_echo` at volume 0.3 with strict mutual exclusion stopping audio if SHIELD TV (`media_player.shield_2` / `media_player.shield`) is active or starts playing.
+    - **Evening TV & Leisure (18:00–22:00)**: Coordinates SHIELD TV activation via `remote.shield`, launches YouTube app (`com.google.android.youtube.tv`), coordinates TV backlight and lamp, running realistic 60–75 minute leisure sessions twice before 22:00.
+    - **Patio Evening Lighting (20:00–23:00)**: Switches patio fixtures (`switch.patio_left_light_switch` and `switch.patio_right_light`) on during dark hours, turning off at 23:00.
+    - **Late Night Activity (22:00–06:00)**: Intermittent 2–8 minute lighting bursts across hallway, kitchen hallway, bedroom light 2, and kitchen LEDs at low brightness (10–15%).
+  - **Modified Files**:
+    - `VERSION`
+    - `CHANGELOG.md`
+    - `helpers/vacation_simulation_helpers.yaml`
+    - `automations/alarmo_vacation_simulation_sync.yaml`
+    - `automations/vacation_occupancy_simulation.yaml`
+    - `dashboards/nspanel-office.yaml`
+    - `dashboards/nspanel-main-bedroom.yaml`
+    - `doc/2026-11-16-vacation-occupancy-simulation.md`
+  - **Verification Commands**:
+    - `python3 -c "import yaml; [yaml.safe_load(open(f)) for f in ['helpers/vacation_simulation_helpers.yaml', 'automations/alarmo_vacation_simulation_sync.yaml', 'automations/vacation_occupancy_simulation.yaml', 'dashboards/nspanel-office.yaml', 'dashboards/nspanel-main-bedroom.yaml']]"`
+  - **Rollback Procedure**:
+    - Revert the git commit: `git revert HEAD`
+    - Or delete newly created files (`helpers/vacation_simulation_helpers.yaml`, `automations/alarmo_vacation_simulation_sync.yaml`, `automations/vacation_occupancy_simulation.yaml`) and revert changes in dashboards via `git checkout HEAD~1 -- dashboards/`.
+
 ## [0.17.0] - 2026-11-13
 
 ### Added
