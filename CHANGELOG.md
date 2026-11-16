@@ -30,7 +30,7 @@
       - Overnight safety watchdog: automatically turns off the TV if `media_player.living_room_samsung_oled` remains on between 22:00 and 08:00 for more than 5 minutes.
       - Disarm shutdown: immediately terminates TV playback, stops Alexa Spotify music, and shuts off all simulation lights whenever Vacation Mode is disabled.
     - **Patio Evening Lighting (20:00–23:00)**: Switches patio fixtures (`switch.patio_left_light_switch` and `switch.patio_right_light`) on during dark hours, turning off at 23:00.
-    - **Late Night Activity (22:00–06:00)**: Intermittent 2–8 minute lighting bursts across hallway, kitchen hallway, bedroom light 2, and kitchen LEDs at low brightness (10–15%).
+    - **Late Night Activity (22:00–06:00)**: Intermittent 2–5 minute realistic lighting bursts across hallway (`light.hallway_lights` at 70% brightness), kitchen hallway (`light.kitchen_hallway_light`), bedroom light 2 (`light.main_bedroom_light_2` at 10%), and kitchen LEDs at 15%, featuring multi-device turn-off sweeps and `continue_on_error: true` resilience.
   - **Modified Files**:
     - `VERSION`
     - `CHANGELOG.md`

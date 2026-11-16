@@ -477,24 +477,27 @@ action:
       # =========================================================================
       # 5. LATE NIGHT ACTIVITY (22:00–06:00)
       # =========================================================================
-      # 5a. Burst 1 (23:45) - Hallway + Kitchen Hallway (4 min, low brightness)
+      # 5a. Burst 1 (23:45) - Hallway + Kitchen Hallway (4 min, 70% brightness)
       - conditions:
           - condition: trigger
             id: late_night_burst_1
         sequence:
           - action: light.turn_on
+            continue_on_error: true
             target:
               entity_id:
-                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
+                - light.hallway_lights
                 - light.kitchen_hallway_light
             data:
-              brightness_pct: 15
+              brightness_pct: 70
           - delay: "00:04:00"
           - action: light.turn_off
+            continue_on_error: true
             target:
               entity_id:
-                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
+                - light.hallway_lights
                 - light.kitchen_hallway_light
+                - light.hallway_night_light
 
       # 5b. Burst 2 (01:30) - Main Bedroom Light 2 (3 min, low brightness)
       - conditions:
@@ -502,12 +505,14 @@ action:
             id: late_night_burst_2
         sequence:
           - action: light.turn_on
+            continue_on_error: true
             target:
               entity_id: light.main_bedroom_light_2
             data:
               brightness_pct: 10
           - delay: "00:03:00"
           - action: light.turn_off
+            continue_on_error: true
             target:
               entity_id: light.main_bedroom_light_2
 
@@ -517,6 +522,7 @@ action:
             id: late_night_burst_3
         sequence:
           - action: light.turn_on
+            continue_on_error: true
             target:
               entity_id:
                 - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
@@ -525,27 +531,33 @@ action:
               brightness_pct: 15
           - delay: "00:05:00"
           - action: light.turn_off
+            continue_on_error: true
             target:
               entity_id:
                 - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
                 - light.kitchen_hallway_light
 
-      # 5d. Burst 4 (05:10) - Hallway Lights (3 min, low brightness)
+      # 5d. Burst 4 (05:10) - Hallway Lights (3 min, 70% brightness)
       - conditions:
           - condition: trigger
             id: late_night_burst_4
         sequence:
           - action: light.turn_on
+            continue_on_error: true
             target:
               entity_id:
-                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
+                - light.hallway_lights
+                - light.kitchen_hallway_light
             data:
-              brightness_pct: 15
+              brightness_pct: 70
           - delay: "00:03:00"
           - action: light.turn_off
+            continue_on_error: true
             target:
               entity_id:
-                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
+                - light.hallway_lights
+                - light.kitchen_hallway_light
+                - light.hallway_night_light
 
       # 5e. Late Night Cleanup (06:00)
       - conditions:
@@ -553,10 +565,12 @@ action:
             id: late_night_cleanup
         sequence:
           - action: light.turn_off
+            continue_on_error: true
             target:
               entity_id:
-                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
+                - light.hallway_lights
                 - light.kitchen_hallway_light
+                - light.hallway_night_light
                 - "{{ 'light.kitchen_leds' if states('light.kitchen_leds') not in ['unknown', 'unavailable', ''] else 'light.leds' }}"
                 - light.main_bedroom_light_2
 
@@ -568,21 +582,26 @@ action:
             id: simulation_disabled_cleanup
         sequence:
           - action: media_player.turn_off
+            continue_on_error: true
             target:
               entity_id: media_player.living_room_samsung_oled
           - action: remote.turn_off
+            continue_on_error: true
             target:
               entity_id: remote.shield
           - action: alexa_devices.send_text_command
+            continue_on_error: true
             data:
               device_id: "c5e4f7977d90dd68570dabe2db6d787a"
               text_command: "stop"
           - action: media_player.media_stop
+            continue_on_error: true
             target:
               entity_id:
                 - media_player.luis_s_echo
                 - media_player.luis_s_echo_spot
           - action: light.turn_off
+            continue_on_error: true
             target:
               entity_id:
                 - light.kitchen_lights
@@ -591,9 +610,11 @@ action:
                 - light.kitchen_hallway_light
                 - "{{ 'light.patio_left_light' if states('light.patio_left_light') not in ['unknown', 'unavailable', ''] else 'light.lamp' }}"
                 - "{{ 'light.living_room_tv_backlight' if states('light.living_room_tv_backlight') not in ['unknown', 'unavailable', ''] else 'light.tv_backlight' }}"
-                - "{{ 'light.hallway_night_light' if states('light.hallway_night_light') not in ['unknown', 'unavailable', ''] else 'light.hallway_lights' }}"
+                - light.hallway_lights
+                - light.hallway_night_light
                 - light.main_bedroom_light_2
           - action: switch.turn_off
+            continue_on_error: true
             target:
               entity_id:
                 - switch.patio_left_light_switch
